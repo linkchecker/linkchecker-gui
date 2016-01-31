@@ -75,6 +75,9 @@ args = dict(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
     ],
-    install_requires=['linkchecker'],
+    install_requires=[
+        'linkchecker>=9.4',
+        #'PyQt4', # install from http://www.riverbankcomputing.com/software/pyqt/download
+    ],
 )
 setup(**args)
