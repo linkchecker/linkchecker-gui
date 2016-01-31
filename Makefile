@@ -39,7 +39,7 @@ clean:
 	find . -depth -name '__pycache__' -exec rm -rf {} \;
 
 distclean: clean
-	rm -rf build dist
+	rm -rf build dist $(APPNAME).egg-info
 
 locale:
 	$(MAKE) -C po
