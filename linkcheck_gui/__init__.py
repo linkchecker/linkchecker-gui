@@ -39,6 +39,7 @@ from .projects import openproject, saveproject, loadproject, ProjectExt
 from linkcheck import configuration, checker, director, get_link_pat, \
     strformat, mimeutil, LinkCheckerError, i18n, httputil, logconf
 from linkcheck.containers import enum
+from linkcheck.parser import parse_text
 from linkcheck import url as urlutil
 
 
@@ -479,6 +480,12 @@ Version 2 or later.
         self.set_statusmsg(_("Checking '%s'.") % strformat.limit(url, 40))
         url_data = checker.get_url_from(url, 0, aggregate, extern=(0, 0))
         self.recent.add_document(url)
+
+        # if a local file with .lst extension, assume it is a list of URLs
+        if (url.startswith("file://") or os.path.exists(url)) and url.endswith(".lst"):
+            url_data.check_connection()
+            parse_text(url_data)
+
         aggregate.urlqueue.put(url_data)
         self.aggregate = aggregate
         # check in background
