@@ -182,7 +182,7 @@ def openproject_msg(parent):
         return _("Canceled opening a project file.")
     if not is_readable(filename):
         return _("Could not read project file %(filename)s.") % dict(filename=filename)
-    return loadproject(filename, parent.config, parent.options, parent.urlinput)
+    return loadproject(parent, filename)
 
 
 def loadproject(parent, filename):
@@ -192,7 +192,7 @@ def loadproject(parent, filename):
     except Exception as errmsg:
         args = dict(filename=filename, err=errmsg)
         msg = _("Could not load project %(filename)s: %(err)s") % args
-    parent.set_statusmsg(msg)
+    return msg
 
 
 def loadproject_msg(parent, filename):
