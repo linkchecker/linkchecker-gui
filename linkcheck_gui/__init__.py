@@ -19,7 +19,8 @@ import re
 import sys
 import webbrowser
 
-from linkcheck import LinkCheckerError, checker
+from linkcheck import LinkCheckerError
+from linkcheck import checker as linkchecker_checker
 from linkcheck import configuration as linkchecker_configuration
 from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
                        mimeutil, strformat)
@@ -456,7 +457,7 @@ Version 3 or later.
     def get_url(self):
         """Return URL to check from the urlinput widget."""
         url = strformat.stripurl(self.urlinput.text())
-        url = checker.guess_url(url)
+        url = linkchecker_checker.guess_url(url)
         if url and ":" not in url:
             # Look for local file, else assume it's an HTTP URL.
             if not os.path.exists(url):
@@ -475,7 +476,7 @@ Version 3 or later.
             self.set_statusmsg(_("Error, empty URL"))
             return
         self.set_statusmsg(_("Checking '%s'.") % strformat.limit(url, 40))
-        url_data = checker.get_url_from(url, 0, aggregate, extern=(0, 0))
+        url_data = linkchecker_checker.get_url_from(url, 0, aggregate, extern=(0, 0))
         self.recent.add_document(url)
 
         # if a local file with .lst extension, assume it is a list of URLs
