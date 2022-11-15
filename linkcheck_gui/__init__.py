@@ -29,7 +29,7 @@ from .options import LinkCheckerOptions
 from .checker import CheckerThread
 from .contextmenu import ContextMenu
 from .editor import EditorWindow
-from .updater import UpdateDialog
+# XXX from .updater import UpdateDialog
 from .urlmodel import UrlItemModel
 from .urlsave import urlsave
 from .settings import Settings
@@ -450,12 +450,12 @@ Version 2 or later.
         if saveresultas:
             self.saveresultas = saveresultas
 
-    @QtCore.pyqtSlot()
-    def on_actionCheckUpdates_triggered(self):
-        """Display update check result."""
-        dialog = UpdateDialog(self)
-        dialog.reset()
-        dialog.show()
+#    @QtCore.pyqtSlot()
+#    def on_actionCheckUpdates_triggered(self):
+#        """Display update check result."""
+#        dialog = UpdateDialog(self)
+#        dialog.reset()
+#        dialog.show()
 
     def start(self):
         """Start a new check."""
