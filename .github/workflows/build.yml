@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Ubuntu dependencies
-        run: sudo apt install xvfb
+        run: sudo apt install git qhelpgenerator-qt5 xvfb
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -47,11 +47,13 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -U setuptools wheel
+          python -m pip install -U hatchling hatch-vcs markdown2
           python -m pip install -U tox coveralls
 
       - name: Run tests
-        run: xvfb-run --auto-servernum python -m tox -e py
+        run: |
+          python -m hatchling build --hooks-only
+          xvfb-run --auto-servernum python -m tox -e py
 
       - name: Report to coveralls
         run: coveralls
@@ -67,8 +69,6 @@ jobs:
       matrix:
         toxenv:
           - flake8
-          - check-manifest
-          - check-python-versions
           - yamllint
 
     steps:
@@ -90,7 +90,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -U setuptools wheel
           python -m pip install -U tox
 
       - name: Run ${{ matrix.toxenv }}

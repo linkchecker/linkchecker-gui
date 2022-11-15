@@ -18,14 +18,14 @@ jobs:
           fetch-depth: 0
 
       - name: Install Ubuntu packages
-        run: sudo apt install git
+        run: sudo apt install git qhelpgenerator-qt5
 
       - name: Setup Python
         uses: actions/setup-python@v4
 
       - name: Install Python packages
         run: >
-            pip3 install setuptools_scm twine wheel
+            pip3 install -U hatchling hatch-vcs markdown2 twine
 
       - name: Set SOURCE_DATE_EPOCH
         run: >
@@ -33,7 +33,7 @@ jobs:
 
       - name: Create distribution files
         run: >
-            python3 setup.py sdist bdist_wheel
+            python3 -m hatchling build
 
       - name: Check distribution files
         run: >
