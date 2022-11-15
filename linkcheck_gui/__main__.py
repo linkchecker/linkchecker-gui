@@ -16,13 +16,14 @@
 """
 Check HTML pages for broken links. This is the GUI client.
 """
-import sys
 import signal
+import sys
+
 from linkcheck import configuration
 from linkcheck.command.linkchecker import drop_privileges
-
-from PyQt5.QtWidgets import QApplication
 from linkcheck.fileutil import is_readable
+from PyQt5.QtWidgets import QApplication
+
 from . import LinkCheckerMain, get_app_style
 from .projects import ProjectExt
 
