@@ -54,7 +54,7 @@ class UpdateDialog(QtWidgets.QMessageBox):
         if result:
             if value is None:
                 # no update available: display info
-                text = _('Congratulations: the latest version ' '%(app)s is installed.')
+                text = _('Congratulations: the latest version %(app)s is installed.')
                 attrs = dict(app=configuration.App)
             else:
                 version, url = value
