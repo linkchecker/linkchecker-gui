@@ -15,44 +15,36 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-import sys
 import re
+import sys
 import webbrowser
+
+from linkcheck import LinkCheckerError, checker
+from linkcheck import configuration as linkchecker_configuration
+from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
+                       mimeutil, strformat)
+from linkcheck import url as urlutil
+from linkcheck.parser import parse_text
 from PyQt5 import QtCore, QtGui, QtWidgets
-from .linkchecker_ui_main import Ui_MainWindow
-from .properties import set_properties, clear_properties
-from .statistics import set_statistics, clear_statistics
-from .debug import LinkCheckerDebug
-from .logger import SignalLogger, GuiLogHandler, StatusLogger
-from .help import HelpWindow
-from .options import LinkCheckerOptions
+
+from . import configuration
 from .checker import CheckerThread
 from .contextmenu import ContextMenu
+from .debug import LinkCheckerDebug
 from .editor import EditorWindow
+from .help import HelpWindow
+from .library.containers import enum
+from .linkchecker_ui_main import Ui_MainWindow
+from .logger import GuiLogHandler, SignalLogger, StatusLogger
+from .options import LinkCheckerOptions
+from .projects import ProjectExt, loadproject, openproject, saveproject
+from .properties import clear_properties, set_properties
+from .recentdocs import RecentDocumentModel
+from .settings import Settings
+from .statistics import clear_statistics, set_statistics
 # XXX from .updater import UpdateDialog
 from .urlmodel import UrlItemModel
 from .urlsave import urlsave
-from .settings import Settings
-from .recentdocs import RecentDocumentModel
-from .projects import openproject, saveproject, loadproject, ProjectExt
-from .library.containers import enum
-from . import configuration
-
-from linkcheck import (
-    configuration as linkchecker_configuration,
-    checker,
-    director,
-    get_link_pat,
-    strformat,
-    mimeutil,
-    LinkCheckerError,
-    i18n,
-    httputil,
-    logconf,
-)
-from linkcheck.parser import parse_text
-from linkcheck import url as urlutil
-
 
 DocBaseUrl = "qthelp://linkchecker.app.linkchecker-gui/doc/"
 RegistryBase = "LinkChecker-GUI"
