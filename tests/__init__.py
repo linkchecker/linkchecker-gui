@@ -17,7 +17,7 @@ import os
 import pytest
 
 
-class memoized (object):
+class memoized(object):
     """Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated."""
@@ -42,35 +42,40 @@ class memoized (object):
         return self.func.__doc__
 
 
-def _need_func (testfunc, name):
+def _need_func(testfunc, name):
     """Decorator skipping test if given testfunc fails."""
-    def check_func (func):
-        def newfunc (*args, **kwargs):
+
+    def check_func(func):
+        def newfunc(*args, **kwargs):
             if not testfunc():
                 pytest.skip("%s is not available" % name)
             return func(*args, **kwargs)
         newfunc.__name__ = func.__name__
         return newfunc
+
     return check_func
 
 
 @memoized
-def has_pyqt ():
+def has_pyqt():
     """Test if PyQT is installed."""
     try:
         import PyQt5
+
         return True
     except ImportError:
         pass
     return False
 
+
 need_pyqt = _need_func(has_pyqt, "PyQT")
 
 
 @memoized
-def has_x11 ():
+def has_x11():
     """Test if DISPLAY variable is set."""
     return os.getenv('DISPLAY') is not None
+
 
 need_x11 = _need_func(has_x11, 'X11')
 

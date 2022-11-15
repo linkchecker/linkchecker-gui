@@ -16,12 +16,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class LineEdit (QtWidgets.QLineEdit):
+
+class LineEdit(QtWidgets.QLineEdit):
     """A line edit widget displaying a clear button if there is some text
     and a down-arrow button displaying a list of strings (eg. recent
     documents)."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Initialize buttons and size settings."""
         super(LineEdit, self).__init__(parent)
         self.listmodel = None
@@ -30,7 +31,7 @@ class LineEdit (QtWidgets.QLineEdit):
         self.setup_list_button()
         self.setup_size_metrics()
 
-    def setup_clear_button (self):
+    def setup_clear_button(self):
         """Initialize the clear button."""
         self.clearButton = QtWidgets.QToolButton(self)
         pixmap = QtGui.QPixmap(":/icons/clear.png")
@@ -43,7 +44,7 @@ class LineEdit (QtWidgets.QLineEdit):
         self.clearButton.clicked.connect(self.clear)
         self.textChanged.connect(self.updateCloseButton)
 
-    def setup_list_button (self):
+    def setup_list_button(self):
         """Initialize the dropdown list button."""
         self.listButton = QtWidgets.QToolButton(self)
         pixmap = QtGui.QPixmap(":/icons/arrow_down.png")
@@ -55,7 +56,7 @@ class LineEdit (QtWidgets.QLineEdit):
         self.listButton.hide()
         self.listButton.clicked.connect(self.toggle_list)
 
-    def setModel (self, model):
+    def setModel(self, model):
         """Set list model for list of recent documents."""
         self.listmodel = model
         self.listview = QtWidgets.QListView()
@@ -97,9 +98,14 @@ class LineEdit (QtWidgets.QLineEdit):
                 self.setFocus()
                 self.listview.hide()
                 consumed = True
-            elif key in (QtCore.Qt.Key_Up, QtCore.Qt.Key_Down,
-                         QtCore.Qt.Key_Home, QtCore.Qt.Key_End,
-                         QtCore.Qt.Key_PageUp, QtCore.Qt.Key_PageDown):
+            elif key in (
+                QtCore.Qt.Key_Up,
+                QtCore.Qt.Key_Down,
+                QtCore.Qt.Key_Home,
+                QtCore.Qt.Key_End,
+                QtCore.Qt.Key_PageUp,
+                QtCore.Qt.Key_PageDown,
+            ):
                 pass
             else:
                 self.setFocus()
@@ -108,32 +114,35 @@ class LineEdit (QtWidgets.QLineEdit):
             return consumed
         return False
 
-    def selectRecentDocument (self, index):
+    def selectRecentDocument(self, index):
         """Select recent document text after click on the list view."""
         self.listview.hide()
         item = self.listmodel.data(index)
         self.setText(item.value())
 
-    def setup_size_metrics (self):
+    def setup_size_metrics(self):
         """Set widget size including the buttons."""
         frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
         padding_right = self.clearButton.sizeHint().width() + frameWidth + 1
         padding_left = self.listButton.sizeHint().width() + frameWidth + 1
         style = "QLineEdit { padding-left: %dpx; padding-right: %dpx } " % (
-          padding_left, padding_right)
+            padding_left,
+            padding_right,
+        )
         self.setStyleSheet(style)
         # minimum width
         minSize = self.minimumSizeHint()
         buttonWidth = padding_left + padding_right
         minWidth = max(minSize.width(), buttonWidth)
         # minimum height
-        buttonHeight = max(self.clearButton.sizeHint().height(),
-                           self.listButton.sizeHint().height())
-        minHeight = max(minSize.height(), buttonHeight + frameWidth*2)
+        buttonHeight = max(
+            self.clearButton.sizeHint().height(), self.listButton.sizeHint().height()
+        )
+        minHeight = max(minSize.height(), buttonHeight + frameWidth * 2)
         # set minimum size
         self.setMinimumSize(minWidth, minHeight)
 
-    def resizeEvent (self, event):
+    def resizeEvent(self, event):
         """Move the buttons due to resize event."""
         frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
         bottom = self.rect().y() + self.rect().height()
@@ -141,23 +150,23 @@ class LineEdit (QtWidgets.QLineEdit):
         sizeHint = self.clearButton.sizeHint()
         x = self.rect().right() - frameWidth - sizeHint.width()
         y = (bottom - sizeHint.height()) / 2
-        self.clearButton.move(x,y)
+        self.clearButton.move(x, y)
         # list button
         sizeHint = self.listButton.sizeHint()
         # add one to x and y since the button icon is a little off
         x = self.rect().left() + frameWidth + 1
         y = (bottom - sizeHint.height()) / 2 + 1
-        self.listButton.move(x,y)
+        self.listButton.move(x, y)
 
-    def updateListButton (self):
+    def updateListButton(self):
         """Show or hide button for list of documents."""
         self.listButton.setVisible(bool(self.listmodel.rowCount()))
 
-    def updateCloseButton (self, text):
+    def updateCloseButton(self, text):
         """Only display the clear button if there is some text."""
         self.clearButton.setVisible(bool(text))
 
-    def toggle_list (self):
+    def toggle_list(self):
         """Show or hide list of documents."""
         if self.listview.isHidden():
             self.listview.adjustSize()
@@ -168,7 +177,7 @@ class LineEdit (QtWidgets.QLineEdit):
         else:
             self.listview.hide()
 
-    def addMenuEntries (self, menu):
+    def addMenuEntries(self, menu):
         """Add browser bookmark actions to menu."""
         name = _("Insert %(browser)s bookmark file")
         if find_firefox():
@@ -187,38 +196,43 @@ class LineEdit (QtWidgets.QLineEdit):
             action = menu.addAction(name % {"browser": "Safari"})
             action.triggered.connect(lambda: self.setText(find_safari()))
 
-    def contextMenuEvent (self, event):
+    def contextMenuEvent(self, event):
         """Handle context menu event."""
         menu = self.createStandardContextMenu()
         self.addMenuEntries(menu)
         menu.exec_(event.globalPos())
 
 
-def find_firefox ():
+def find_firefox():
     """Return Firefox bookmark filename or empty string if not found."""
     from linkcheck.bookmarks.firefox import find_bookmark_file
+
     return find_bookmark_file()
 
 
-def find_chrome ():
+def find_chrome():
     """Return Google Chrome bookmark filename or empty string if not found."""
     from linkcheck.bookmarks.chrome import find_bookmark_file
+
     return find_bookmark_file()
 
 
-def find_chromium ():
+def find_chromium():
     """Return Chromium bookmark filename or empty string if not found."""
     from linkcheck.bookmarks.chromium import find_bookmark_file
+
     return find_bookmark_file()
 
 
-def find_opera ():
+def find_opera():
     """Return Opera bookmark filename or empty string if not found."""
     from linkcheck.bookmarks.opera import find_bookmark_file
+
     return find_bookmark_file()
 
 
-def find_safari ():
+def find_safari():
     """Return Safari bookmark filename or empty string if not found."""
     from linkcheck.bookmarks.safari import find_bookmark_file
+
     return find_bookmark_file()

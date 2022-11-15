@@ -18,10 +18,10 @@ from linkcheck import configuration
 from PyQt5 import QtCore, QtWidgets, QtHelp
 
 
-class HelpWindow (QtWidgets.QDialog):
+class HelpWindow(QtWidgets.QDialog):
     """A custom help display dialog."""
 
-    def __init__ (self, parent, qhcpath):
+    def __init__(self, parent, qhcpath):
         """Initialize dialog and load qhc help project from given path."""
         super(HelpWindow, self).__init__(parent)
         self.engine = QtHelp.QHelpEngine(qhcpath, self)
@@ -29,7 +29,7 @@ class HelpWindow (QtWidgets.QDialog):
         self.setWindowTitle("%s Help" % configuration.AppName)
         self.build_ui()
 
-    def build_ui (self):
+    def build_ui(self):
         """Build UI for the help window."""
         splitter = QtWidgets.QSplitter()
         splitter.setOrientation(QtCore.Qt.Vertical)
@@ -45,31 +45,32 @@ class HelpWindow (QtWidgets.QDialog):
         self.setLayout(hlayout)
         self.resize(800, 600)
 
-    def showDocumentation (self, url):
+    def showDocumentation(self, url):
         """Show given URL in help browser."""
         self.tree.expandAll()
         self.browser.setSource(url)
         self.show()
 
 
-class HelpBrowser (QtWidgets.QTextBrowser):
+class HelpBrowser(QtWidgets.QTextBrowser):
     """A QTextBrowser that can handle qthelp:// URLs."""
 
-    def __init__ (self, parent, engine):
+    def __init__(self, parent, engine):
         """Initialize and store given HelpEngine instance."""
         super(HelpBrowser, self).__init__(parent)
         self.engine = engine
 
-    def setSource (self, url):
+    def setSource(self, url):
         """Open HTTP URLs in external browser, else call base class
         implementation."""
         if url.scheme() == "http":
             import webbrowser
+
             webbrowser.open(str(url.toString()))
         else:
             QtWidgets.QTextBrowser.setSource(self, url)
 
-    def loadResource (self, rtype, url):
+    def loadResource(self, rtype, url):
         """Handle qthelp:// URLs, load content from help engine."""
         if url.scheme() == "qthelp":
             return QtCore.QVariant(self.engine.fileData(url))

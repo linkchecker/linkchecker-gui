@@ -22,10 +22,10 @@ from linkcheck.fileutil import is_writable
 from linkcheck import configuration
 
 
-class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
+class LinkCheckerOptions(QtWidgets.QDialog, Ui_Options):
     """Hold options for current URL to check."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Reset all options and initialize the editor window."""
         super(LinkCheckerOptions, self).__init__(parent)
         self.setupUi(self)
@@ -34,13 +34,13 @@ class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
         self.user_config_button.clicked.connect(self.edit_user_config)
         self.reset()
 
-    def reset (self):
+    def reset(self):
         """Reset GUI and config options."""
         self.user_config = configuration.get_user_config()
         self.reset_gui_options()
         self.reset_config_options()
 
-    def reset_gui_options (self):
+    def reset_gui_options(self):
         """Reset GUI options to default values."""
         self.recursionlevel.setValue(-1)
         self.verbose.setChecked(False)
@@ -48,18 +48,21 @@ class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
         self.warninglines.setPlainText("")
         self.ignorelines.setPlainText("")
 
-    def reset_config_options (self):
+    def reset_config_options(self):
         """Reset configuration file edit buttons."""
         self.user_config_writable = is_writable(self.user_config)
-        set_edit_button(self.user_config, self.user_config_button,
-                        self.user_config_filename, self.user_config_writable)
+        set_edit_button(
+            self.user_config,
+            self.user_config_button,
+            self.user_config_filename,
+            self.user_config_writable,
+        )
 
-    def edit_user_config (self):
+    def edit_user_config(self):
         """Show editor for user specific configuration file."""
-        return start_editor(self.user_config, self.user_config_writable,
-                            self.editor)
+        return start_editor(self.user_config, self.user_config_writable, self.editor)
 
-    def get_options (self):
+    def get_options(self):
         """Return option data as dictionary."""
         return dict(
             debug=self.debug.isChecked(),
@@ -69,7 +72,7 @@ class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
             ignorelines=self.ignorelines.toPlainText(),
         )
 
-    def set_options (self, data):
+    def set_options(self, data):
         """Set GUI options from given data."""
         if data.get("debug") is not None:
             self.debug.setChecked(data["debug"])
@@ -83,7 +86,7 @@ class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
             self.ignorelines.setPlainText(data["ignorelines"])
 
 
-def start_editor (filename, writable, editor):
+def start_editor(filename, writable, editor):
     """Start editor for given filename."""
     if not os.path.isfile(filename):
         # file vanished
@@ -95,7 +98,7 @@ def start_editor (filename, writable, editor):
     editor.show()
 
 
-def set_edit_button (filename, button, label, writable):
+def set_edit_button(filename, button, label, writable):
     """Update edit button depending on writable flag of file."""
     label.setText(filename)
     if os.path.isfile(filename):

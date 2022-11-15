@@ -19,10 +19,11 @@ import urllib.parse
 
 from linkcheck.checker.fileurl import get_os_filename
 
-class ContextMenu (QtWidgets.QMenu):
+
+class ContextMenu(QtWidgets.QMenu):
     """Show context menu."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Add actions to context menu."""
         super(ContextMenu, self).__init__(parent)
         self.addAction(parent.actionViewOnline)
@@ -30,7 +31,7 @@ class ContextMenu (QtWidgets.QMenu):
         self.addAction(parent.actionViewParentOnline)
         self.addAction(parent.actionViewParentSource)
 
-    def enableFromItem (self, item):
+    def enableFromItem(self, item):
         """Enable context menu actions depending on the item content."""
         parent = self.parentWidget()
         # data is an instance of CompactUrlData
@@ -42,7 +43,7 @@ class ContextMenu (QtWidgets.QMenu):
         enable_parent_url_source = self.can_view_parent_source(data)
         parent.actionViewParentSource.setEnabled(enable_parent_url_source)
 
-    def can_view_parent_source (self, url_data):
+    def can_view_parent_source(self, url_data):
         """Determine if parent URL source can be retrieved."""
         if not url_data.valid:
             return False

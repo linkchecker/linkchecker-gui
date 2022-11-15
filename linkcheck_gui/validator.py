@@ -19,7 +19,7 @@ from PyQt5 import QtGui
 import re
 
 
-def check_regex (value):
+def check_regex(value):
     """Check if given string value can be compiled with re.compile()."""
     try:
         re.compile(value)
@@ -29,14 +29,14 @@ def check_regex (value):
         return True
 
 
-class PyRegexValidator (QtGui.QValidator):
+class PyRegexValidator(QtGui.QValidator):
     """Validate input that it is a valid Python regular expression."""
 
-    def validate (self, input, pos):
+    def validate(self, input, pos):
         if check_regex(input):
             return (QtGui.QValidator.Acceptable, pos)
         return (QtGui.QValidator.Intermediate, pos)
 
-    def fixup (self, input):
+    def fixup(self, input):
         while not check_regex(input):
             input.chop(1)

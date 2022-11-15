@@ -25,16 +25,15 @@ ProjectExt = ".lcp"
 ProjectFilter = _("LinkChecker project (*%(ext)s)") % dict(ext=ProjectExt)
 
 
-class ProjectParser (confparse.LCConfigParser):
-
-    def __init__ (self, config, gui_options, urlinput):
+class ProjectParser(confparse.LCConfigParser):
+    def __init__(self, config, gui_options, urlinput):
         super(ProjectParser, self).__init__(config)
         # has set_options(data) function
         self.gui_options = gui_options
         # has setText(url) function
         self.urlinput = urlinput
 
-    def read (self, files):
+    def read(self, files):
         super(ProjectParser, self).read(files)
         self.read_project_config()
         self.read_gui_config()
@@ -57,22 +56,22 @@ class ProjectParser (confparse.LCConfigParser):
         data = {}
         option = "debug"
         if self.has_option(section, option):
-             data[option] = self.getboolean(section, option)
+            data[option] = self.getboolean(section, option)
         option = "verbose"
         if self.has_option(section, option):
-             data[option] = self.getboolean(section, option)
+            data[option] = self.getboolean(section, option)
         option = "recursionlevel"
         if self.has_option(section, option):
-             data[option] = self.getint(section, option)
+            data[option] = self.getint(section, option)
         option = "warninglines"
         if self.has_option(section, option):
-             data[option] = self.get(section, option)
+            data[option] = self.get(section, option)
         option = "ignorelines"
         if self.has_option(section, option):
-             data[option] = self.get(section, option)
+            data[option] = self.get(section, option)
         self.gui_options.set_options(data)
 
-    def write (self, fp):
+    def write(self, fp):
         """Write project configuration to given file object."""
         self.write_project_config()
         self.write_gui_config()
@@ -95,9 +94,10 @@ class ProjectParser (confparse.LCConfigParser):
 def url_to_filename(url, extension):
     # filter host and document
     parts = url_split(url)
-    value = parts[1]+parts[3]
+    value = parts[1] + parts[3]
     # normalize
     import unicodedata
+
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     # replace non-alpha characters and convert to lowercase
     value = re.sub('[^\w-]+', '_', value).strip().lower()
@@ -112,6 +112,7 @@ def saveproject(parent, url):
     except Exception as errmsg:
         msg = str(errmsg)
     parent.set_statusmsg(msg)
+
 
 def saveproject_msg(parent, url):
     """Save a project file and return status message."""
@@ -146,7 +147,7 @@ def saveproject_msg(parent, url):
 def write_header(filename, filter_comments):
     """Write header and filter comment lines if file already exists."""
     lines = [
-        '# This is a generated LinkChecker project file. Do not edit'+os.linesep,
+        '# This is a generated LinkChecker project file. Do not edit' + os.linesep,
     ]
     if filter_comments:
         with open(filename, 'r') as fp:
@@ -158,7 +159,7 @@ def write_header(filename, filter_comments):
             fp.write(line)
 
 
-def openproject (parent):
+def openproject(parent):
     """Select and load a project file."""
     try:
         msg = openproject_msg(parent)
@@ -199,4 +200,3 @@ def loadproject_msg(parent, filename):
     parser.read([filename])
     d = dict(filename=filename)
     return _("Project file %(filename)s loaded successfully.") % d
-

@@ -18,12 +18,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from .linkchecker_ui_debug import Ui_DebugDialog
 
 
-class LinkCheckerDebug (QtWidgets.QDialog, Ui_DebugDialog):
+class LinkCheckerDebug(QtWidgets.QDialog, Ui_DebugDialog):
     """Show debug text."""
 
     log_msg_signal = QtCore.pyqtSignal(str)
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Setup the debug message dialog."""
         super(LinkCheckerDebug, self).__init__(parent)
         self.setupUi(self)
@@ -33,10 +33,10 @@ class LinkCheckerDebug (QtWidgets.QDialog, Ui_DebugDialog):
         self.log_msg_signal.connect(self.textEdit.appendPlainText)
         self.reset()
 
-    def reset (self):
+    def reset(self):
         """Clear all debug info."""
         self.textEdit.clear()
 
-    def getText (self):
+    def getText(self):
         """Get debug info as string."""
         return self.textEdit.toPlainText()

@@ -18,43 +18,43 @@ from logging import Handler
 from linkcheck.logger import _Logger
 
 
-class GuiLogHandler (Handler):
+class GuiLogHandler(Handler):
     """Delegate log messages to the UI."""
 
-    def __init__ (self, signal):
+    def __init__(self, signal):
         """Save widget."""
         super(GuiLogHandler, self).__init__()
         self.signal = signal
 
-    def emit (self, record):
+    def emit(self, record):
         """Emit a record. It gets logged in the debug widget."""
         self.signal.emit(self.format(record))
 
 
-class SignalLogger (_Logger):
+class SignalLogger(_Logger):
     """Use Qt signals for logged URLs and statistics."""
 
     LoggerName = "gui"
 
-    def __init__ (self, **args):
+    def __init__(self, **args):
         """Store signals for URL and statistic data."""
         super(SignalLogger, self).__init__(**args)
         self.log_url_signal = args["signal"]
         self.log_stats_signal = args["stats"]
 
-    def start_fileoutput (self):
+    def start_fileoutput(self):
         """Override fileoutput handling of base class."""
         pass
 
-    def close_fileoutput (self):
+    def close_fileoutput(self):
         """Override fileoutput handling of base class."""
         pass
 
-    def log_url (self, url_data):
+    def log_url(self, url_data):
         """Emit URL data which gets logged in the main window."""
         self.log_url_signal.emit(url_data)
 
-    def end_output (self, **kwargs):
+    def end_output(self, **kwargs):
         """Emit statistic data which gets logged in the main window."""
         self.stats.downloaded_bytes = kwargs.get("downloaded_bytes")
         self.log_stats_signal.emit(self.stats)
@@ -63,10 +63,10 @@ class SignalLogger (_Logger):
 class StatusLogger:
     """GUI status logger, signaling to progress labels."""
 
-    def __init__ (self, signal):
+    def __init__(self, signal):
         """Store given signal object."""
         self.signal = signal
 
-    def log_status (self, checked, in_progress, queued, duration, num_urls):
+    def log_status(self, checked, in_progress, queued, duration, num_urls):
         """Emit signal with given status information."""
         self.signal.emit(checked, in_progress, queued, duration, num_urls)

@@ -25,6 +25,7 @@ It includes the following features:
 """
 
 import sys
+
 if sys.version_info < (3, 5, 0, 'final', 0):
     raise SystemExit("This program requires Python 3.5 or later.")
 import os
@@ -43,8 +44,7 @@ myname = "Bastian Kleineidam"
 myemail = "bastian.kleineidam@web.de"
 
 data_files = [
-    ('share/linkchecker',
-        ['doc/html/lccollection.qhc', 'doc/html/lcdoc.qch']),
+    ('share/linkchecker', ['doc/html/lccollection.qhc', 'doc/html/lcdoc.qch']),
 ]
 
 if os.name == 'posix':
@@ -53,29 +53,24 @@ if os.name == 'posix':
     data_files.append(('share/applications', ['doc/linkchecker-gui.desktop']))
 
 args = dict(
-    name = AppName,
-    version = AppVersion,
-    description = Description,
-    author = myname,
-    author_email = myemail,
-    maintainer = myname,
-    maintainer_email = myemail,
-    url = "https://github.com/wummel/linkchecker-gui",
-    license = "GPL",
-    packages = [
-        'linkcheck_gui',
-    ],
-    scripts = ['linkchecker-gui'],
-    data_files = data_files,
-    classifiers = [
+    name=AppName,
+    version=AppVersion,
+    description=Description,
+    author=myname,
+    author_email=myemail,
+    maintainer=myname,
+    maintainer_email=myemail,
+    url="https://github.com/wummel/linkchecker-gui",
+    license="GPL",
+    packages=['linkcheck_gui',],
+    scripts=['linkchecker-gui'],
+    data_files=data_files,
+    classifiers=[
         'Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking',
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
     ],
-    install_requires=[
-        'linkchecker>=9.4',
-        'PyQt5',
-    ],
+    install_requires=['linkchecker>=9.4', 'PyQt5',],
 )
 setup(**args)

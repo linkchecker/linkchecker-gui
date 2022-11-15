@@ -42,7 +42,8 @@ Logtype2FileExt = {
     "csv": ".csv",
 }
 
-def urlsave (parent, config, urls):
+
+def urlsave(parent, config, urls):
     """Save URL results in file."""
     filename, logtype = get_save_filename(parent)
     if not filename:
@@ -60,7 +61,7 @@ def urlsave (parent, config, urls):
     return logtype
 
 
-def get_save_filename (parent):
+def get_save_filename(parent):
     """Open file save dialog for given parent window and base directory.
     Return dialog result."""
     title = _("Save check results")

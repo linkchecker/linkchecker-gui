@@ -18,14 +18,15 @@ import sys
 from tests import need_pyqt, need_x11
 
 
-class TestGui (unittest.TestCase):
+class TestGui(unittest.TestCase):
     """Test OMT GUI client."""
 
     @need_pyqt
     @need_x11
-    def test_gui (self):
+    def test_gui(self):
         from PyQt5 import QtCore, QtWidgets, QtTest
         from linkcheck_gui import LinkCheckerMain
+
         app = QtWidgets.QApplication(sys.argv)
         window = LinkCheckerMain()
         window.show()

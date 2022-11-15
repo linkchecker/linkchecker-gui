@@ -18,14 +18,14 @@
 from PyQt5 import QtCore
 
 
-def save_point (qpoint):
+def save_point(qpoint):
     """Ensure positive X and Y values of point."""
     qpoint.setX(max(0, qpoint.x()))
     qpoint.setY(max(0, qpoint.y()))
     return qpoint
 
 
-def save_size (qsize):
+def save_size(qsize):
     """Ensure minimum width and height values of the given size."""
     qsize.setWidth(max(400, qsize.width()))
     qsize.setHeight(max(400, qsize.height()))
@@ -35,11 +35,11 @@ def save_size (qsize):
 class Settings:
     """Save and read GUI settings."""
 
-    def __init__ (self, base, appname):
+    def __init__(self, base, appname):
         """Initialize a QSettings object."""
         self.settings = QtCore.QSettings(base, appname)
 
-    def read_geometry (self):
+    def read_geometry(self):
         """Return stored size and position of main window."""
         data = dict(size=None, pos=None)
         self.settings.beginGroup('mainwindow')
@@ -50,7 +50,7 @@ class Settings:
         self.settings.endGroup()
         return data
 
-    def save_geometry (self, data):
+    def save_geometry(self, data):
         """Save size and position of main window."""
         size = save_size(data["size"])
         pos = save_point(data["pos"])
@@ -59,7 +59,7 @@ class Settings:
         self.settings.setValue("pos", QtCore.QVariant(pos))
         self.settings.endGroup()
 
-    def read_treeviewcols (self):
+    def read_treeviewcols(self):
         """Return widths of URL treeview columns."""
         data = dict(col1=200, col2=200, col3=150)
         self.settings.beginGroup('treeview')
@@ -75,17 +75,22 @@ class Settings:
         self.settings.endGroup()
         return data
 
-    def save_treeviewcols (self, data):
+    def save_treeviewcols(self, data):
         """Save widths of URL treeview columns."""
         self.settings.beginGroup('treeview')
         for key in ("col1", "col2", "col3"):
             self.settings.setValue(key, QtCore.QVariant(data[key]))
         self.settings.endGroup()
 
-    def read_options (self):
+    def read_options(self):
         """Return stored GUI options."""
-        data = dict(debug=None, verbose=None,
-            recursionlevel=None, warninglines=None, ignorelines=None)
+        data = dict(
+            debug=None,
+            verbose=None,
+            recursionlevel=None,
+            warninglines=None,
+            ignorelines=None,
+        )
         self.settings.beginGroup('output')
         for key in ("debug", "verbose"):
             if self.settings.contains(key):
@@ -112,7 +117,7 @@ class Settings:
         self.settings.endGroup()
         return data
 
-    def save_options (self, data):
+    def save_options(self, data):
         """Save GUI options."""
         self.settings.beginGroup('output')
         for key in ("debug", "verbose"):
@@ -123,14 +128,14 @@ class Settings:
             self.settings.setValue(key, QtCore.QVariant(data[key]))
         self.settings.endGroup()
 
-    def read_recent_documents (self):
+    def read_recent_documents(self):
         """Return list of recent documents."""
         self.settings.beginGroup('recent')
         data = self.settings.value('documents').toStringList()
         self.settings.endGroup()
         return [doc for doc in data]
 
-    def save_recent_documents (self, data):
+    def save_recent_documents(self, data):
         """Save list of recent documents."""
         self.settings.beginGroup('recent')
         self.settings.setValue('documents', QtCore.QVariant(data))
@@ -153,6 +158,6 @@ class Settings:
         self.settings.setValue(key, QtCore.QVariant(data[key]))
         self.settings.endGroup()
 
-    def sync (self):
+    def sync(self):
         """Synchronize QSettings object to disk."""
         self.settings.sync()

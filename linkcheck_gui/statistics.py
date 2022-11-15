@@ -16,7 +16,8 @@
 
 from linkcheck.logger import ContentTypes
 
-def set_statistics (widget, statistics):
+
+def set_statistics(widget, statistics):
     """Set statistic information in given widget."""
     widget.stats_url_minlen.setText("%d" % statistics.min_url_length)
     widget.stats_url_maxlen.setText("%d" % statistics.max_url_length)
@@ -31,10 +32,10 @@ def set_statistics (widget, statistics):
     widget.stats_invalid_urls.setText("%d" % statistics.errors)
     widget.stats_warnings.setText("%d" % statistics.warnings)
     for key, value in list(statistics.link_types.items()):
-        getattr(widget, "stats_content_%s"%key).setText("%d" % value)
+        getattr(widget, "stats_content_%s" % key).setText("%d" % value)
 
 
-def clear_statistics (widget):
+def clear_statistics(widget):
     """Reset statistic information in given widget."""
     widget.stats_url_minlen.setText("")
     widget.stats_url_maxlen.setText("")
@@ -43,4 +44,4 @@ def clear_statistics (widget):
     widget.stats_invalid_urls.setText("")
     widget.stats_warnings.setText("")
     for key in ContentTypes:
-        getattr(widget, "stats_content_%s"%key).setText("")
+        getattr(widget, "stats_content_%s" % key).setText("")

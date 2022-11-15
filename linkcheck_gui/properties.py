@@ -18,17 +18,20 @@ import os
 from linkcheck import strformat
 
 
-def set_properties (widget, data):
+def set_properties(widget, data):
     """Write URL data values into widget text fields."""
     if data.base_url and data.url:
-        widget.prop_url.setText('<a href="%(url)s">%(base_url)s</a>' % \
-                              dict(url=data.url, base_url=data.base_url))
+        widget.prop_url.setText(
+            '<a href="%(url)s">%(base_url)s</a>'
+            % dict(url=data.url, base_url=data.base_url)
+        )
     else:
         widget.prop_url.setText("")
     widget.prop_name.setText(data.name)
     if data.parent_url:
-        widget.prop_parenturl.setText('<a href="%(url)s">%(url)s</a>' % \
-                              dict(url=data.parent_url))
+        widget.prop_parenturl.setText(
+            '<a href="%(url)s">%(url)s</a>' % dict(url=data.parent_url)
+        )
     else:
         widget.prop_parenturl.setText("")
     widget.prop_base.setText(data.base_ref)
@@ -57,7 +60,7 @@ def set_properties (widget, data):
     widget.prop_result.setText(result)
 
 
-def clear_properties (widget):
+def clear_properties(widget):
     """Reset URL data values in widget text fields."""
     widget.prop_url.setText("")
     widget.prop_name.setText("")
@@ -71,9 +74,9 @@ def clear_properties (widget):
     widget.prop_result.setText("")
 
 
-def wrap (lines, width):
+def wrap(lines, width):
     """Format lines with given line-width."""
-    sep = os.linesep+os.linesep
+    sep = os.linesep + os.linesep
     text = sep.join(lines)
     kwargs = dict(break_long_words=False, break_on_hyphens=False)
     return strformat.wrap(text, width, **kwargs)
