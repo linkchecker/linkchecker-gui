@@ -99,7 +99,7 @@ def url_to_filename(url, extension):
     # normalize
     import unicodedata
 
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicodedata.normalize('NFKD', value)
     # replace non-alpha characters and convert to lowercase
     value = re.sub(r'[^\w-]+', '_', value).strip().lower()
     # add extension
