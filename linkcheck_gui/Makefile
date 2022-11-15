@@ -11,9 +11,11 @@ RC_FILES = linkchecker_rc.py
 all: $(UI_FILES) $(RC_FILES)
 
 linkchecker_ui_%.py: ui/%.ui
-	pyuic5 -o $@ $<
+	pyuic5 --from-imports -o $@ $<
 # replace the Qt translator with the one LinkChecker uses
 	sed -i -r -e 's/QtGui\.QApplication\.translate\("[^"]+", "([^"]+)", None, QtGui\.QApplication\.UnicodeUTF8\)/_("\1")/g' $@
+# relative import of lineedit
+	sed -i -e 's/from lineedit/from .lineedit/' $@
 
 linkchecker_rc.py: rc/linkchecker.qrc
 	pyrcc5 -o $@ $<
