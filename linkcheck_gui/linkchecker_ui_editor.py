@@ -2,53 +2,45 @@
 
 # Form implementation generated from reading ui file 'ui/editor.ui'
 #
-# Created: Mon Dec 12 19:00:37 2011
-#      by: PyQt4 UI code generator 4.8.6
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
 
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    _fromUtf8 = lambda s: s
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_EditorDialog(object):
     def setupUi(self, EditorDialog):
-        EditorDialog.setObjectName(_fromUtf8("EditorDialog"))
+        EditorDialog.setObjectName("EditorDialog")
         EditorDialog.setWindowModality(QtCore.Qt.ApplicationModal)
         EditorDialog.resize(640, 600)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(EditorDialog.sizePolicy().hasHeightForWidth())
         EditorDialog.setSizePolicy(sizePolicy)
-        EditorDialog.setWindowTitle(_("LinkChecker source view"))
-        self.verticalLayout = QtGui.QVBoxLayout(EditorDialog)
-        self.verticalLayout.setMargin(0)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.menubar = QtGui.QMenuBar(EditorDialog)
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setTitle(_("&File"))
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.verticalLayout = QtWidgets.QVBoxLayout(EditorDialog)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.menubar = QtWidgets.QMenuBar(EditorDialog)
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
         self.verticalLayout.addWidget(self.menubar)
-        self.frame = QtGui.QFrame(EditorDialog)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        self.frame = QtWidgets.QFrame(EditorDialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
         self.frame.setSizePolicy(sizePolicy)
-        self.frame.setFrameShape(QtGui.QFrame.NoFrame)
-        self.frame.setFrameShadow(QtGui.QFrame.Plain)
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame.setLineWidth(0)
-        self.frame.setObjectName(_fromUtf8("frame"))
+        self.frame.setObjectName("frame")
         self.verticalLayout.addWidget(self.frame)
-        self.actionSave = QtGui.QAction(EditorDialog)
-        self.actionSave.setText(_("&Save"))
-        self.actionSave.setShortcut(_("Ctrl+S"))
-        self.actionSave.setObjectName(_fromUtf8("actionSave"))
+        self.actionSave = QtWidgets.QAction(EditorDialog)
+        self.actionSave.setObjectName("actionSave")
         self.menuFile.addAction(self.actionSave)
         self.menubar.addAction(self.menuFile.menuAction())
 
@@ -56,5 +48,8 @@ class Ui_EditorDialog(object):
         QtCore.QMetaObject.connectSlotsByName(EditorDialog)
 
     def retranslateUi(self, EditorDialog):
-        pass
-
+        _translate = QtCore.QCoreApplication.translate
+        EditorDialog.setWindowTitle(_translate("EditorDialog", "LinkChecker source view"))
+        self.menuFile.setTitle(_translate("EditorDialog", "&File"))
+        self.actionSave.setText(_translate("EditorDialog", "&Save"))
+        self.actionSave.setShortcut(_translate("EditorDialog", "Ctrl+S"))

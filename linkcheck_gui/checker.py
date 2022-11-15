@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2008-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -14,32 +13,32 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 from linkcheck import director
 
 
-class CheckerThread (QtCore.QThread):
+class CheckerThread(QtCore.QThread):
     """Separate checker thread."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Reset check variables."""
-        super(CheckerThread, self).__init__(parent)
+        super().__init__(parent)
         self.aggregate = None
 
-    def check (self, aggregate):
+    def check(self, aggregate):
         """Set check variables and start the thread."""
         self.aggregate = aggregate
         # setup the thread and call run()
         self.start()
 
-    def cancel (self):
+    def cancel(self):
         """Reset check variables and set stop flag."""
         if self.aggregate is not None:
             aggregate = self.aggregate
             self.aggregate = None
             aggregate.cancel()
 
-    def run (self):
+    def run(self):
         """Start checking."""
         assert self.aggregate.config["threads"] > 0
         director.check_urls(self.aggregate)

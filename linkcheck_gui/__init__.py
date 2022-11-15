@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2008-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,58 +15,46 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-import sys
 import re
+import sys
 import webbrowser
-from PyQt4 import QtCore, QtGui
-from .linkchecker_ui_main import Ui_MainWindow
-from .properties import set_properties, clear_properties
-from .statistics import set_statistics, clear_statistics
-from .debug import LinkCheckerDebug
-from .logger import SignalLogger, GuiLogHandler, StatusLogger
-from .help import HelpWindow
-from .options import LinkCheckerOptions
+
+from linkcheck import LinkCheckerError
+from linkcheck import checker as linkchecker_checker
+from linkcheck import configuration as linkchecker_configuration
+from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
+                       mimeutil, strformat)
+from linkcheck import url as urlutil
+from linkcheck.parser import parse_text
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+from . import configuration
 from .checker import CheckerThread
 from .contextmenu import ContextMenu
+from .debug import LinkCheckerDebug
 from .editor import EditorWindow
-from .updater import UpdateDialog
+from .help import HelpWindow
+from .library.containers import enum
+from .linkchecker_ui_main import Ui_MainWindow
+from .logger import GuiLogHandler, SignalLogger, StatusLogger
+from .options import LinkCheckerOptions
+from .projects import ProjectExt, loadproject, openproject, saveproject
+from .properties import clear_properties, set_properties
+from .recentdocs import RecentDocumentModel
+from .settings import Settings
+from .statistics import clear_statistics, set_statistics
+# XXX from .updater import UpdateDialog
 from .urlmodel import UrlItemModel
 from .urlsave import urlsave
-from .settings import Settings
-from .recentdocs import RecentDocumentModel
-from .projects import openproject, saveproject, loadproject, ProjectExt
-from linkcheck import configuration, checker, director, get_link_pat, \
-    strformat, mimeutil, LinkCheckerError, i18n, httputil, logconf
-from linkcheck.containers import enum
-from linkcheck.parser import parse_text
-from linkcheck import url as urlutil
 
-
-DocBaseUrl = "qthelp://bfk.app.linkchecker/doc/"
-RegistryBase = "Bastian"
+DocBaseUrl = "qthelp://linkchecker.app.linkchecker-gui/doc/"
+RegistryBase = "LinkChecker-GUI"
 Status = enum('idle', 'checking')
 
 MaxMessageLength = 60
 
-def get_app_style ():
-    """Return appropriate QStyle object for the current platform to
-    be used in QApplication.setStyle().
-    Currently prefers Macintosh on OS X, else Plastique.
-    Style names are case insensitive.
 
-    See also
-    http://doc.trolltech.com/latest/gallery-macintosh.html
-    and
-    http://doc.trolltech.com/latest/gallery-plastique.html
-    """
-    if sys.platform == 'darwin':
-        style = "Macintosh"
-    else:
-        style = "Plastique"
-    return QtGui.QStyleFactory.create(style)
-
-
-def get_icon (name):
+def get_icon(name):
     """Return QIcon with given pixmap resource name."""
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(name), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -77,10 +64,10 @@ def get_icon (name):
 def warninglines2regex(lines):
     """Convert a list of strings to a regular expression matching any of
     the given strings."""
-    return u"|".join([re.escape(line) for line in lines])
+    return "|".join([re.escape(line) for line in lines])
 
 
-class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
+class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     """The main window displaying checked URLs."""
 
     log_url_signal = QtCore.pyqtSignal(object)
@@ -90,7 +77,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None, url=None, project=None):
         """Initialize UI."""
-        super(LinkCheckerMain, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(configuration.App)
@@ -102,14 +89,15 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         self.checker = CheckerThread(parent=self)
         self.contextmenu = ContextMenu(parent=self)
         self.editor = EditorWindow(parent=self)
-        # Note: do not use QT assistant here because of the .exe packaging
         self.assistant = HelpWindow(self, self.get_qhcpath())
+        self.actionHelp.setVisible(True)
+        self.actionCheckUpdates.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
         self.movie = QtGui.QMovie(":/icons/busy.gif")
         self.movie.setCacheMode(QtGui.QMovie.CacheAll)
-        self.label_busy.setText(u"")
+        self.label_busy.setText("")
         self.label_busy.setMovie(self.movie)
         # init the rest
         self.init_logging()
@@ -128,7 +116,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         self.handler = GuiLogHandler(self.debug.log_msg_signal)
         logconf.init_log_config(handler=self.handler)
 
-    def init_url (self, url):
+    def init_url(self, url):
         """Initialize URL input."""
         documents = self.settings.read_recent_documents()
         self.recent = RecentDocumentModel(parent=self, documents=documents)
@@ -138,13 +126,14 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         elif documents:
             self.urlinput.setText(documents[0])
 
-    def init_menu (self):
+    def init_menu(self):
         """Add menu entries for bookmark file checking."""
         self.urlinput.addMenuEntries(self.menuEdit)
+        return  # XXX
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
-        langActionGroup = QtGui.QActionGroup(self)
+        langActionGroup = QtWidgets.QActionGroup(self)
         langActionGroup.triggered.connect(self.switch_language)
         for i, lang in enumerate(sorted(i18n.supported_languages)):
             action = self.menuLang.addAction("&%d %s" % (i, lang))
@@ -161,7 +150,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         self.__class__.dropEvent = self.handleDropEvent
         self.setAcceptDrops(True)
 
-    def init_app (self, project):
+    def init_app(self, project):
         """Set window size and position, GUI options and reset status."""
         data = self.settings.read_geometry()
         if data["size"] is not None:
@@ -179,23 +168,24 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         data = self.settings.read_misc()
         self.saveresultas = data['saveresultas']
 
-    def get_qhcpath (self):
+    def get_qhcpath(self):
         """Helper function to search for the QHC help file in different
         locations."""
-        devel_dir = os.path.join(configuration.configdata.install_data, "doc", "html")
-        return configuration.get_share_file('lccollection.qhc', devel_dir=devel_dir)
+        return os.path.join(__path__[0], "data", "help", "lccollection.qhc")
 
-    def connect_widgets (self):
+    def connect_widgets(self):
         """Connect widget signals. Some signals use the AutoConnect feature.
         Autoconnected methods have the form on_<objectname>_<signal>.
         """
-        def set_idle ():
+
+        def set_idle():
             """Set application status to idle."""
             self.status = Status.idle
             self.set_statusmsg(_("Check finished."))
             self.controlButton.clicked.disconnect(self.checker.cancel)
+
         self.checker.finished.connect(set_idle)
-        self.checker.terminated.connect(set_idle)
+        # XXX self.checker.terminated.connect(set_idle)
         self.log_url_signal.connect(self.model.log_url)
         self.log_stats_signal.connect(self.log_stats)
         self.error_signal.connect(self.internal_error)
@@ -204,16 +194,18 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         self.prop_url.linkHovered.connect(self.hover_link)
         self.prop_parenturl.linkHovered.connect(self.hover_link)
 
-    def init_shortcuts (self):
+    def init_shortcuts(self):
         """Configure application shortcuts."""
+
         def selectUrl():
             """Highlight URL input textbox."""
             self.urlinput.setFocus()
             self.urlinput.selectAll()
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
+
+        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
         shortcut.activated.connect(selectUrl)
 
-    def init_treeview (self):
+    def init_treeview(self):
         """Set treeview model and layout."""
         self.model = UrlItemModel()
         self.treeView.setModel(self.model)
@@ -224,7 +216,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         selectionModel = self.treeView.selectionModel()
         selectionModel.selectionChanged.connect(self.set_properties)
 
-    def get_treeviewcols (self):
+    def get_treeviewcols(self):
         """Return URL treeview column widths."""
         return dict(
             col1=self.treeView.columnWidth(0),
@@ -232,28 +224,31 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
             col3=self.treeView.columnWidth(2),
         )
 
-    def init_config (self):
+    def init_config(self):
         """Create a configuration object."""
-        self.config = configuration.Configuration()
+        self.config = linkchecker_configuration.Configuration()
         status = StatusLogger(self.log_status_signal)
         self.config.set_status_logger(status)
         # dictionary holding overwritten values
         self.config_backup = {}
         # set standard GUI configuration values
         self.config.logger_add(SignalLogger)
-        self.config["logger"] = self.config.logger_new(SignalLogger.LoggerName,
-            signal=self.log_url_signal, stats=self.log_stats_signal)
+        self.config["logger"] = self.config.logger_new(
+            SignalLogger.LoggerName,
+            signal=self.log_url_signal,
+            stats=self.log_stats_signal,
+        )
         self.config["status"] = True
         self.config["status_wait_seconds"] = 2
 
-    def read_config (self, filename=None):
+    def read_config(self, filename=None):
         """Read user and system configuration file."""
         try:
             self.config.read()
         except LinkCheckerError as msg:
-            self.config_error = unicode(msg)
+            self.config_error = msg
 
-    def set_config (self):
+    def set_config(self):
         """Set configuration."""
         data = self.options.get_options()
         self.config["recursionlevel"] = data["recursionlevel"]
@@ -280,12 +275,12 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
                     pat = get_link_pat(line, strict=1)
                     self.config["externlinks"].append(pat)
                 except re.error as err:
-                    msg = _("Invalid regular expression %r: %s" % (pat, err))
+                    msg = _("Invalid regular expression %r: %s") % (pat, err)
                     self.set_statusmsg(msg)
         # make sure the configuration is sane
         self.config.sanitize()
 
-    def backup_config (self, key, value=None):
+    def backup_config(self, key, value=None):
         """Backup config key if not already done and set given value."""
         if key not in self.config_backup:
             confvalue = self.config[key]
@@ -296,7 +291,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         if value is not None:
             self.config[key] = value
 
-    def restore_config (self):
+    def restore_config(self):
         """Restore config from backup."""
         for key in self.config_backup:
             confvalue = self.config_backup[key]
@@ -305,11 +300,11 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
                 confvalue = confvalue[:]
             self.config[key] = confvalue
 
-    def get_status (self):
+    def get_status(self):
         """Return current application status."""
         return self._status
 
-    def set_status (self, status):
+    def set_status(self, status):
         """Set application status."""
         self._status = status
         if status == Status.idle:
@@ -324,9 +319,9 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
             self.treeView.scrollToTop()
             self.movie.stop()
             # Reset progress information.
-            self.label_active.setText(u"0")
-            self.label_queued.setText(u"0")
-            self.label_checked.setText(u"0")
+            self.label_active.setText("0")
+            self.label_queued.setText("0")
+            self.label_checked.setText("0")
             self.label_busy.hide()
             self.menubar.setEnabled(True)
             self.urlinput.setEnabled(True)
@@ -334,7 +329,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         elif status == Status.checking:
             self.treeView.setSortingEnabled(False)
             self.debug.reset()
-            self.set_statusmsg(_(u"Checking site..."))
+            self.set_statusmsg(_("Checking site..."))
             # disable commands
             self.menubar.setEnabled(False)
             self.urlinput.setEnabled(False)
@@ -348,22 +343,22 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
     status = property(get_status, set_status)
 
     @QtCore.pyqtSlot()
-    def on_actionHelp_triggered (self):
+    def on_actionHelp_triggered(self):
         """Show help page."""
         url = QtCore.QUrl("%sindex.html" % DocBaseUrl)
         self.assistant.showDocumentation(url)
 
     @QtCore.pyqtSlot()
-    def on_actionOptions_triggered (self):
+    def on_actionOptions_triggered(self):
         """Show option dialog."""
         self.options.exec_()
 
     @QtCore.pyqtSlot()
-    def on_actionQuit_triggered (self):
+    def on_actionQuit_triggered(self):
         """Quit application."""
         self.close()
 
-    def closeEvent (self, e=None):
+    def closeEvent(self, e=None):
         """Save settings and remove registered logging handler"""
         self.settings.save_geometry(dict(size=self.size(), pos=self.pos()))
         self.settings.save_treeviewcols(self.get_treeviewcols())
@@ -376,78 +371,81 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
             e.accept()
 
     @QtCore.pyqtSlot()
-    def on_actionAbout_triggered (self):
+    def on_actionAbout_triggered(self):
         """Display about dialog."""
-        modules = u"<br>\n".join(configuration.get_modules_info())
+        modules = "<br>\n".join(configuration.get_modules_info().split())
         d = {
             "app": configuration.App,
             "appname": configuration.AppName,
             "copyright": configuration.HtmlCopyright,
-            "donateurl": configuration.DonateUrl,
-            "pyver": u"%d.%d.%d" % sys.version_info[:3],
+            "pyver": "%d.%d.%d" % sys.version_info[:3],
             "modules": modules,
-            "portable": _("yes") if configuration.Portable else _("no"),
             "releasedate": configuration.ReleaseDate,
+            "linkchecker_version": linkchecker_configuration.Version,
         }
-        QtGui.QMessageBox.about(self, _(u"About %(appname)s") % d,
-            _(u"""<qt><center>
+        QtWidgets.QMessageBox.about(
+            self,
+            _("About %(appname)s") % d,
+            _(
+                """<qt><center>
 <h1>%(app)s</h1>
 <p>Released on %(releasedate)s
+<p>Using LinkChecker %(linkchecker_version)s
 <p>Python: %(pyver)s<br>
 %(modules)s<br>
-Portable version: %(portable)s
 <p>%(copyright)s
 <br>%(appname)s is licensed under the
-<a href="http://www.gnu.org/licenses/gpl.html">GPL</a>
-Version 2 or later.
-<p>If you like %(appname)s, consider one of several ways to
-<a href="%(donateurl)s">donate</a>. Thanks!
-</center></qt>""") % d)
+<a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL</a>
+Version 3 or later.
+</center></qt>"""
+            )
+            % d,
+        )
 
     @QtCore.pyqtSlot()
-    def on_actionDebug_triggered (self):
+    def on_actionDebug_triggered(self):
         """Display debug dialog."""
         self.debug.show()
 
     @QtCore.pyqtSlot()
-    def on_actionOpen_project_triggered (self):
+    def on_actionOpen_project_triggered(self):
         """Open project."""
         openproject(self)
 
     @QtCore.pyqtSlot()
-    def on_actionSave_project_triggered (self):
+    def on_actionSave_project_triggered(self):
         """Save project."""
         saveproject(self, self.get_url())
 
     @QtCore.pyqtSlot()
-    def on_actionSave_triggered (self):
+    def on_actionSave_triggered(self):
         """Save URL results."""
         saveresultas = urlsave(self, self.config, self.model.urls)
         if saveresultas:
             self.saveresultas = saveresultas
 
-    @QtCore.pyqtSlot()
-    def on_actionCheckUpdates_triggered (self):
-        """Display update check result."""
-        dialog = UpdateDialog(self)
-        dialog.reset()
-        dialog.show()
+#    @QtCore.pyqtSlot()
+#    def on_actionCheckUpdates_triggered(self):
+#        """Display update check result."""
+#        dialog = UpdateDialog(self)
+#        dialog.reset()
+#        dialog.show()
 
-    def start (self):
+    def start(self):
         """Start a new check."""
         if self.status == Status.idle:
             self.check()
 
     on_urlinput_returnPressed = start
 
-    def cancel (self):
+    def cancel(self):
         """Note that checking is canceled."""
         self.controlButton.setEnabled(False)
         duration = strformat.strduration_long(self.config["aborttimeout"])
-        self.set_statusmsg(_(u"Closing active URLs with timeout %s...") % duration)
+        self.set_statusmsg(_("Closing active URLs with timeout %s...") % duration)
 
     @QtCore.pyqtSlot()
-    def on_controlButton_clicked (self):
+    def on_controlButton_clicked(self):
         """Start or Cancel has been clicked."""
         if self.status == Status.idle:
             self.start()
@@ -456,17 +454,17 @@ Version 2 or later.
         else:
             raise ValueError("Invalid application status %r" % self.status)
 
-    def get_url (self):
+    def get_url(self):
         """Return URL to check from the urlinput widget."""
-        url = strformat.stripurl(unicode(self.urlinput.text()))
-        url = checker.guess_url(url)
-        if url and u":" not in url:
+        url = strformat.stripurl(self.urlinput.text())
+        url = linkchecker_checker.guess_url(url)
+        if url and ":" not in url:
             # Look for local file, else assume it's an HTTP URL.
             if not os.path.exists(url):
-                url = u"http://%s" % url
+                url = "http://%s" % url
         return url
 
-    def check (self):
+    def check(self):
         """Check given URL."""
         self.model.clear()
         clear_properties(self)
@@ -478,7 +476,7 @@ Version 2 or later.
             self.set_statusmsg(_("Error, empty URL"))
             return
         self.set_statusmsg(_("Checking '%s'.") % strformat.limit(url, 40))
-        url_data = checker.get_url_from(url, 0, aggregate, extern=(0, 0))
+        url_data = linkchecker_checker.get_url_from(url, 0, aggregate, extern=(0, 0))
         self.recent.add_document(url)
 
         # if a local file with .lst extension, assume it is a list of URLs
@@ -492,7 +490,7 @@ Version 2 or later.
         self.checker.check(self.aggregate)
         self.status = Status.checking
 
-    def set_properties (self, selected, deselected):
+    def set_properties(self, selected, deselected):
         """Set URL properties for selected item."""
         indexes = selected.indexes()
         if len(indexes):
@@ -502,12 +500,14 @@ Version 2 or later.
                 set_properties(self, urlitem.url_data)
         selected_rows = len(self.treeView.selectionModel().selectedRows())
         if selected_rows:
-            self.set_statusmsg(_n("%d URL selected.", "%d URLs selected",
-                               selected_rows) % selected_rows)
+            self.set_statusmsg(
+                _n("%d URL selected.", "%d URLs selected", selected_rows)
+                % selected_rows
+            )
         else:
             self.set_statusmsg(_("Ready."))
 
-    def on_treeView_customContextMenuRequested (self, point):
+    def on_treeView_customContextMenuRequested(self, point):
         """Show item context menu."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem is not None:
@@ -515,82 +515,85 @@ Version 2 or later.
             self.contextmenu.popup(QtGui.QCursor.pos())
 
     @QtCore.pyqtSlot()
-    def on_actionViewOnline_triggered (self):
+    def on_actionViewOnline_triggered(self):
         """View item URL online."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem is not None:
             webbrowser.open(urlitem.url_data.url)
 
     @QtCore.pyqtSlot()
-    def on_actionViewParentOnline_triggered (self):
+    def on_actionViewParentOnline_triggered(self):
         """View item parent URL online."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem is not None:
             webbrowser.open(urlitem.url_data.parent_url)
 
     @QtCore.pyqtSlot()
-    def on_actionViewParentSource_triggered (self):
+    def on_actionViewParentSource_triggered(self):
         """View item parent URL source in local text editor (read-only)."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem is not None:
-            self.view_source(urlitem.url_data.parent_url,
-                             urlitem.url_data.line, urlitem.url_data.column)
+            self.view_source(
+                urlitem.url_data.parent_url,
+                urlitem.url_data.line,
+                urlitem.url_data.column,
+            )
 
-    def view_source (self, url, line, col):
+    def view_source(self, url, line, col):
         """View URL source in editor window."""
-        self.editor.setWindowTitle(u"View %s" % url)
+        self.editor.setWindowTitle("View %s" % url)
         self.editor.setUrl(url)
         data, info = urlutil.get_content(url, proxy=self.config["proxy"])
         if data is None:
-            msg = u"An error occurred retreiving URL `%s': %s." % (url, info)
+            msg = _("An error occurred retreiving URL `%s': %s.") % (url, info)
             self.editor.setText(msg)
         else:
             content_type = httputil.get_content_type(info)
             if not content_type:
                 # read function for content type guessing
-                read = lambda: data
+                def read(): return data
                 content_type = mimeutil.guess_mimetype(url, read=read)
             self.editor.setContentType(content_type)
             self.editor.setText(data, line=line, col=col)
         self.editor.show()
 
     @QtCore.pyqtSlot()
-    def on_actionCopyToClipboard_triggered (self):
+    def on_actionCopyToClipboard_triggered(self):
         """Copy item URL to clipboard."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem:
-            clipboard = QtGui.QApplication.clipboard()
+            clipboard = QtWidgets.QApplication.clipboard()
             clipboard.setText(urlitem.url_data.url)
             event = QtCore.QEvent(QtCore.QEvent.Clipboard)
-            QtGui.QApplication.sendEvent(clipboard, event)
+            QtWidgets.QApplication.sendEvent(clipboard, event)
 
-    def set_statusmsg (self, msg):
+    def set_statusmsg(self, msg):
         """Show given status message."""
         self.statusBar.showMessage(msg)
         if len(msg) > MaxMessageLength:
             self.label_status.setToolTip(msg)
-            msg = msg[:MaxMessageLength-3]+u"..."
+            msg = msg[: MaxMessageLength - 3] + "..."
         else:
-            self.label_status.setToolTip(u"")
+            self.label_status.setToolTip("")
         self.label_status.setText(msg)
 
-    def hover_link (self, link):
+    def hover_link(self, link):
         """Show given link in status bar."""
         self.statusBar.showMessage(link)
 
-    def log_status (self, checked, in_progress, queued, duration, num_urls):
+    def log_status(self, checked, in_progress, queued, duration, num_urls):
         """Update number of checked, active and queued links."""
-        self.label_checked.setText(u"%d" % checked)
-        self.label_active.setText(u"%d" % in_progress)
-        self.label_queued.setText(u"%d" % queued)
+        self.label_checked.setText("%d" % checked)
+        self.label_active.setText("%d" % in_progress)
+        self.label_queued.setText("%d" % queued)
 
-    def log_stats (self, statistics):
+    def log_stats(self, statistics):
         """Set statistic information for selected URL."""
         set_statistics(self, statistics)
 
-    def internal_error (self, msg):
+    def internal_error(self, msg):
         """Display internal error message. Triggered by sys.excepthook()."""
-        QtGui.QMessageBox.warning(self, _(u"LinkChecker internal error"), msg)
+        QtWidgets.QMessageBox.warning(self, _("LinkChecker internal error"), msg)
 
     def handleDragEvent(self, event):
         """Handle drag enter of move event."""
@@ -607,14 +610,14 @@ Version 2 or later.
         mime = event.mimeData()
         url = mime.urls()[0]
         if url.path().toLower().endsWith(ProjectExt):
-            filename = unicode(url.toLocalFile())
+            filename = url.toLocalFile()
             loadproject(self, filename)
         else:
             self.urlinput.setText(url.toString())
 
     def retranslateUi(self, Window):
         """Translate menu titles."""
-        super(LinkCheckerMain, self).retranslateUi(Window)
+        super().retranslateUi(Window)
         # self.menu_lang is created after calling retranslateUi
         # the first time, so check for its excistance
         if hasattr(self, "menu_lang"):

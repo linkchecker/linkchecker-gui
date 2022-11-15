@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2009-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -14,27 +13,25 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 import os
-try:
-    import urlparse
-except ImportError:
-    # Python 3
-    from urllib import parse as urlparse
+import urllib.parse
+
 from linkcheck.checker.fileurl import get_os_filename
 
-class ContextMenu (QtGui.QMenu):
+
+class ContextMenu(QtWidgets.QMenu):
     """Show context menu."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Add actions to context menu."""
-        super(ContextMenu, self).__init__(parent)
+        super().__init__(parent)
         self.addAction(parent.actionViewOnline)
         self.addAction(parent.actionCopyToClipboard)
         self.addAction(parent.actionViewParentOnline)
         self.addAction(parent.actionViewParentSource)
 
-    def enableFromItem (self, item):
+    def enableFromItem(self, item):
         """Enable context menu actions depending on the item content."""
         parent = self.parentWidget()
         # data is an instance of CompactUrlData
@@ -46,7 +43,7 @@ class ContextMenu (QtGui.QMenu):
         enable_parent_url_source = self.can_view_parent_source(data)
         parent.actionViewParentSource.setEnabled(enable_parent_url_source)
 
-    def can_view_parent_source (self, url_data):
+    def can_view_parent_source(self, url_data):
         """Determine if parent URL source can be retrieved."""
         if not url_data.valid:
             return False
@@ -55,11 +52,11 @@ class ContextMenu (QtGui.QMenu):
             return False
         # Directory contents are dynamically generated, so it makes
         # no sense in viewing/editing them.
-        if parent.startswith(u"file:"):
-            path = urlparse.urlsplit(parent)[2]
+        if parent.startswith("file:"):
+            path = urllib.parse.urlsplit(parent)[2]
             return not os.path.isdir(get_os_filename(path))
-        if parent.startswith((u"ftp:", u"ftps:")):
-            path = urlparse.urlsplit(parent)[2]
-            return bool(path) and not path.endswith(u'/')
+        if parent.startswith(("ftp:", "ftps:")):
+            path = urllib.parse.urlsplit(parent)[2]
+            return bool(path) and not path.endswith('/')
         # Only HTTP left
-        return parent.startswith((u"http:", u"https:"))
+        return parent.startswith(("http:", "https:"))

@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2010-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,20 +15,20 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-try:
-    import urlparse
-except ImportError:
-    # Python 3
-    from urllib import parse as urlparse
-from PyQt4 import QtGui, QtCore
+import urllib.parse
+
+from PyQt5 import QtWidgets, QtCore
+
 from .linkchecker_ui_editor import Ui_EditorDialog
 from linkcheck.checker.fileurl import get_os_filename
+
 try:
     from .editor_qsci import ContentTypeLexers, Editor
 except ImportError:
     from .editor_qt import ContentTypeLexers, Editor
 
-class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
+
+class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
     """Editor window."""
 
     # emitted after successful save
@@ -37,53 +36,53 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
     # emitted after successful load
     loaded = QtCore.pyqtSignal(str)
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Initialize the editor widget."""
-        super(EditorWindow, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         # filename used for saving
         self.filename = None
         # the Scintilla editor widget
         self.editor = Editor(parent=self.frame)
-        layout = QtGui.QVBoxLayout(self.frame)
+        layout = QtWidgets.QVBoxLayout(self.frame)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.editor)
         # for debugging
-        #self.setText(("1234567890"*8) + "\n<html><head>\n<title>x</title>\n</head>\n")
-        #lexer = Qsci.QsciLexerHTML()
-        #lexer.setFont(self.editor.font())
-        #self.editor.setLexer(lexer)
-        #self.editor.setCursorPosition(1, 1)
-        #self.show()
+        # self.setText(("1234567890"*8) + "\n<html><head>\n<title>x</title>\n</head>\n")
+        # lexer = Qsci.QsciLexerHTML()
+        # lexer.setFont(self.editor.font())
+        # self.editor.setLexer(lexer)
+        # self.editor.setCursorPosition(1, 1)
+        # self.show()
 
-    def setContentType (self, content_type):
+    def setContentType(self, content_type):
         """Choose a lexer according to given content type."""
         lexerclass = ContentTypeLexers.get(content_type.lower())
         self.editor.highlight(lexerclass)
 
-    def setText (self, text, line=1, col=1):
+    def setText(self, text, line=1, col=1):
         """Set editor text and jump to given line and column."""
         self.editor.setText(text)
-        self.editor.setCursorPosition(line-1, col-1)
+        self.editor.setCursorPosition(line - 1, col - 1)
         self.editor.setModified(False)
 
-    def setUrl (self, url):
+    def setUrl(self, url):
         """If URL is a file:// URL, store the filename of it as base
         directory for the "save as" dialog."""
         self.basedir = ""
         if url and url.startswith("file://"):
-            urlparts = urlparse.urlsplit(url)
+            urlparts = urllib.parse.urlsplit(url)
             path = get_os_filename(urlparts[2])
             if os.path.exists(path):
                 self.basedir = path
 
     @QtCore.pyqtSlot()
-    def on_actionSave_triggered (self):
+    def on_actionSave_triggered(self):
         """Save changed editor contents."""
         if self.editor.isModified() or not self.filename:
             self.save()
 
-    def closeEvent (self, e=None):
+    def closeEvent(self, e=None):
         """Save settings and remove registered logging handler"""
         if self.editor.isModified():
             # ask if user wants to save
@@ -100,24 +99,25 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
             # unchanged
             e.accept()
 
-    def wants_save (self):
+    def wants_save(self):
         """Ask user if he wants to save changes. Return True if user
         wants to save, else False."""
-        dialog = QtGui.QMessageBox(parent=self)
-        dialog.setIcon(QtGui.QMessageBox.Question)
+        dialog = QtWidgets.QMessageBox(parent=self)
+        dialog.setIcon(QtWidgets.QMessageBox.Question)
         dialog.setWindowTitle(_("Save file?"))
         dialog.setText(_("The document has been modified."))
         dialog.setInformativeText(_("Do you want to save your changes?"))
-        dialog.setStandardButtons(QtGui.QMessageBox.Save |
-                                  QtGui.QMessageBox.Discard)
-        dialog.setDefaultButton(QtGui.QMessageBox.Save)
-        return dialog.exec_() == QtGui.QMessageBox.Save
+        dialog.setStandardButtons(
+            QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Discard
+        )
+        dialog.setDefaultButton(QtWidgets.QMessageBox.Save)
+        return dialog.exec_() == QtWidgets.QMessageBox.Save
 
-    def save (self):
+    def save(self):
         """Save editor contents to file."""
         if not self.filename:
             title = _("Save File As")
-            res = QtGui.QFileDialog.getSaveFileName(self, title, self.basedir)
+            res = QtWidgets.QFileDialog.getSaveFileName(self, title, self.basedir)
             if not res:
                 # user canceled
                 return
@@ -134,14 +134,14 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
             try:
                 fh = QtCore.QFile(self.filename)
                 if not fh.open(QtCore.QIODevice.WriteOnly):
-                    raise IOError(fh.errorString())
+                    raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
                 stream.setCodec("UTF-8")
                 stream << self.editor.text()
                 self.editor.setModified(False)
                 saved = True
-            except (IOError, OSError) as e:
-                err = QtGui.QMessageBox(self)
+            except OSError as e:
+                err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
         finally:
@@ -151,7 +151,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
             self.saved.emit(self.filename)
         return saved
 
-    def load (self, filename):
+    def load(self, filename):
         """Load editor contents from file."""
         if not os.path.isfile(filename):
             return
@@ -159,7 +159,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
             return
         self.filename = filename
         if not os.access(filename, os.W_OK):
-            title = u"%s (%s)" % (self.filename, _(u"readonly"))
+            title = "{} ({})".format(self.filename, _("readonly"))
         else:
             title = self.filename
         self.setWindowTitle(title)
@@ -169,13 +169,13 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
             try:
                 fh = QtCore.QFile(self.filename)
                 if not fh.open(QtCore.QIODevice.ReadOnly):
-                    raise IOError(fh.errorString())
+                    raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
                 stream.setCodec("UTF-8")
                 self.setText(stream.readAll())
                 loaded = True
-            except (IOError, OSError) as e:
-                err = QtGui.QMessageBox(self)
+            except OSError as e:
+                err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
         finally:

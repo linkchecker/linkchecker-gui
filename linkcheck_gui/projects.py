@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2012-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,26 +16,28 @@
 import re
 import os
 import shutil
-from PyQt4 import QtGui
+import urllib.parse
+
+from PyQt5 import QtWidgets
 from linkcheck.configuration import get_user_config, confparse
-from linkcheck.url import url_split
-from linkcheck.fileutil import is_readable, is_writable
+from linkcheck.url import default_ports, splitport
+from linkcheck.fileutil import is_readable
+from .library.fileutil import is_writable
 
 ProjectExt = ".lcp"
 ProjectFilter = _("LinkChecker project (*%(ext)s)") % dict(ext=ProjectExt)
 
 
-class ProjectParser (confparse.LCConfigParser):
-
-    def __init__ (self, config, gui_options, urlinput):
-        super(ProjectParser, self).__init__(config)
+class ProjectParser(confparse.LCConfigParser):
+    def __init__(self, config, gui_options, urlinput):
+        super().__init__(config)
         # has set_options(data) function
         self.gui_options = gui_options
         # has setText(url) function
         self.urlinput = urlinput
 
-    def read (self, files):
-        super(ProjectParser, self).read(files)
+    def read(self, files):
+        super().read(files)
         self.read_project_config()
         self.read_gui_config()
 
@@ -49,7 +50,7 @@ class ProjectParser (confparse.LCConfigParser):
             url = self.get(section, option)
             self.urlinput.setText(url)
         else:
-            self.urlinput.setText(u"")
+            self.urlinput.setText("")
 
     def read_gui_config(self):
         section = "gui"
@@ -58,26 +59,26 @@ class ProjectParser (confparse.LCConfigParser):
         data = {}
         option = "debug"
         if self.has_option(section, option):
-             data[option] = self.getboolean(section, option)
+            data[option] = self.getboolean(section, option)
         option = "verbose"
         if self.has_option(section, option):
-             data[option] = self.getboolean(section, option)
+            data[option] = self.getboolean(section, option)
         option = "recursionlevel"
         if self.has_option(section, option):
-             data[option] = self.getint(section, option)
+            data[option] = self.getint(section, option)
         option = "warninglines"
         if self.has_option(section, option):
-             data[option] = self.get(section, option)
+            data[option] = self.get(section, option)
         option = "ignorelines"
         if self.has_option(section, option):
-             data[option] = self.get(section, option)
+            data[option] = self.get(section, option)
         self.gui_options.set_options(data)
 
-    def write (self, fp):
+    def write(self, fp):
         """Write project configuration to given file object."""
         self.write_project_config()
         self.write_gui_config()
-        super(ProjectParser, self).write(fp)
+        super().write(fp)
 
     def write_project_config(self):
         """Write project section configuration."""
@@ -89,20 +90,34 @@ class ProjectParser (confparse.LCConfigParser):
         """Write gui section configuration."""
         section = "gui"
         self.add_section(section)
-        for key, value in self.gui_options.get_options().items():
+        for key, value in list(self.gui_options.get_options().items()):
             self.set(section, key, value)
 
 
+def url_split(url):
+    """Split url in a tuple (scheme, hostname, port, document) where
+    hostname is always lowercased.
+    Precondition: url is syntactically correct URI (eg has no whitespace)
+    """
+    scheme, netloc = urllib.parse.splittype(url)
+    host, document = urllib.parse.splithost(netloc)
+    port = default_ports.get(scheme, 0)
+    if host:
+        host = host.lower()
+        host, port = splitport(host, port=port)
+    return scheme, host, port, document
+
+
 def url_to_filename(url, extension):
-    value = unicode(url)
     # filter host and document
     parts = url_split(url)
-    value = parts[1]+parts[3]
+    value = parts[1] + parts[3]
     # normalize
     import unicodedata
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+
+    value = unicodedata.normalize('NFKD', value)
     # replace non-alpha characters and convert to lowercase
-    value = re.sub('[^\w-]+', '_', value).strip().lower()
+    value = re.sub(r'[^\w-]+', '_', value).strip().lower()
     # add extension
     return value + extension
 
@@ -115,16 +130,16 @@ def saveproject(parent, url):
         msg = str(errmsg)
     parent.set_statusmsg(msg)
 
+
 def saveproject_msg(parent, url):
     """Save a project file and return status message."""
     title = _("Save LinkChecker project")
-    func = QtGui.QFileDialog.getSaveFileName
+    func = QtWidgets.QFileDialog.getSaveFileName
     suggestedname = url_to_filename(url, ProjectExt)
-    res = func(parent, title, suggestedname, ProjectFilter)
-    if not res:
+    filename, _filter = func(parent, title, suggestedname, ProjectFilter)
+    if not filename:
         # user canceled
         return _("Canceled saving a project file.")
-    filename = unicode(res)
     d = dict(filename=filename)
     if not is_writable(filename):
         return _("Could not write project file %(filename)s.") % d
@@ -149,10 +164,10 @@ def saveproject_msg(parent, url):
 def write_header(filename, filter_comments):
     """Write header and filter comment lines if file already exists."""
     lines = [
-        '# This is a generated LinkChecker project file. Do not edit'+os.linesep,
+        '# This is a generated LinkChecker project file. Do not edit' + os.linesep,
     ]
     if filter_comments:
-        with open(filename, 'r') as fp:
+        with open(filename) as fp:
             for line in fp:
                 if not line.lstrip().startswith((';', '#')):
                     lines.append(line)
@@ -161,7 +176,7 @@ def write_header(filename, filter_comments):
             fp.write(line)
 
 
-def openproject (parent):
+def openproject(parent):
     """Select and load a project file."""
     try:
         msg = openproject_msg(parent)
@@ -174,9 +189,9 @@ def openproject_msg(parent):
     """Select and load a project file. Returns message to display
     which indicates if file has been loaded successful."""
     title = _("Open LinkChecker project")
-    func = QtGui.QFileDialog.getOpenFileName
+    func = QtWidgets.QFileDialog.getOpenFileName
     directory = ""
-    filename = func(parent, title, directory, ProjectFilter)
+    filename, _filter = func(parent, title, directory, ProjectFilter)
     if not filename:
         # user canceled
         return _("Canceled opening a project file.")
@@ -202,4 +217,3 @@ def loadproject_msg(parent, filename):
     parser.read([filename])
     d = dict(filename=filename)
     return _("Project file %(filename)s loaded successfully.") % d
-

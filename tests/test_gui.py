@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2009-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,18 +15,20 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import unittest
 import sys
-from tests import need_pyqt, need_x11
+
+from . import need_pyqt, need_x11
 
 
-class TestGui (unittest.TestCase):
+class TestGui(unittest.TestCase):
     """Test OMT GUI client."""
 
     @need_pyqt
     @need_x11
-    def test_gui (self):
-        from PyQt4 import QtCore, QtGui, QtTest
+    def test_gui(self):
+        from PyQt5 import QtCore, QtTest, QtWidgets
         from linkcheck_gui import LinkCheckerMain
-        app = QtGui.QApplication(sys.argv)
+
+        app = QtWidgets.QApplication(sys.argv)
         window = LinkCheckerMain()
         window.show()
         QtTest.QTest.mouseClick(window.controlButton, QtCore.Qt.LeftButton)

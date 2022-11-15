@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2010-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -19,62 +18,65 @@ import os
 from linkcheck import strformat
 
 
-def set_properties (widget, data):
+def set_properties(widget, data):
     """Write URL data values into widget text fields."""
     if data.base_url and data.url:
-        widget.prop_url.setText(u'<a href="%(url)s">%(base_url)s</a>' % \
-                              dict(url=data.url, base_url=data.base_url))
+        widget.prop_url.setText(
+            '<a href="%(url)s">%(base_url)s</a>'
+            % dict(url=data.url, base_url=data.base_url)
+        )
     else:
-        widget.prop_url.setText(u"")
+        widget.prop_url.setText("")
     widget.prop_name.setText(data.name)
     if data.parent_url:
-        widget.prop_parenturl.setText(u'<a href="%(url)s">%(url)s</a>' % \
-                              dict(url=data.parent_url))
+        widget.prop_parenturl.setText(
+            '<a href="%(url)s">%(url)s</a>' % dict(url=data.parent_url)
+        )
     else:
-        widget.prop_parenturl.setText(u"")
+        widget.prop_parenturl.setText("")
     widget.prop_base.setText(data.base_ref)
     widget.prop_checktime.setText(_("%.3f seconds") % data.checktime)
     if data.dltime >= 0:
         widget.prop_dltime.setText(_("%.3f seconds") % data.dltime)
     else:
-        widget.prop_dltime.setText(u"")
+        widget.prop_dltime.setText("")
     if data.size >= 0:
         widget.prop_size.setText(strformat.strsize(data.size))
     else:
-        widget.prop_size.setText(u"")
+        widget.prop_size.setText("")
     if data.modified:
         widget.prop_modified.setText(data.modified.isoformat(" "))
     else:
-        widget.prop_modified.setText(u"")
+        widget.prop_modified.setText("")
     widget.prop_info.setText(wrap(data.info, 65))
     warning_msgs = [x[1] for x in data.warnings]
     widget.prop_warning.setText(wrap(warning_msgs, 65))
     if data.valid:
-        result = u"Valid"
+        result = "Valid"
     else:
-        result = u"Error"
+        result = "Error"
     if data.result:
-        result += u": %s" % data.result
+        result += ": %s" % data.result
     widget.prop_result.setText(result)
 
 
-def clear_properties (widget):
+def clear_properties(widget):
     """Reset URL data values in widget text fields."""
-    widget.prop_url.setText(u"")
-    widget.prop_name.setText(u"")
-    widget.prop_parenturl.setText(u"")
-    widget.prop_base.setText(u"")
-    widget.prop_checktime.setText(u"")
-    widget.prop_dltime.setText(u"")
-    widget.prop_size.setText(u"")
-    widget.prop_info.setText(u"")
-    widget.prop_warning.setText(u"")
-    widget.prop_result.setText(u"")
+    widget.prop_url.setText("")
+    widget.prop_name.setText("")
+    widget.prop_parenturl.setText("")
+    widget.prop_base.setText("")
+    widget.prop_checktime.setText("")
+    widget.prop_dltime.setText("")
+    widget.prop_size.setText("")
+    widget.prop_info.setText("")
+    widget.prop_warning.setText("")
+    widget.prop_result.setText("")
 
 
-def wrap (lines, width):
+def wrap(lines, width):
     """Format lines with given line-width."""
-    sep = os.linesep+os.linesep
+    sep = os.linesep + os.linesep
     text = sep.join(lines)
     kwargs = dict(break_long_words=False, break_on_hyphens=False)
     return strformat.wrap(text, width, **kwargs)

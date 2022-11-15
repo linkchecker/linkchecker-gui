@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2008-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -18,32 +16,29 @@
 """
 Check HTML pages for broken links. This is the GUI client.
 """
-import sys
 import signal
-from linkcheck import configuration, drop_privileges, i18n
-from linkcheck.loader import is_frozen
-if is_frozen():
-    # Let Python find the C++ runtime DLLs for PyQt.
-    import os
-    from linkcheck import get_install_data
-    sys.path.append(os.path.join(get_install_data(), 'Microsoft.VC90.CRT'))
-from PyQt4.QtGui import QApplication
+import sys
+
+from linkcheck import configuration
+from linkcheck.command.linkchecker import drop_privileges
 from linkcheck.fileutil import is_readable
-from linkcheck_gui import LinkCheckerMain, get_app_style
-from linkcheck_gui.projects import ProjectExt
+from PyQt5.QtWidgets import QApplication
+
+from . import LinkCheckerMain
+from .projects import ProjectExt
 
 
-def excepthook (window, etype, evalue, tb):
+def excepthook(window, etype, evalue, tb):
     """Catch unhandled exceptions."""
-    from cStringIO import StringIO
+    from io import StringIO
     from linkcheck.director.console import internal_error
-    out = i18n.get_encoded_writer(out=StringIO(), encoding="utf-8")
+    out = StringIO()
     internal_error(out=out, etype=etype, evalue=evalue, tb=tb)
     # signal main window to be thread-safe
     window.error_signal.emit(out.getvalue())
 
 
-def main (argv=None):
+def main(argv=None):
     """Initialize the Qt application, handle commandline arguments
     and show the main window."""
     if argv is None:
@@ -52,12 +47,10 @@ def main (argv=None):
     app.setApplicationName(configuration.AppName)
     app.setApplicationVersion(configuration.Version)
     app.setOrganizationName(configuration.Author)
-    QApplication.setStyle(get_app_style())
-    QApplication.setPalette(QApplication.style().standardPalette())
     args = app.arguments()
     mainkwargs = {}
     if len(args) > 1:
-        fileorurl = unicode(args[1])
+        fileorurl = args[1]
         if is_readable(fileorurl) and fileorurl.lower().endswith(ProjectExt):
             mainkwargs["project"] = fileorurl
         else:
@@ -67,10 +60,9 @@ def main (argv=None):
     # window before app.exec_() finishes
     window = LinkCheckerMain(**mainkwargs)
     window.show()
-    window.raise_() # this will raise the window on Mac OS X
+    window.raise_()  # this will raise the window on Mac OS X
     drop_privileges()
-    sys.excepthook = \
-       lambda etype, evalue, tb: excepthook(window, etype, evalue, tb)
+    sys.excepthook = lambda etype, evalue, tb: excepthook(window, etype, evalue, tb)
     sys.exit(app.exec_())
 
 

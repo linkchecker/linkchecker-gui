@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2011-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,53 +16,54 @@
 """
 Text editor implemented with QScintilla
 """
-from PyQt4 import QtGui, Qsci
+from PyQt5 import QtGui, Qsci
 
 # Map MIME type to Scintilla lexer class
 ContentTypeLexers = {
     "application/x-shellscript": Qsci.QsciLexerBash,
     "application/x-sh": Qsci.QsciLexerBash,
     "application/x-msdos-program": Qsci.QsciLexerBatch,
-    #"": Qsci.QsciLexerCMake,
+    # "": Qsci.QsciLexerCMake,
     "text/x-c++src": Qsci.QsciLexerCPP,
     "text/css": Qsci.QsciLexerCSS,
-    #"": Qsci.QsciLexerCSharp,
-    #"": Qsci.QsciLexerCustom,
+    # "": Qsci.QsciLexerCSharp,
+    # "": Qsci.QsciLexerCustom,
     "text/x-dsrc": Qsci.QsciLexerD,
     "text/x-diff": Qsci.QsciLexerDiff,
-    #"": Qsci.QsciLexerFortran,
-    #"": Qsci.QsciLexerFortran77,
+    # "": Qsci.QsciLexerFortran,
+    # "": Qsci.QsciLexerFortran77,
     "text/html": Qsci.QsciLexerHTML,
-    #"": Qsci.QsciLexerIDL,
+    # "": Qsci.QsciLexerIDL,
     "text/x-java": Qsci.QsciLexerJava,
     "application/javascript": Qsci.QsciLexerJavaScript,
-    #"": Qsci.QsciLexerLua,
+    # "": Qsci.QsciLexerLua,
     "text/x-makefile": Qsci.QsciLexerMakefile,
-    #"": Qsci.QsciLexerPOV,
+    # "": Qsci.QsciLexerPOV,
     "text/x-pascal": Qsci.QsciLexerPascal,
     "text/x-perl": Qsci.QsciLexerPerl,
     "application/postscript": Qsci.QsciLexerPostScript,
     "text/plain+ini": Qsci.QsciLexerProperties,
     "text/x-python": Qsci.QsciLexerPython,
     "application/x-ruby": Qsci.QsciLexerRuby,
-    #"": Qsci.QsciLexerSQL,
-    #"": Qsci.QsciLexerSpice,
+    # "": Qsci.QsciLexerSQL,
+    # "": Qsci.QsciLexerSpice,
     "application/x-tcl": Qsci.QsciLexerTCL,
     "application/x-latex": Qsci.QsciLexerTeX,
-    #"": Qsci.QsciLexerVHDL,
-    #"": Qsci.QsciLexerVerilog,
+    # "": Qsci.QsciLexerVHDL,
+    # "": Qsci.QsciLexerVerilog,
     "application/xml": Qsci.QsciLexerXML,
-    #"": Qsci.QsciLexerYAML,
+    # "": Qsci.QsciLexerYAML,
 }
 
-class Editor (Qsci.QsciScintilla):
+
+class Editor(Qsci.QsciScintilla):
     """Configured QsciScintilla widget."""
 
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         """Set Scintilla options for font, colors, etc."""
-        super(Editor, self).__init__(parent)
+        super().__init__(parent)
         # Use Courier font with fixed width
-        font = QtGui.QFont("Consolas", 11)
+        font = QtGui.QFont("Source Code Pro", 11)
         font.setFixedPitch(True)
 
         # Set the default font of the editor
@@ -72,7 +72,7 @@ class Editor (Qsci.QsciScintilla):
         self.setMarginsFont(font)
 
         # line number margin for 4 digits (plus 2px extra space)
-        margin = QtGui.QFontMetrics(font).width("0"*4)+2
+        margin = QtGui.QFontMetrics(font).width("0" * 4) + 2
         # Display line numbers, margin 0 is for line numbers
         self.setMarginWidth(0, margin)
         self.setMarginLineNumbers(0, True)
@@ -95,10 +95,9 @@ class Editor (Qsci.QsciScintilla):
         self.setMarginsForegroundColor(QtGui.QColor("#333333"))
 
         # folding margin colors (foreground,background)
-        self.setFoldMarginColors(QtGui.QColor("#f5f5dc"),
-                                 QtGui.QColor("#aaaaaa"))
+        self.setFoldMarginColors(QtGui.QColor("#f5f5dc"), QtGui.QColor("#aaaaaa"))
 
-    def highlight (self, lexerclass):
+    def highlight(self, lexerclass):
         """Set syntax highlighter."""
         if lexerclass:
             lexer = lexerclass()

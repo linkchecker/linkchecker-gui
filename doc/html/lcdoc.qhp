@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QtHelpProject version="1.0">
-  <namespace>bfk.app.linkchecker</namespace>
+  <namespace>linkchecker.app.linkchecker-gui</namespace>
   <virtualFolder>doc</virtualFolder>
   <filterSection>
     <toc>
@@ -8,6 +8,9 @@
     </toc>
     <files>
       <file>index.html</file>
+      <file>pygments.css</file>
+      <file>sphinxdoc.css</file>
+      <file>logo/64x64/linkchecker-gui.png</file>
     </files>
   </filterSection>
 </QtHelpProject>

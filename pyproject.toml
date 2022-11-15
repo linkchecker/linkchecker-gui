@@ -1,0 +1,77 @@
+[project]
+name = "LinkChecker-GUI"
+dynamic = ["version"]
+description = "GUI for LinkChecker"
+readme = "README.md"
+authors = [{name = "LinkChecker Authors"}]
+maintainers = [{name = "LinkChecker Authors"}]
+classifiers = [
+    "Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking",
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+requires-python = ">=3.9"
+
+dependencies = [
+    "linkchecker >= 10.1",
+    "PyQt5",
+    "QScintilla",
+]
+
+[build-system]
+requires = [
+    "hatchling >= 1.8.0",
+    "hatch-vcs",
+    "markdown2",
+]
+build-backend = "hatchling.build"
+
+[project.urls]
+Homepage = "https://github.com/linkchecker/linkchecker-gui"
+
+[project.gui-scripts]
+linkchecker-gui = "linkcheck_gui.__main__:main"
+
+[tool.hatch.build]
+artifacts = [
+    "linkcheck_gui/_release.py",
+    "linkcheck_gui/data/",
+]
+exclude = [
+    ".github",
+    "Makefile",
+    "linkcheck_gui/rc/",
+    "linkcheck_gui/ui/",
+]
+
+[tool.hatch.build.hooks.custom]
+path = "tools/hatch_build.py"
+
+[tool.hatch.build.targets.sdist]
+strict-naming = false
+
+[tool.hatch.build.targets.wheel]
+only-include = ["linkcheck_gui"]
+strict-naming = false
+
+[tool.hatch.build.targets.wheel.shared-data]
+"doc/en/linkchecker-gui.1" = "share/man/man1/linkchecker-gui.1"
+"doc/de/linkchecker-gui.1" = "share/man/de/man1/linkchecker-gui.1"
+"doc/linkchecker-gui.desktop" = "share/applications/linkchecker-gui.desktop"
+"doc/html/logo/16x16/linkchecker-gui.png" = "share/icons/hicolor/16x16/apps/linkchecker-gui.png"
+"doc/html/logo/32x32/linkchecker-gui.png" = "share/icons/hicolor/32x32/apps/linkchecker-gui.png"
+"doc/html/logo/48x48/linkchecker-gui.png" = "share/icons/hicolor/48x48/apps/linkchecker-gui.png"
+"doc/html/logo/64x64/linkchecker-gui.png" = "share/icons/hicolor/64x64/apps/linkchecker-gui.png"
+"doc/html/logo/128x128/linkchecker-gui.png" = "share/icons/hicolor/128x128/apps/linkchecker-gui.png"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "node-and-timestamp"
+version_scheme = "post-release"

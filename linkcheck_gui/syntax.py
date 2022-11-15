@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2011-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,10 +14,10 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 
 
-def format (color, style=''):
+def format(color, style=''):
     """Return a QTextCharFormat with the given attributes."""
     format = QtGui.QTextCharFormat()
     format.setForeground(getattr(QtCore.Qt, color))
@@ -29,12 +28,12 @@ def format (color, style=''):
     return format
 
 
-class Highlighter (QtGui.QSyntaxHighlighter):
+class Highlighter(QtGui.QSyntaxHighlighter):
     """Base class for all highlighters."""
 
-    def __init__ (self, document):
+    def __init__(self, document):
         """Initialize rules and styles."""
-        super(Highlighter, self).__init__(document)
+        super().__init__(document)
         self.rules = []
         self.styles = {}
 
@@ -50,23 +49,25 @@ class Highlighter (QtGui.QSyntaxHighlighter):
                 index = expression.indexIn(text, index + length)
         self.setCurrentBlockState(0)
 
-    def addRule (self, pattern, style):
+    def addRule(self, pattern, style):
         """Add a rule pattern with given style."""
         self.rules.append((QtCore.QRegExp(pattern), self.styles[style]))
 
 
-class XmlHighlighter (Highlighter):
+class XmlHighlighter(Highlighter):
     """XML syntax highlighter."""
 
     def __init__(self, document):
         """Set XML syntax rules."""
-        super(XmlHighlighter, self).__init__(document)
-        self.styles.update({
-            'keyword': format('darkBlue'),
-            'attribute': format('darkGreen'),
-            'comment': format('darkYellow'),
-            'string': format('darkMagenta'),
-        })
+        super().__init__(document)
+        self.styles.update(
+            {
+                'keyword': format('darkBlue'),
+                'attribute': format('darkGreen'),
+                'comment': format('darkYellow'),
+                'string': format('darkMagenta'),
+            }
+        )
         # keywords
         for reg in ('/>', '>', '<!?[a-zA-Z0-9_]+'):
             self.addRule(reg, 'keyword')
@@ -79,20 +80,24 @@ class XmlHighlighter (Highlighter):
         # comments
         self.addRule(r"<!--[^>]*-->", 'comment')
 
+
 # Treat HTML as XML
 HtmlHighlighter = XmlHighlighter
 
-class IniHighlighter (Highlighter):
+
+class IniHighlighter(Highlighter):
     """INI syntax highlighter."""
 
     def __init__(self, document):
         """Set INI syntax rules."""
-        super(IniHighlighter, self).__init__(document)
-        self.styles.update({
-            'section': format('darkBlue'),
-            'property': format('darkGreen'),
-            'comment': format('darkYellow'),
-        })
+        super().__init__(document)
+        self.styles.update(
+            {
+                'section': format('darkBlue'),
+                'property': format('darkGreen'),
+                'comment': format('darkYellow'),
+            }
+        )
         self.addRule(r'\b\[[a-zA-Z0-9_]+\]\b', 'section')
         self.addRule(r'\b[a-zA-Z0-9_]+\](?=\s*\=)', 'property')
         self.addRule(r'#[^\n]*', 'comment')

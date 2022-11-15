@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <QHelpCollectionProject version="1.0">
 <assistant>
-   <title>LinkChecker</title>
-   <applicationIcon>logo16x16.png</applicationIcon>
-   <cacheDirectory>bfk/LinkChecker</cacheDirectory>
-   <startPage>qthelp://bfk.app.linkchecker/doc/index.html</startPage>
+   <title>LinkChecker-GUI</title>
+   <applicationIcon>logo/16x16/linkchecker-gui.png</applicationIcon>
+   <cacheDirectory>linkchecker/LinkChecker-GUI</cacheDirectory>
+   <startPage>qthelp://linkchecker.app.linkchecker-gui/doc/index.html</startPage>
    <enableDocumentationManager>false</enableDocumentationManager>
    <enableAddressBar>false</enableAddressBar>
    <enableFilterFunctionality>false</enableFilterFunctionality>

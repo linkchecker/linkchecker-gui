@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2009-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,24 +14,24 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from linkcheck import configuration
-from PyQt4 import QtCore, QtGui, QtHelp
+from . import configuration
+from PyQt5 import QtCore, QtWidgets, QtHelp
 
 
-class HelpWindow (QtGui.QDialog):
+class HelpWindow(QtWidgets.QDialog):
     """A custom help display dialog."""
 
-    def __init__ (self, parent, qhcpath):
+    def __init__(self, parent, qhcpath):
         """Initialize dialog and load qhc help project from given path."""
-        super(HelpWindow, self).__init__(parent)
+        super().__init__(parent)
         self.engine = QtHelp.QHelpEngine(qhcpath, self)
         self.engine.setupData()
-        self.setWindowTitle(u"%s Help" % configuration.AppName)
+        self.setWindowTitle("%s Help" % configuration.AppName)
         self.build_ui()
 
-    def build_ui (self):
+    def build_ui(self):
         """Build UI for the help window."""
-        splitter = QtGui.QSplitter()
+        splitter = QtWidgets.QSplitter()
         splitter.setOrientation(QtCore.Qt.Vertical)
         self.browser = HelpBrowser(splitter, self.engine)
         self.tree = self.engine.contentWidget()
@@ -41,37 +40,38 @@ class HelpWindow (QtGui.QDialog):
         splitter.addWidget(self.tree)
         splitter.addWidget(self.browser)
         splitter.setSizes((70, 530))
-        hlayout = QtGui.QHBoxLayout()
+        hlayout = QtWidgets.QHBoxLayout()
         hlayout.addWidget(splitter)
         self.setLayout(hlayout)
         self.resize(800, 600)
 
-    def showDocumentation (self, url):
+    def showDocumentation(self, url):
         """Show given URL in help browser."""
         self.tree.expandAll()
         self.browser.setSource(url)
         self.show()
 
 
-class HelpBrowser (QtGui.QTextBrowser):
+class HelpBrowser(QtWidgets.QTextBrowser):
     """A QTextBrowser that can handle qthelp:// URLs."""
 
-    def __init__ (self, parent, engine):
+    def __init__(self, parent, engine):
         """Initialize and store given HelpEngine instance."""
-        super(HelpBrowser, self).__init__(parent)
+        super().__init__(parent)
         self.engine = engine
 
-    def setSource (self, url):
-        """Open HTTP URLs in external browser, else call base class
+    def setSource(self, url):
+        """Open HTTPS URLs in external browser, else call base class
         implementation."""
-        if url.scheme() == "http":
+        if url.scheme() == "https":
             import webbrowser
+
             webbrowser.open(str(url.toString()))
         else:
-            QtGui.QTextBrowser.setSource(self, url)
+            QtWidgets.QTextBrowser.setSource(self, url)
 
-    def loadResource (self, rtype, url):
+    def loadResource(self, rtype, url):
         """Handle qthelp:// URLs, load content from help engine."""
         if url.scheme() == "qthelp":
             return QtCore.QVariant(self.engine.fileData(url))
-        return QtGui.QTextBrowser.loadResource(self, rtype, url)
+        return QtWidgets.QTextBrowser.loadResource(self, rtype, url)

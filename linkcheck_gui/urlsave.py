@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2010-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -14,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 
 FilterHtml = _("HTML output (*.html)")
 FilterText = _("Text output (*.txt)")
@@ -34,7 +33,7 @@ Logtype2Filter = {
     'xml': FilterXml,
     'csv': FilterCsv,
 }
-Filter2Logtype = {v: k for k, v in Logtype2Filter.items()}
+Filter2Logtype = {v: k for k, v in list(Logtype2Filter.items())}
 
 Logtype2FileExt = {
     "html": ".html",
@@ -43,13 +42,13 @@ Logtype2FileExt = {
     "csv": ".csv",
 }
 
-def urlsave (parent, config, urls):
+
+def urlsave(parent, config, urls):
     """Save URL results in file."""
     filename, logtype = get_save_filename(parent)
     if not filename:
         # user canceled
         return
-    filename = unicode(filename)
     kwargs = dict(fileoutput=1, filename=filename, encoding="utf_8_sig")
     logger = config.logger_new(logtype, **kwargs)
     logger.start_output()
@@ -62,17 +61,17 @@ def urlsave (parent, config, urls):
     return logtype
 
 
-def get_save_filename (parent):
+def get_save_filename(parent):
     """Open file save dialog for given parent window and base directory.
     Return dialog result."""
     title = _("Save check results")
-    func = QtGui.QFileDialog.getSaveFileName
+    func = QtWidgets.QFileDialog.getSaveFileName
     logtype = parent.saveresultas if parent.saveresultas else 'html'
     filters = ";;".join(sortwithfirst(LoggerFilters, Logtype2Filter[logtype]))
     filename = "linkchecker-out" + Logtype2FileExt[logtype]
     selectedFilter = QtCore.QString()
     res = func(parent, title, filename, filters, selectedFilter)
-    logtype = Filter2Logtype.get(unicode(selectedFilter))
+    logtype = Filter2Logtype.get(selectedFilter)
     return res, logtype
 
 

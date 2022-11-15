@@ -1,8 +1,7 @@
 HELPFILES := lccollection.qhc
 HTMLFILES := index.html
-OXYGEN := ${HOME}/src/oxygen-gitsvn
-ICOICONS := logo16x16.png logo32x32.png
-ICNSICONS := logo16x16.png logo32x32.png logo48x48.png logo128x128.png
+ICOICONS := logo/16x16/linkchecker-gui.png logo/32x32/linkchecker-gui.png
+ICNSICONS := logo/16x16/linkchecker-gui.png logo/32x32/linkchecker-gui.png logo/48x48/linkchecker-gui.png logo/128x128/linkchecker-gui.png
 
 all:	$(HELPFILES) $(HTMLFILES)
 
@@ -17,9 +16,6 @@ test:
 
 %.qhc:	%.qhcp lcdoc.qhp $(HTMLFILES)
 	-qcollectiongenerator $< -o $@
-
-logo%.png:	$(OXYGEN)/%/categories/applications-development-web.png
-	cp $< $@
 
 favicon.ico:	$(ICOICONS)
 	png2ico favicon.ico $(ICOICONS)

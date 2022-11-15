@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 # Copyright (C) 2011-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -16,11 +15,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Provide custom validators."""
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 import re
 
 
-def check_regex (value):
+def check_regex(value):
     """Check if given string value can be compiled with re.compile()."""
     try:
         re.compile(value)
@@ -30,14 +29,14 @@ def check_regex (value):
         return True
 
 
-class PyRegexValidator (QtGui.QValidator):
+class PyRegexValidator(QtGui.QValidator):
     """Validate input that it is a valid Python regular expression."""
 
-    def validate (self, input, pos):
-        if check_regex(unicode(input)):
+    def validate(self, input, pos):
+        if check_regex(input):
             return (QtGui.QValidator.Acceptable, pos)
         return (QtGui.QValidator.Intermediate, pos)
 
-    def fixup (self, input):
-        while not check_regex(unicode(input)):
+    def fixup(self, input):
+        while not check_regex(input):
             input.chop(1)
