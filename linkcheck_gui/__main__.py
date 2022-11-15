@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # Copyright (C) 2008-2016 Bastian Kleineidam
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,8 +23,8 @@ from linkcheck.command.linkchecker import drop_privileges
 
 from PyQt5.QtWidgets import QApplication
 from linkcheck.fileutil import is_readable
-from linkcheck_gui import LinkCheckerMain, get_app_style
-from linkcheck_gui.projects import ProjectExt
+from . import LinkCheckerMain, get_app_style
+from .projects import ProjectExt
 
 
 def excepthook(window, etype, evalue, tb):

@@ -73,7 +73,9 @@ args = dict(
     url="https://github.com/linkchecker/linkchecker-gui",
     license="GPL",
     packages=find_packages(include=["linkcheck_gui", "linkcheck_gui.*"]),
-    scripts=['linkchecker-gui'],
+    entry_points={
+        "gui_scripts": ["linkchecker-gui = linkcheck_gui.__main__:main"],
+    },
     data_files=data_files,
     classifiers=[
         'Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking',
@@ -81,6 +83,10 @@ args = dict(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
     ],
-    install_requires=["linkchecker>=10.1", "PyQt5"],
+    install_requires=[
+        "importlib_metadata;python_version<'3.8'",
+        "linkchecker>=10.1",
+        "PyQt5",
+    ],
 )
 setup(**args)
