@@ -397,7 +397,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
         """Display about dialog."""
-        modules = "<br>\n".join(configuration.get_modules_info())
+        modules = "<br>\n".join(configuration.get_modules_info().split())
         d = {
             "app": configuration.App,
             "appname": configuration.AppName,
