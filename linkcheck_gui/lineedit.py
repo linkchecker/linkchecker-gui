@@ -149,13 +149,13 @@ class LineEdit(QtWidgets.QLineEdit):
         # clear button
         sizeHint = self.clearButton.sizeHint()
         x = self.rect().right() - frameWidth - sizeHint.width()
-        y = (bottom - sizeHint.height()) / 2
+        y = (bottom - sizeHint.height()) // 2
         self.clearButton.move(x, y)
         # list button
         sizeHint = self.listButton.sizeHint()
         # add one to x and y since the button icon is a little off
         x = self.rect().left() + frameWidth + 1
-        y = (bottom - sizeHint.height()) / 2 + 1
+        y = (bottom - sizeHint.height()) // 2 + 1
         self.listButton.move(x, y)
 
     def updateListButton(self):
