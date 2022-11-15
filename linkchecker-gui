@@ -19,7 +19,7 @@ Check HTML pages for broken links. This is the GUI client.
 """
 import sys
 import signal
-from linkcheck import configuration, drop_privileges, i18n
+from linkcheck import configuration, drop_privileges
 from linkcheck.loader import is_frozen
 
 if is_frozen():
@@ -38,7 +38,7 @@ def excepthook(window, etype, evalue, tb):
     """Catch unhandled exceptions."""
     from io import StringIO
     from linkcheck.director.console import internal_error
-    out = i18n.get_encoded_writer(out=StringIO(), encoding="utf-8")
+    out = StringIO()
     internal_error(out=out, etype=etype, evalue=evalue, tb=tb)
     # signal main window to be thread-safe
     window.error_signal.emit(out.getvalue())
