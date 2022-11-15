@@ -29,7 +29,7 @@ def get_profile_dir():
 
             try:
                 basedir = get_shell_folder("Local AppData")
-            except EnvironmentError:
+            except OSError:
                 basedir = os.path.join(
                     os.environ["USERPROFILE"], "Local Settings", "Application Data"
                 )

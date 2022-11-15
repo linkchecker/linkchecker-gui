@@ -32,7 +32,7 @@ def get_profile_dir():
 
             try:
                 basedir = get_shell_folder("Local AppData")
-            except EnvironmentError:
+            except OSError:
                 basedir = os.path.join(
                     os.environ["USERPROFILE"], "Local Settings", "Application Data"
                 )
@@ -68,5 +68,4 @@ def parse_bookmark_file(file):
     Return iterator for bookmarks of the form (url, name).
     Bookmarks are not sorted.
     """
-    for url, name in parse_bookmark_json(json.load(file)):
-        yield url, name
+    yield from parse_bookmark_json(json.load(file))

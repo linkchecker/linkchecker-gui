@@ -23,7 +23,7 @@ class HelpWindow(QtWidgets.QDialog):
 
     def __init__(self, parent, qhcpath):
         """Initialize dialog and load qhc help project from given path."""
-        super(HelpWindow, self).__init__(parent)
+        super().__init__(parent)
         self.engine = QtHelp.QHelpEngine(qhcpath, self)
         self.engine.setupData()
         self.setWindowTitle("%s Help" % configuration.AppName)
@@ -57,7 +57,7 @@ class HelpBrowser(QtWidgets.QTextBrowser):
 
     def __init__(self, parent, engine):
         """Initialize and store given HelpEngine instance."""
-        super(HelpBrowser, self).__init__(parent)
+        super().__init__(parent)
         self.engine = engine
 
     def setSource(self, url):

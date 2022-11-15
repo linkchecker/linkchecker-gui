@@ -44,7 +44,7 @@ class Editor(QtWidgets.QPlainTextEdit):
 
     def __init__(self, parent):
         """Initialize line numbering."""
-        super(Editor, self).__init__(parent)
+        super().__init__(parent)
         font = QtGui.QFont("Source Code Pro", 11)
         font.setFixedPitch(True)
         self.document().setDefaultFont(font)
@@ -127,7 +127,7 @@ class Editor(QtWidgets.QPlainTextEdit):
 
     def resizeEvent(self, event):
         """Resize line number area together with editor."""
-        super(Editor, self).resizeEvent(event)
+        super().resizeEvent(event)
         cr = self.contentsRect()
         self.lineNumberArea.setGeometry(
             QtCore.QRect(cr.left(), cr.top(), self.lineNumberAreaWidth(), cr.height())

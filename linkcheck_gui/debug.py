@@ -25,7 +25,7 @@ class LinkCheckerDebug(QtWidgets.QDialog, Ui_DebugDialog):
 
     def __init__(self, parent=None):
         """Setup the debug message dialog."""
-        super(LinkCheckerDebug, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         font = QtGui.QFont("Source Code Pro", 11)
         font.setFixedPitch(True)

@@ -33,7 +33,7 @@ class Highlighter(QtGui.QSyntaxHighlighter):
 
     def __init__(self, document):
         """Initialize rules and styles."""
-        super(Highlighter, self).__init__(document)
+        super().__init__(document)
         self.rules = []
         self.styles = {}
 
@@ -59,7 +59,7 @@ class XmlHighlighter(Highlighter):
 
     def __init__(self, document):
         """Set XML syntax rules."""
-        super(XmlHighlighter, self).__init__(document)
+        super().__init__(document)
         self.styles.update(
             {
                 'keyword': format('darkBlue'),
@@ -90,7 +90,7 @@ class IniHighlighter(Highlighter):
 
     def __init__(self, document):
         """Set INI syntax rules."""
-        super(IniHighlighter, self).__init__(document)
+        super().__init__(document)
         self.styles.update(
             {
                 'section': format('darkBlue'),

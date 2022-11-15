@@ -22,7 +22,7 @@ class CheckerThread(QtCore.QThread):
 
     def __init__(self, parent=None):
         """Reset check variables."""
-        super(CheckerThread, self).__init__(parent)
+        super().__init__(parent)
         self.aggregate = None
 
     def check(self, aggregate):

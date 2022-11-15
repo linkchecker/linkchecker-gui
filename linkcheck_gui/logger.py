@@ -23,7 +23,7 @@ class GuiLogHandler(Handler):
 
     def __init__(self, signal):
         """Save widget."""
-        super(GuiLogHandler, self).__init__()
+        super().__init__()
         self.signal = signal
 
     def emit(self, record):
@@ -38,7 +38,7 @@ class SignalLogger(_Logger):
 
     def __init__(self, **args):
         """Store signals for URL and statistic data."""
-        super(SignalLogger, self).__init__(**args)
+        super().__init__(**args)
         self.log_url_signal = args["signal"]
         self.log_stats_signal = args["stats"]
 

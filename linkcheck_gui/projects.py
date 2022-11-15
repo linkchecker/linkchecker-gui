@@ -30,14 +30,14 @@ ProjectFilter = _("LinkChecker project (*%(ext)s)") % dict(ext=ProjectExt)
 
 class ProjectParser(confparse.LCConfigParser):
     def __init__(self, config, gui_options, urlinput):
-        super(ProjectParser, self).__init__(config)
+        super().__init__(config)
         # has set_options(data) function
         self.gui_options = gui_options
         # has setText(url) function
         self.urlinput = urlinput
 
     def read(self, files):
-        super(ProjectParser, self).read(files)
+        super().read(files)
         self.read_project_config()
         self.read_gui_config()
 
@@ -78,7 +78,7 @@ class ProjectParser(confparse.LCConfigParser):
         """Write project configuration to given file object."""
         self.write_project_config()
         self.write_gui_config()
-        super(ProjectParser, self).write(fp)
+        super().write(fp)
 
     def write_project_config(self):
         """Write project section configuration."""
@@ -167,7 +167,7 @@ def write_header(filename, filter_comments):
         '# This is a generated LinkChecker project file. Do not edit' + os.linesep,
     ]
     if filter_comments:
-        with open(filename, 'r') as fp:
+        with open(filename) as fp:
             for line in fp:
                 if not line.lstrip().startswith((';', '#')):
                     lines.append(line)

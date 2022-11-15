@@ -116,7 +116,7 @@ class UrlItemModel(QtCore.QAbstractItemModel):
 
     def __init__(self, parent=None):
         """Set empty URL item list."""
-        super(UrlItemModel, self).__init__(parent)
+        super().__init__(parent)
         # list of UrlItem objects
         self.urls = []
 

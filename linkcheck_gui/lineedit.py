@@ -24,7 +24,7 @@ class LineEdit(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None):
         """Initialize buttons and size settings."""
-        super(LineEdit, self).__init__(parent)
+        super().__init__(parent)
         self.listmodel = None
         self.listview = None
         self.setup_clear_button()

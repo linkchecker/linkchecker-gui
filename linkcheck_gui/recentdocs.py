@@ -23,7 +23,7 @@ class RecentDocumentModel(QtCore.QAbstractListModel):
 
     def __init__(self, parent=None, documents=[], maxentries=10):
         """Set document list."""
-        super(RecentDocumentModel, self).__init__(parent)
+        super().__init__(parent)
         self.maxentries = maxentries
         self.documents = documents[:maxentries]
 

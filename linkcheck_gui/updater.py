@@ -35,7 +35,7 @@ class UpdateDialog(QtWidgets.QMessageBox):
 
     def __init__(self, parent=None):
         """Initialize dialog and start background update thread."""
-        super(UpdateDialog, self).__init__(parent)
+        super().__init__(parent)
         title = _('%(app)s update information') % dict(app=configuration.App)
         self.setWindowTitle(title)
         self.thread = UpdateThread()

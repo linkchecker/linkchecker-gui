@@ -77,7 +77,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None, url=None, project=None):
         """Initialize UI."""
-        super(LinkCheckerMain, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(configuration.App)
@@ -617,7 +617,7 @@ Version 3 or later.
 
     def retranslateUi(self, Window):
         """Translate menu titles."""
-        super(LinkCheckerMain, self).retranslateUi(Window)
+        super().retranslateUi(Window)
         # self.menu_lang is created after calling retranslateUi
         # the first time, so check for its excistance
         if hasattr(self, "menu_lang"):

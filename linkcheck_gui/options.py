@@ -27,7 +27,7 @@ class LinkCheckerOptions(QtWidgets.QDialog, Ui_Options):
 
     def __init__(self, parent=None):
         """Reset all options and initialize the editor window."""
-        super(LinkCheckerOptions, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.editor = EditorWindow(self)
         self.closeButton.clicked.connect(self.close)

@@ -38,7 +38,7 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
 
     def __init__(self, parent=None):
         """Initialize the editor widget."""
-        super(EditorWindow, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         # filename used for saving
         self.filename = None
@@ -134,13 +134,13 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
             try:
                 fh = QtCore.QFile(self.filename)
                 if not fh.open(QtCore.QIODevice.WriteOnly):
-                    raise IOError(fh.errorString())
+                    raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
                 stream.setCodec("UTF-8")
                 stream << self.editor.text()
                 self.editor.setModified(False)
                 saved = True
-            except (IOError, OSError) as e:
+            except OSError as e:
                 err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
@@ -169,12 +169,12 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
             try:
                 fh = QtCore.QFile(self.filename)
                 if not fh.open(QtCore.QIODevice.ReadOnly):
-                    raise IOError(fh.errorString())
+                    raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
                 stream.setCodec("UTF-8")
                 self.setText(stream.readAll())
                 loaded = True
-            except (IOError, OSError) as e:
+            except OSError as e:
                 err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
