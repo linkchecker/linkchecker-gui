@@ -209,7 +209,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             self.controlButton.clicked.disconnect(self.checker.cancel)
 
         self.checker.finished.connect(set_idle)
-        self.checker.terminated.connect(set_idle)
+        # XXX self.checker.terminated.connect(set_idle)
         self.log_url_signal.connect(self.model.log_url)
         self.log_stats_signal.connect(self.log_stats)
         self.error_signal.connect(self.internal_error)
