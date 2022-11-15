@@ -34,7 +34,7 @@ import os
 from setuptools import find_packages, setup
 
 # the application version
-AppVersion = "9.4"
+AppVersion = "10.0a1.dev0"
 # the application name
 AppName = "LinkCheckerGUI"
 Description = "GUI for LinkChecker"
@@ -60,7 +60,7 @@ args = dict(
     author_email=myemail,
     maintainer=myname,
     maintainer_email=myemail,
-    url="https://github.com/wummel/linkchecker-gui",
+    url="https://github.com/linkchecker/linkchecker-gui",
     license="GPL",
     packages=find_packages(include=["linkcheck_gui", "linkcheck_gui.*"]),
     scripts=['linkchecker-gui'],
