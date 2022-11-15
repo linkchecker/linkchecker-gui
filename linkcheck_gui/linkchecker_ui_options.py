@@ -13,8 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Options(object):
     def setupUi(self, Options):
         Options.setObjectName("Options")
-        Options.resize(455, 550)
-        Options.setMinimumSize(QtCore.QSize(400, 550))
+        Options.resize(455, 570)
+        Options.setMinimumSize(QtCore.QSize(400, 570))
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(Options)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.groupBox_2 = QtWidgets.QGroupBox(Options)
