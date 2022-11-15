@@ -16,7 +16,6 @@
 
 import os
 import sys
-from xdg.BaseDirectory import xdg_config_home
 
 
 def get_profile_dir():
@@ -39,7 +38,8 @@ def get_profile_dir():
         if sys.platform == "darwin":
             dirpath = os.path.join(os.environ["HOME"], "Library", "Application Support")
         else:
-            dirpath = xdg_config_home
+            dirpath = os.environ.get("XDG_CONFIG_HOME") or \
+                        os.path.expanduser(os.path.join("~", ".config"))
         dirpath = os.path.join(dirpath, "Google", "Chrome")
     return dirpath
 

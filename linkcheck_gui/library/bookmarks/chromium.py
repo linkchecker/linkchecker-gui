@@ -17,7 +17,6 @@
 import os
 import sys
 import json
-from xdg.BaseDirectory import xdg_config_home
 
 from linkcheck.bookmarks.chromium import parse_bookmark_json
 
@@ -42,7 +41,8 @@ def get_profile_dir():
         if sys.platform == "darwin":
             dirpath = os.path.join(os.environ["HOME"], "Library", "Application Support")
         else:
-            dirpath = xdg_config_home
+            dirpath = os.environ.get("XDG_CONFIG_HOME") or \
+                        os.path.expanduser(os.path.join("~", ".config"))
         dirpath = os.path.join(dirpath, "chromium")
     return dirpath
 
