@@ -61,24 +61,6 @@ Status = enum('idle', 'checking')
 MaxMessageLength = 60
 
 
-def get_app_style():
-    """Return appropriate QStyle object for the current platform to
-    be used in QApplication.setStyle().
-    Currently prefers Macintosh on OS X, else Plastique.
-    Style names are case insensitive.
-
-    See also
-    http://doc.trolltech.com/latest/gallery-macintosh.html
-    and
-    http://doc.trolltech.com/latest/gallery-plastique.html
-    """
-    if sys.platform == 'darwin':
-        style = "Macintosh"
-    else:
-        style = "Plastique"
-    return QtWidgets.QStyleFactory.create(style)
-
-
 def get_icon(name):
     """Return QIcon with given pixmap resource name."""
     icon = QtGui.QIcon()

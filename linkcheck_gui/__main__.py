@@ -24,7 +24,7 @@ from linkcheck.command.linkchecker import drop_privileges
 from linkcheck.fileutil import is_readable
 from PyQt5.QtWidgets import QApplication
 
-from . import LinkCheckerMain, get_app_style
+from . import LinkCheckerMain
 from .projects import ProjectExt
 
 
@@ -47,8 +47,6 @@ def main(argv=None):
     app.setApplicationName(configuration.AppName)
     app.setApplicationVersion(configuration.Version)
     app.setOrganizationName(configuration.Author)
-    QApplication.setStyle(get_app_style())
-    QApplication.setPalette(QApplication.style().standardPalette())
     args = app.arguments()
     mainkwargs = {}
     if len(args) > 1:
