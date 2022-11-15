@@ -62,7 +62,7 @@ def get_modules_info():
         if version_attr and hasattr(mod, version_attr):
             attr = getattr(mod, version_attr)
             version = attr() if callable(attr) else attr
-            module_infos.append("%s %s" % (name, version))
+            module_infos.append(f"{name} {version}")
         else:
             # ignore attribute errors in case library developers
             # change the version information attribute

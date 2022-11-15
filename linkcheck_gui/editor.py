@@ -159,7 +159,7 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
             return
         self.filename = filename
         if not os.access(filename, os.W_OK):
-            title = "%s (%s)" % (self.filename, _("readonly"))
+            title = "{} ({})".format(self.filename, _("readonly"))
         else:
             title = self.filename
         self.setWindowTitle(title)

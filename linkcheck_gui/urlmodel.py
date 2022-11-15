@@ -72,7 +72,7 @@ class UrlItem:
                 result += ": %s" % self.url_data.result
         # Parent URL
         if self.url_data.parent_url:
-            parent = "%s%s%s" % (
+            parent = "{}{}{}".format(
                 self.url_data.parent_url,
                 (_(", line %d") % self.url_data.line),
                 (_(", col %d") % self.url_data.column),
