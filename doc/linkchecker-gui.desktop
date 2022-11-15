@@ -7,4 +7,4 @@ Type=Application
 Exec=linkchecker-gui
 Terminal=false
 Categories=Network;WebDevelopment;
-Icon=logo48x48
+Icon=linkchecker-gui

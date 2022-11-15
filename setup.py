@@ -43,6 +43,15 @@ Description = "GUI for LinkChecker"
 myname = "Bastian Kleineidam"
 myemail = "bastian.kleineidam@web.de"
 
+
+def get_icons():
+    icons = []
+    for size in 16, 32, 48, 64, 128:
+        icons.append(('share/icons/hicolor/{0}x{0}/apps'.format(size),
+                     ['doc/html/logo/{0}x{0}/linkchecker-gui.png'.format(size)]))
+    return icons
+
+
 data_files = []  # XXX
 #    ('share/linkchecker', ['doc/html/lccollection.qhc', 'doc/html/lcdoc.qch'])
 # ]
@@ -51,6 +60,7 @@ if os.name == 'posix':
     data_files.append(('share/man/man1', ['doc/en/linkchecker-gui.1']))
     data_files.append(('share/man/de/man1', ['doc/de/linkchecker-gui.1']))
     data_files.append(('share/applications', ['doc/linkchecker-gui.desktop']))
+    data_files.extend(get_icons())
 
 args = dict(
     name=AppName,
