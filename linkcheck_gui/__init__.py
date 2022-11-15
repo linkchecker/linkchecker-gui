@@ -153,6 +153,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def init_menu(self):
         """Add menu entries for bookmark file checking."""
         self.urlinput.addMenuEntries(self.menuEdit)
+        return  # XXX
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
