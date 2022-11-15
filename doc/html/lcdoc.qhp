@@ -8,6 +8,9 @@
     </toc>
     <files>
       <file>index.html</file>
+      <file>pygments.css</file>
+      <file>sphinxdoc.css</file>
+      <file>logo/64x64/linkchecker-gui.png</file>
     </files>
   </filterSection>
 </QtHelpProject>
