@@ -15,7 +15,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import unittest
 import sys
-from tests import need_pyqt, need_x11
+
+from . import need_pyqt, need_x11
 
 
 class TestGui(unittest.TestCase):
@@ -24,7 +25,7 @@ class TestGui(unittest.TestCase):
     @need_pyqt
     @need_x11
     def test_gui(self):
-        from PyQt5 import QtCore, QtWidgets, QtTest
+        from PyQt5 import QtCore, QtTest, QtWidgets
         from linkcheck_gui import LinkCheckerMain
 
         app = QtWidgets.QApplication(sys.argv)
