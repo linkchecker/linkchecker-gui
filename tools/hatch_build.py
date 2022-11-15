@@ -15,18 +15,26 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from pathlib import Path
+import shutil
 import subprocess
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
+import markdown2
 
+HELP_DIR = ("linkcheck_gui", "data", "help")
 RELEASE_PY = ("linkcheck_gui", "_release.py")
+HELP_SRC_DIR = ("doc", "html")
 
 
 class CustomBuildHook(BuildHookInterface):
     def clean(self, versions):
         Path(*RELEASE_PY).unlink(missing_ok=True)
+        shutil.rmtree(str(Path(*HELP_DIR)), ignore_errors=True)
 
     def initialize(self, version, build_data):
+        if not shutil.which("qtchooser"):
+            raise SystemExit("qtchooser not found")
+
         cp = None
         committer_date = committer_year = "unknown"
         try:
@@ -50,3 +58,17 @@ __copyright_year__ = "{committer_year}"
 __author__ = "{self.metadata.core.authors[0]['name']}"
 __url__ = "{self.metadata.core.urls["Homepage"]}"
 """)
+
+        index_html = (Path(*HELP_SRC_DIR, "html.header").read_text()
+                      + markdown2.markdown_path(str(Path(*HELP_SRC_DIR, "index.txt")))
+                      + Path(*HELP_SRC_DIR, "html.footer").read_text())
+        Path(*HELP_SRC_DIR, "index.html").write_text(index_html)
+
+        cp = subprocess.run(["qtchooser", "-run-tool=qhelpgenerator", "-qt=qt5",
+                             "-c", "lccollection.qhcp", "-o", "lccollection.qhc",
+                             ],
+                            cwd=Path(*HELP_SRC_DIR), check=True)
+
+        Path(*HELP_DIR).mkdir(parents=True, exist_ok=True)
+        shutil.copy(Path(*HELP_SRC_DIR, "lcdoc.qch"), Path(*HELP_DIR))
+        shutil.copy(Path(*HELP_SRC_DIR, "lccollection.qhc"), Path(*HELP_DIR))

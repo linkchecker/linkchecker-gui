@@ -23,7 +23,11 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Build-time artifacts
 _release.py
+doc/html/index.html
+linkcheck_gui/data/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

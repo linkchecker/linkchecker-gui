@@ -14,7 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from linkcheck import configuration
+from . import configuration
 from PyQt5 import QtCore, QtWidgets, QtHelp
 
 
@@ -61,9 +61,9 @@ class HelpBrowser(QtWidgets.QTextBrowser):
         self.engine = engine
 
     def setSource(self, url):
-        """Open HTTP URLs in external browser, else call base class
+        """Open HTTPS URLs in external browser, else call base class
         implementation."""
-        if url.scheme() == "http":
+        if url.scheme() == "https":
             import webbrowser
 
             webbrowser.open(str(url.toString()))

@@ -10,13 +10,11 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
 
-requires-python = ">=3.5"
+requires-python = ">=3.9"
 
 dependencies = [
     "linkchecker >= 10.1",
@@ -28,6 +26,7 @@ dependencies = [
 requires = [
     "hatchling >= 1.8.0",
     "hatch-vcs",
+    "markdown2",
 ]
 build-backend = "hatchling.build"
 
@@ -40,6 +39,7 @@ linkchecker-gui = "linkcheck_gui.__main__:main"
 [tool.hatch.build]
 artifacts = [
     "linkcheck_gui/_release.py",
+    "linkcheck_gui/data/",
 ]
 exclude = [
     ".github",

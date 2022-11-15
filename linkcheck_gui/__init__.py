@@ -24,7 +24,7 @@ from .properties import set_properties, clear_properties
 from .statistics import set_statistics, clear_statistics
 from .debug import LinkCheckerDebug
 from .logger import SignalLogger, GuiLogHandler, StatusLogger
-# XXX from .help import HelpWindow
+from .help import HelpWindow
 from .options import LinkCheckerOptions
 from .checker import CheckerThread
 from .contextmenu import ContextMenu
@@ -54,8 +54,8 @@ from linkcheck.parser import parse_text
 from linkcheck import url as urlutil
 
 
-DocBaseUrl = "qthelp://bfk.app.linkchecker/doc/"
-RegistryBase = "Bastian"
+DocBaseUrl = "qthelp://linkchecker.app.linkchecker-gui/doc/"
+RegistryBase = "LinkChecker-GUI"
 Status = enum('idle', 'checking')
 
 MaxMessageLength = 60
@@ -114,9 +114,8 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.checker = CheckerThread(parent=self)
         self.contextmenu = ContextMenu(parent=self)
         self.editor = EditorWindow(parent=self)
-        # Note: do not use QT assistant here because of the .exe packaging
-        # XXX self.assistant = HelpWindow(self, self.get_qhcpath())
-        self.actionHelp.setVisible(False)  # XXX
+        self.assistant = HelpWindow(self, self.get_qhcpath())
+        self.actionHelp.setVisible(True)
         self.actionCheckUpdates.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
@@ -197,8 +196,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def get_qhcpath(self):
         """Helper function to search for the QHC help file in different
         locations."""
-        devel_dir = os.path.join(configuration.configdata.install_data, "doc", "html")
-        return configuration.get_share_file('lccollection.qhc', devel_dir=devel_dir)
+        return os.path.join(__path__[0], "data", "help", "lccollection.qhc")
 
     def connect_widgets(self):
         """Connect widget signals. Some signals use the AutoConnect feature.
@@ -372,8 +370,8 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot()
     def on_actionHelp_triggered(self):
         """Show help page."""
-        # XXX url = QtCore.QUrl("%sindex.html" % DocBaseUrl)
-        # XXX self.assistant.showDocumentation(url)
+        url = QtCore.QUrl("%sindex.html" % DocBaseUrl)
+        self.assistant.showDocumentation(url)
 
     @QtCore.pyqtSlot()
     def on_actionOptions_triggered(self):
