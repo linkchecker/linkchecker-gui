@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding: iso-8859-1 -*-
 # Copyright (C) 2016 Bastian Kleineidam
 #
@@ -71,7 +71,7 @@ args = dict(
     data_files = data_files,
     classifiers = [
         'Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking',
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
     ],
