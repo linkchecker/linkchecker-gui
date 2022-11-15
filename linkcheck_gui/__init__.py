@@ -24,7 +24,7 @@ from .properties import set_properties, clear_properties
 from .statistics import set_statistics, clear_statistics
 from .debug import LinkCheckerDebug
 from .logger import SignalLogger, GuiLogHandler, StatusLogger
-from .help import HelpWindow
+# XXX from .help import HelpWindow
 from .options import LinkCheckerOptions
 from .checker import CheckerThread
 from .contextmenu import ContextMenu
@@ -114,7 +114,8 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.contextmenu = ContextMenu(parent=self)
         self.editor = EditorWindow(parent=self)
         # Note: do not use QT assistant here because of the .exe packaging
-        self.assistant = HelpWindow(self, self.get_qhcpath())
+        # XXX self.assistant = HelpWindow(self, self.get_qhcpath())
+        self.actionHelp.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
@@ -368,8 +369,8 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot()
     def on_actionHelp_triggered(self):
         """Show help page."""
-        url = QtCore.QUrl("%sindex.html" % DocBaseUrl)
-        self.assistant.showDocumentation(url)
+        # XXX url = QtCore.QUrl("%sindex.html" % DocBaseUrl)
+        # XXX self.assistant.showDocumentation(url)
 
     @QtCore.pyqtSlot()
     def on_actionOptions_triggered(self):

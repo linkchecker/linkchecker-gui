@@ -43,9 +43,9 @@ Description = "GUI for LinkChecker"
 myname = "Bastian Kleineidam"
 myemail = "bastian.kleineidam@web.de"
 
-data_files = [
-    ('share/linkchecker', ['doc/html/lccollection.qhc', 'doc/html/lcdoc.qch']),
-]
+data_files = []  # XXX
+#    ('share/linkchecker', ['doc/html/lccollection.qhc', 'doc/html/lcdoc.qch'])
+# ]
 
 if os.name == 'posix':
     data_files.append(('share/man/man1', ['doc/en/linkchecker-gui.1']))
