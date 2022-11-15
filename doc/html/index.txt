@@ -7,7 +7,10 @@ it is enough to
 type ``linkchecker www.example.org`` on the command line or
 type ``www.example.org`` in the GUI application. This will check the
 complete domain of ``http://www.example.org`` recursively. All links
-pointing outside of the domain are also checked for validity.
+pointing outside of the domain are also checked for validity. It is also
+possible to check URLs from  a text file consisting of one URL per line; 
+the file name must end in ``.lst`` and the path to the file
+should be entered in the URL box of the GUI application.
 
 Local files can also be checked. On Unix or OSX systems the syntax
 is ``file:///path/to/my/file.html``. On Windows the syntax is
