@@ -251,7 +251,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         try:
             self.config.read()
         except LinkCheckerError as msg:
-            self.config_error = unicode(msg)
+            self.config_error = msg
 
     def set_config (self):
         """Set configuration."""
@@ -458,7 +458,7 @@ Version 2 or later.
 
     def get_url (self):
         """Return URL to check from the urlinput widget."""
-        url = strformat.stripurl(unicode(self.urlinput.text()))
+        url = strformat.stripurl(self.urlinput.text())
         url = checker.guess_url(url)
         if url and u":" not in url:
             # Look for local file, else assume it's an HTTP URL.
@@ -607,7 +607,7 @@ Version 2 or later.
         mime = event.mimeData()
         url = mime.urls()[0]
         if url.path().toLower().endsWith(ProjectExt):
-            filename = unicode(url.toLocalFile())
+            filename = url.toLocalFile()
             loadproject(self, filename)
         else:
             self.urlinput.setText(url.toString())

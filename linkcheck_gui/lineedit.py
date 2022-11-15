@@ -113,8 +113,7 @@ class LineEdit (QtGui.QLineEdit):
         """Select recent document text after click on the list view."""
         self.listview.hide()
         item = self.listmodel.data(index)
-        text = unicode(item.toString())
-        self.setText(text)
+        self.setText(item.toString())
 
     def setup_size_metrics (self):
         """Set widget size including the buttons."""

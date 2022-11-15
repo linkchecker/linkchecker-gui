@@ -66,8 +66,8 @@ class LinkCheckerOptions (QtGui.QDialog, Ui_Options):
             debug=self.debug.isChecked(),
             verbose=self.verbose.isChecked(),
             recursionlevel=self.recursionlevel.value(),
-            warninglines=unicode(self.warninglines.toPlainText()),
-            ignorelines=unicode(self.ignorelines.toPlainText()),
+            warninglines=self.warninglines.toPlainText(),
+            ignorelines=self.ignorelines.toPlainText(),
         )
 
     def set_options (self, data):

@@ -94,7 +94,6 @@ class ProjectParser (confparse.LCConfigParser):
 
 
 def url_to_filename(url, extension):
-    value = unicode(url)
     # filter host and document
     parts = url_split(url)
     value = parts[1]+parts[3]
@@ -124,7 +123,7 @@ def saveproject_msg(parent, url):
     if not res:
         # user canceled
         return _("Canceled saving a project file.")
-    filename = unicode(res)
+    filename = res
     d = dict(filename=filename)
     if not is_writable(filename):
         return _("Could not write project file %(filename)s.") % d

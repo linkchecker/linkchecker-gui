@@ -49,7 +49,6 @@ def urlsave (parent, config, urls):
     if not filename:
         # user canceled
         return
-    filename = unicode(filename)
     kwargs = dict(fileoutput=1, filename=filename, encoding="utf_8_sig")
     logger = config.logger_new(logtype, **kwargs)
     logger.start_output()
@@ -72,7 +71,7 @@ def get_save_filename (parent):
     filename = "linkchecker-out" + Logtype2FileExt[logtype]
     selectedFilter = QtCore.QString()
     res = func(parent, title, filename, filters, selectedFilter)
-    logtype = Filter2Logtype.get(unicode(selectedFilter))
+    logtype = Filter2Logtype.get(selectedFilter)
     return res, logtype
 
 

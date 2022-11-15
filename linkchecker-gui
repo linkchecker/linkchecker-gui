@@ -57,7 +57,7 @@ def main (argv=None):
     args = app.arguments()
     mainkwargs = {}
     if len(args) > 1:
-        fileorurl = unicode(args[1])
+        fileorurl = args[1]
         if is_readable(fileorurl) and fileorurl.lower().endswith(ProjectExt):
             mainkwargs["project"] = fileorurl
         else:

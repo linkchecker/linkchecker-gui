@@ -84,7 +84,7 @@ class UrlItem (object):
             # Parent URL
             parent,
             # URL
-            unicode(self.url_data.url),
+            self.url_data.url,
             # Name
             self.url_data.name,
             # Result
@@ -103,7 +103,7 @@ class UrlItem (object):
             # Parent URL
             u"",
             # URL
-            unicode(self.url_data.url),
+            self.url_data.url,
             # Name
             self.url_data.name,
             # Result

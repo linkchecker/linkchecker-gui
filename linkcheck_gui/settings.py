@@ -106,10 +106,10 @@ class Settings (object):
             data['recursionlevel'] = value
         if self.settings.contains('warninglines'):
             value = self.settings.value('warninglines').toString()
-            data['warninglines'] = unicode(value)
+            data['warninglines'] = value
         if self.settings.contains('ignorelines'):
             value = self.settings.value('ignorelines').toString()
-            data['ignorelines'] = unicode(value)
+            data['ignorelines'] = value
         self.settings.endGroup()
         return data
 
@@ -129,7 +129,7 @@ class Settings (object):
         self.settings.beginGroup('recent')
         data = self.settings.value('documents').toStringList()
         self.settings.endGroup()
-        return [unicode(doc) for doc in data]
+        return [doc for doc in data]
 
     def save_recent_documents (self, data):
         """Save list of recent documents."""
@@ -143,7 +143,7 @@ class Settings (object):
         self.settings.beginGroup('misc')
         key = 'saveresultas'
         value = self.settings.value(key).toString()
-        data[key] = unicode(value)
+        data[key] = value
         self.settings.endGroup()
         return data
 
