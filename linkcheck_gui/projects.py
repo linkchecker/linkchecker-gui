@@ -16,9 +16,11 @@
 import re
 import os
 import shutil
+import urllib.parse
+
 from PyQt5 import QtWidgets
 from linkcheck.configuration import get_user_config, confparse
-from linkcheck.url import url_split
+from linkcheck.url import default_ports, splitport
 from linkcheck.fileutil import is_readable
 from .library.fileutil import is_writable
 
@@ -90,6 +92,20 @@ class ProjectParser(confparse.LCConfigParser):
         self.add_section(section)
         for key, value in list(self.gui_options.get_options().items()):
             self.set(section, key, value)
+
+
+def url_split(url):
+    """Split url in a tuple (scheme, hostname, port, document) where
+    hostname is always lowercased.
+    Precondition: url is syntactically correct URI (eg has no whitespace)
+    """
+    scheme, netloc = urllib.parse.splittype(url)
+    host, document = urllib.parse.splithost(netloc)
+    port = default_ports.get(scheme, 0)
+    if host:
+        host = host.lower()
+        host, port = splitport(host, port=port)
+    return scheme, host, port, document
 
 
 def url_to_filename(url, extension):
