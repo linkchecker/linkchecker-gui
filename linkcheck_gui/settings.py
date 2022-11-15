@@ -44,9 +44,9 @@ class Settings:
         data = dict(size=None, pos=None)
         self.settings.beginGroup('mainwindow')
         if self.settings.contains('size'):
-            data["size"] = save_size(self.settings.value('size').toSize())
+            data["size"] = save_size(self.settings.value('size'))
         if self.settings.contains('pos'):
-            data["pos"] = save_point(self.settings.value('pos').toPoint())
+            data["pos"] = save_point(self.settings.value('pos'))
         self.settings.endGroup()
         return data
 
@@ -55,8 +55,8 @@ class Settings:
         size = save_size(data["size"])
         pos = save_point(data["pos"])
         self.settings.beginGroup('mainwindow')
-        self.settings.setValue("size", QtCore.QVariant(size))
-        self.settings.setValue("pos", QtCore.QVariant(pos))
+        self.settings.setValue("size", size)
+        self.settings.setValue("pos", pos)
         self.settings.endGroup()
 
     def read_treeviewcols(self):
@@ -65,8 +65,8 @@ class Settings:
         self.settings.beginGroup('treeview')
         for key in ("col1", "col2", "col3"):
             if self.settings.contains(key):
-                value, ok = self.settings.value(key).toInt()
-                if ok:
+                value = int(self.settings.value(key))
+                if value:
                     if value < 50:
                         value = 50
                     elif value > 500:
@@ -79,7 +79,7 @@ class Settings:
         """Save widths of URL treeview columns."""
         self.settings.beginGroup('treeview')
         for key in ("col1", "col2", "col3"):
-            self.settings.setValue(key, QtCore.QVariant(data[key]))
+            self.settings.setValue(key, data[key])
         self.settings.endGroup()
 
     def read_options(self):
@@ -94,25 +94,23 @@ class Settings:
         self.settings.beginGroup('output')
         for key in ("debug", "verbose"):
             if self.settings.contains(key):
-                data[key] = self.settings.value(key).toBool()
+                data[key] = self.settings.value(key, type=bool)
         self.settings.endGroup()
         self.settings.beginGroup('checking')
         if self.settings.contains('recursionlevel'):
-            value, ok = self.settings.value('recursionlevel').toInt()
-            if ok:
-                if value < -1:
-                    value = -1
-                elif value > 100:
+            value = int(self.settings.value('recursionlevel'))
+            if value >= 0:
+                if value > 100:
                     # 100 is the maximum GUI option value
                     value = 100
             else:
                 value = -1
             data['recursionlevel'] = value
         if self.settings.contains('warninglines'):
-            value = self.settings.value('warninglines').toString()
+            value = self.settings.value('warninglines')
             data['warninglines'] = value
         if self.settings.contains('ignorelines'):
-            value = self.settings.value('ignorelines').toString()
+            value = self.settings.value('ignorelines')
             data['ignorelines'] = value
         self.settings.endGroup()
         return data
@@ -121,24 +119,24 @@ class Settings:
         """Save GUI options."""
         self.settings.beginGroup('output')
         for key in ("debug", "verbose"):
-            self.settings.setValue(key, QtCore.QVariant(data[key]))
+            self.settings.setValue(key, data[key])
         self.settings.endGroup()
         self.settings.beginGroup('checking')
         for key in ("recursionlevel", "warninglines", "ignorelines"):
-            self.settings.setValue(key, QtCore.QVariant(data[key]))
+            self.settings.setValue(key, data[key])
         self.settings.endGroup()
 
     def read_recent_documents(self):
         """Return list of recent documents."""
         self.settings.beginGroup('recent')
-        data = self.settings.value('documents').toStringList()
+        data = self.settings.value('documents') or []
         self.settings.endGroup()
         return [doc for doc in data]
 
     def save_recent_documents(self, data):
         """Save list of recent documents."""
         self.settings.beginGroup('recent')
-        self.settings.setValue('documents', QtCore.QVariant(data))
+        self.settings.setValue('documents', data)
         self.settings.endGroup()
 
     def read_misc(self):
@@ -146,7 +144,7 @@ class Settings:
         data = dict(saveresultas=None)
         self.settings.beginGroup('misc')
         key = 'saveresultas'
-        value = self.settings.value(key).toString()
+        value = self.settings.value(key)
         data[key] = value
         self.settings.endGroup()
         return data
@@ -155,7 +153,7 @@ class Settings:
         """Save misc options."""
         self.settings.beginGroup('misc')
         key = 'saveresultas'
-        self.settings.setValue(key, QtCore.QVariant(data[key]))
+        self.settings.setValue(key, data[key])
         self.settings.endGroup()
 
     def sync(self):
