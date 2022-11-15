@@ -18,7 +18,7 @@ import os
 from PyQt5 import QtWidgets
 from .linkchecker_ui_options import Ui_Options
 from .editor import EditorWindow
-from linkcheck.fileutil import is_writable
+from .library.fileutil import is_writable
 from linkcheck import configuration
 
 

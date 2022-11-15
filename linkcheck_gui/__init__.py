@@ -35,6 +35,8 @@ from .urlsave import urlsave
 from .settings import Settings
 from .recentdocs import RecentDocumentModel
 from .projects import openproject, saveproject, loadproject, ProjectExt
+from .library.containers import enum
+
 from linkcheck import (
     configuration,
     checker,
@@ -47,7 +49,6 @@ from linkcheck import (
     httputil,
     logconf,
 )
-from linkcheck.containers import enum
 from linkcheck.parser import parse_text
 from linkcheck import url as urlutil
 

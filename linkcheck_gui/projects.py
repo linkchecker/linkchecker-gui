@@ -19,7 +19,8 @@ import shutil
 from PyQt5 import QtWidgets
 from linkcheck.configuration import get_user_config, confparse
 from linkcheck.url import url_split
-from linkcheck.fileutil import is_readable, is_writable
+from linkcheck.fileutil import is_readable
+from .library.fileutil import is_writable
 
 ProjectExt = ".lcp"
 ProjectFilter = _("LinkChecker project (*%(ext)s)") % dict(ext=ProjectExt)

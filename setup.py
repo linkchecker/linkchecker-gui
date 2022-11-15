@@ -31,7 +31,7 @@ if sys.version_info < (3, 5, 0, 'final', 0):
 import os
 
 # import Distutils stuff
-from setuptools import setup
+from setuptools import find_packages, setup
 
 # the application version
 AppVersion = "9.4"
@@ -62,7 +62,7 @@ args = dict(
     maintainer_email=myemail,
     url="https://github.com/wummel/linkchecker-gui",
     license="GPL",
-    packages=['linkcheck_gui',],
+    packages=find_packages(include=["linkcheck_gui", "linkcheck_gui.*"]),
     scripts=['linkchecker-gui'],
     data_files=data_files,
     classifiers=[
