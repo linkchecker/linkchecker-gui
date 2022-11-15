@@ -24,7 +24,7 @@ It includes the following features:
 - automatic generation of .mo locale files
 - automatic permission setting on POSIX systems for installed files
 """
-from __future__ import print_function
+
 import sys
 if sys.version_info < (3, 5, 0, 'final', 0):
     raise SystemExit("This program requires Python 3.5 or later.")
