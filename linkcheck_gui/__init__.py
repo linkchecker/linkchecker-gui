@@ -576,7 +576,7 @@ Version 2 or later.
             content_type = httputil.get_content_type(info)
             if not content_type:
                 # read function for content type guessing
-                read = lambda: data
+                def read(): return data
                 content_type = mimeutil.guess_mimetype(url, read=read)
             self.editor.setContentType(content_type)
             self.editor.setText(data, line=line, col=col)

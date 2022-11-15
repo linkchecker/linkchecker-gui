@@ -73,7 +73,7 @@ class LineEdit(QtWidgets.QLineEdit):
         self.listview.installEventFilter(self)
         self.listview.clicked.connect(self.selectRecentDocument)
         self.listview.hide()
-        updatefunc = lambda parent, start, end: self.updateListButton
+        def updatefunc(parent, start, end): return self.updateListButton
         self.listmodel.rowsInserted.connect(updatefunc)
         self.listmodel.rowsRemoved.connect(updatefunc)
         self.updateListButton()
