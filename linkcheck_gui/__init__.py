@@ -402,7 +402,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             "app": configuration.App,
             "appname": configuration.AppName,
             "copyright": configuration.HtmlCopyright,
-            "donateurl": configuration.DonateUrl,
             "pyver": "%d.%d.%d" % sys.version_info[:3],
             "modules": modules,
             "portable": _("yes") if configuration.Portable else _("no"),
@@ -422,8 +421,6 @@ Portable version: %(portable)s
 <br>%(appname)s is licensed under the
 <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>
 Version 2 or later.
-<p>If you like %(appname)s, consider one of several ways to
-<a href="%(donateurl)s">donate</a>. Thanks!
 </center></qt>"""
             )
             % d,
