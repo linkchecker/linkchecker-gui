@@ -14,11 +14,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from .linkchecker_ui_debug import Ui_DebugDialog
 
 
-class LinkCheckerDebug (QtGui.QDialog, Ui_DebugDialog):
+class LinkCheckerDebug (QtWidgets.QDialog, Ui_DebugDialog):
     """Show debug text."""
 
     log_msg_signal = QtCore.pyqtSignal(str)

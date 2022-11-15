@@ -15,10 +15,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from linkcheck import configuration
-from PyQt4 import QtCore, QtGui, QtHelp
+from PyQt5 import QtCore, QtWidgets, QtHelp
 
 
-class HelpWindow (QtGui.QDialog):
+class HelpWindow (QtWidgets.QDialog):
     """A custom help display dialog."""
 
     def __init__ (self, parent, qhcpath):
@@ -31,7 +31,7 @@ class HelpWindow (QtGui.QDialog):
 
     def build_ui (self):
         """Build UI for the help window."""
-        splitter = QtGui.QSplitter()
+        splitter = QtWidgets.QSplitter()
         splitter.setOrientation(QtCore.Qt.Vertical)
         self.browser = HelpBrowser(splitter, self.engine)
         self.tree = self.engine.contentWidget()
@@ -40,7 +40,7 @@ class HelpWindow (QtGui.QDialog):
         splitter.addWidget(self.tree)
         splitter.addWidget(self.browser)
         splitter.setSizes((70, 530))
-        hlayout = QtGui.QHBoxLayout()
+        hlayout = QtWidgets.QHBoxLayout()
         hlayout.addWidget(splitter)
         self.setLayout(hlayout)
         self.resize(800, 600)
@@ -52,7 +52,7 @@ class HelpWindow (QtGui.QDialog):
         self.show()
 
 
-class HelpBrowser (QtGui.QTextBrowser):
+class HelpBrowser (QtWidgets.QTextBrowser):
     """A QTextBrowser that can handle qthelp:// URLs."""
 
     def __init__ (self, parent, engine):
@@ -67,10 +67,10 @@ class HelpBrowser (QtGui.QTextBrowser):
             import webbrowser
             webbrowser.open(str(url.toString()))
         else:
-            QtGui.QTextBrowser.setSource(self, url)
+            QtWidgets.QTextBrowser.setSource(self, url)
 
     def loadResource (self, rtype, url):
         """Handle qthelp:// URLs, load content from help engine."""
         if url.scheme() == "qthelp":
             return QtCore.QVariant(self.engine.fileData(url))
-        return QtGui.QTextBrowser.loadResource(self, rtype, url)
+        return QtWidgets.QTextBrowser.loadResource(self, rtype, url)

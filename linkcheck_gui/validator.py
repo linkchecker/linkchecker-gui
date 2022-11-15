@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Provide custom validators."""
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 import re
 
 

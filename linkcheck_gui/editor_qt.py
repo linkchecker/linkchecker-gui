@@ -16,7 +16,7 @@
 """
 Text editor implemented with Qt
 """
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 from . import syntax
 
 # Map MIME type to QSyntaxHighlighter class
@@ -26,7 +26,7 @@ ContentTypeLexers = {
     "text/plain+ini": syntax.IniHighlighter,
 }
 
-class LineNumberArea (QtGui.QWidget):
+class LineNumberArea (QtWidgets.QWidget):
     """Display line numbers."""
 
     def sizeHint (self):
@@ -38,7 +38,7 @@ class LineNumberArea (QtGui.QWidget):
         self.parentWidget().lineNumberAreaPaintEvent(event)
 
 
-class Editor (QtGui.QPlainTextEdit):
+class Editor (QtWidgets.QPlainTextEdit):
     """Qt editor with line numbering."""
 
     def __init__ (self, parent):
@@ -131,7 +131,7 @@ class Editor (QtGui.QPlainTextEdit):
         """Highlight the current line."""
         extraSelections = []
         if not self.isReadOnly():
-            selection = QtGui.QTextEdit.ExtraSelection()
+            selection = QtWidgets.QTextEdit.ExtraSelection()
             lineColor = QtGui.QColor(QtCore.Qt.yellow).lighter(160)
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QtGui.QTextFormat.FullWidthSelection, True)

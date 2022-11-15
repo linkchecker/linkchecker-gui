@@ -14,7 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 from linkcheck import updater, configuration
 
 
@@ -30,7 +30,7 @@ class UpdateThread (QtCore.QThread):
         self.result, self.value = updater.check_update()
 
 
-class UpdateDialog (QtGui.QMessageBox):
+class UpdateDialog (QtWidgets.QMessageBox):
     """Dialog displaying results of an update check."""
 
     def __init__ (self, parent=None):
@@ -45,7 +45,7 @@ class UpdateDialog (QtGui.QMessageBox):
         """Reset dialog and restart update check."""
         self.thread.reset()
         self.thread.start()
-        self.setIcon(QtGui.QMessageBox.Information)
+        self.setIcon(QtWidgets.QMessageBox.Information)
         self.setText(_('Checking for updates...'))
 
     def update (self):
@@ -74,7 +74,7 @@ class UpdateDialog (QtGui.QMessageBox):
             # terminated
             if value is None:
                 value = _('update thread has been terminated')
-            self.setIcon(QtGui.QMessageBox.Warning)
+            self.setIcon(QtWidgets.QMessageBox.Warning)
             text = _('An error occured while checking for an '
                      'update of %(app)s: %(error)s.')
             attrs = dict(error=value, app=configuration.AppName)

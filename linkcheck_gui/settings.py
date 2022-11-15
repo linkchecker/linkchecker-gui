@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Read and store QSettings for this application."""
 
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 
 def save_point (qpoint):

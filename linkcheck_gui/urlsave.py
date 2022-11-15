@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 
 FilterHtml = _("HTML output (*.html)")
 FilterText = _("Text output (*.txt)")
@@ -64,7 +64,7 @@ def get_save_filename (parent):
     """Open file save dialog for given parent window and base directory.
     Return dialog result."""
     title = _("Save check results")
-    func = QtGui.QFileDialog.getSaveFileName
+    func = QtWidgets.QFileDialog.getSaveFileName
     logtype = parent.saveresultas if parent.saveresultas else 'html'
     filters = ";;".join(sortwithfirst(LoggerFilters, Logtype2Filter[logtype]))
     filename = "linkchecker-out" + Logtype2FileExt[logtype]

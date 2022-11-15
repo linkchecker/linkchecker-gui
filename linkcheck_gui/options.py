@@ -15,14 +15,14 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from .linkchecker_ui_options import Ui_Options
 from .editor import EditorWindow
 from linkcheck.fileutil import is_writable
 from linkcheck import configuration
 
 
-class LinkCheckerOptions (QtGui.QDialog, Ui_Options):
+class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
     """Hold options for current URL to check."""
 
     def __init__ (self, parent=None):

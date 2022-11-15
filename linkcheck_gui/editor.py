@@ -17,7 +17,8 @@
 import os
 import urllib.parse
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
+
 from .linkchecker_ui_editor import Ui_EditorDialog
 from linkcheck.checker.fileurl import get_os_filename
 try:
@@ -25,7 +26,7 @@ try:
 except ImportError:
     from .editor_qt import ContentTypeLexers, Editor
 
-class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
+class EditorWindow (QtWidgets.QDialog, Ui_EditorDialog):
     """Editor window."""
 
     # emitted after successful save
@@ -41,7 +42,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
         self.filename = None
         # the Scintilla editor widget
         self.editor = Editor(parent=self.frame)
-        layout = QtGui.QVBoxLayout(self.frame)
+        layout = QtWidgets.QVBoxLayout(self.frame)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.editor)
         # for debugging
@@ -99,21 +100,21 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
     def wants_save (self):
         """Ask user if he wants to save changes. Return True if user
         wants to save, else False."""
-        dialog = QtGui.QMessageBox(parent=self)
-        dialog.setIcon(QtGui.QMessageBox.Question)
+        dialog = QtWidgets.QMessageBox(parent=self)
+        dialog.setIcon(QtWidgets.QMessageBox.Question)
         dialog.setWindowTitle(_("Save file?"))
         dialog.setText(_("The document has been modified."))
         dialog.setInformativeText(_("Do you want to save your changes?"))
-        dialog.setStandardButtons(QtGui.QMessageBox.Save |
-                                  QtGui.QMessageBox.Discard)
-        dialog.setDefaultButton(QtGui.QMessageBox.Save)
-        return dialog.exec_() == QtGui.QMessageBox.Save
+        dialog.setStandardButtons(QtWidgets.QMessageBox.Save |
+                                  QtWidgets.QMessageBox.Discard)
+        dialog.setDefaultButton(QtWidgets.QMessageBox.Save)
+        return dialog.exec_() == QtWidgets.QMessageBox.Save
 
     def save (self):
         """Save editor contents to file."""
         if not self.filename:
             title = _("Save File As")
-            res = QtGui.QFileDialog.getSaveFileName(self, title, self.basedir)
+            res = QtWidgets.QFileDialog.getSaveFileName(self, title, self.basedir)
             if not res:
                 # user canceled
                 return
@@ -137,7 +138,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
                 self.editor.setModified(False)
                 saved = True
             except (IOError, OSError) as e:
-                err = QtGui.QMessageBox(self)
+                err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
         finally:
@@ -171,7 +172,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
                 self.setText(stream.readAll())
                 loaded = True
             except (IOError, OSError) as e:
-                err = QtGui.QMessageBox(self)
+                err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
                 err.exec_()
         finally:

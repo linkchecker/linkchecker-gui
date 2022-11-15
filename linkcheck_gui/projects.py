@@ -16,7 +16,7 @@
 import re
 import os
 import shutil
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from linkcheck.configuration import get_user_config, confparse
 from linkcheck.url import url_split
 from linkcheck.fileutil import is_readable, is_writable
@@ -116,13 +116,12 @@ def saveproject(parent, url):
 def saveproject_msg(parent, url):
     """Save a project file and return status message."""
     title = _("Save LinkChecker project")
-    func = QtGui.QFileDialog.getSaveFileName
+    func = QtWidgets.QFileDialog.getSaveFileName
     suggestedname = url_to_filename(url, ProjectExt)
-    res = func(parent, title, suggestedname, ProjectFilter)
-    if not res:
+    filename, _filter = func(parent, title, suggestedname, ProjectFilter)
+    if not filename:
         # user canceled
         return _("Canceled saving a project file.")
-    filename = res
     d = dict(filename=filename)
     if not is_writable(filename):
         return _("Could not write project file %(filename)s.") % d
@@ -172,9 +171,9 @@ def openproject_msg(parent):
     """Select and load a project file. Returns message to display
     which indicates if file has been loaded successful."""
     title = _("Open LinkChecker project")
-    func = QtGui.QFileDialog.getOpenFileName
+    func = QtWidgets.QFileDialog.getOpenFileName
     directory = ""
-    filename = func(parent, title, directory, ProjectFilter)
+    filename, _filter = func(parent, title, directory, ProjectFilter)
     if not filename:
         # user canceled
         return _("Canceled opening a project file.")

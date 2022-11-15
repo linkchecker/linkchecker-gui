@@ -14,9 +14,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-class LineEdit (QtGui.QLineEdit):
+class LineEdit (QtWidgets.QLineEdit):
     """A line edit widget displaying a clear button if there is some text
     and a down-arrow button displaying a list of strings (eg. recent
     documents)."""
@@ -32,7 +32,7 @@ class LineEdit (QtGui.QLineEdit):
 
     def setup_clear_button (self):
         """Initialize the clear button."""
-        self.clearButton = QtGui.QToolButton(self)
+        self.clearButton = QtWidgets.QToolButton(self)
         pixmap = QtGui.QPixmap(":/icons/clear.png")
         self.clearButton.setIcon(QtGui.QIcon(pixmap))
         self.clearButton.setIconSize(pixmap.size())
@@ -45,7 +45,7 @@ class LineEdit (QtGui.QLineEdit):
 
     def setup_list_button (self):
         """Initialize the dropdown list button."""
-        self.listButton = QtGui.QToolButton(self)
+        self.listButton = QtWidgets.QToolButton(self)
         pixmap = QtGui.QPixmap(":/icons/arrow_down.png")
         self.listButton.setIcon(QtGui.QIcon(pixmap))
         self.listButton.setIconSize(pixmap.size())
@@ -58,16 +58,16 @@ class LineEdit (QtGui.QLineEdit):
     def setModel (self, model):
         """Set list model for list of recent documents."""
         self.listmodel = model
-        self.listview = QtGui.QListView()
+        self.listview = QtWidgets.QListView()
         self.listview.setModel(model)
         self.listview.setWindowFlags(QtCore.Qt.Popup)
         self.listview.setFocusPolicy(QtCore.Qt.NoFocus)
         self.listview.setFocusProxy(self)
         self.listview.setMouseTracking(True)
         self.listview.setUniformItemSizes(True)
-        self.listview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
-        self.listview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.listview.setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Plain)
+        self.listview.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.listview.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.listview.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
         self.listview.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.listview.installEventFilter(self)
         self.listview.clicked.connect(self.selectRecentDocument)
@@ -112,11 +112,11 @@ class LineEdit (QtGui.QLineEdit):
         """Select recent document text after click on the list view."""
         self.listview.hide()
         item = self.listmodel.data(index)
-        self.setText(item.toString())
+        self.setText(item.value())
 
     def setup_size_metrics (self):
         """Set widget size including the buttons."""
-        frameWidth = self.style().pixelMetric(QtGui.QStyle.PM_DefaultFrameWidth)
+        frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
         padding_right = self.clearButton.sizeHint().width() + frameWidth + 1
         padding_left = self.listButton.sizeHint().width() + frameWidth + 1
         style = "QLineEdit { padding-left: %dpx; padding-right: %dpx } " % (
@@ -135,7 +135,7 @@ class LineEdit (QtGui.QLineEdit):
 
     def resizeEvent (self, event):
         """Move the buttons due to resize event."""
-        frameWidth = self.style().pixelMetric(QtGui.QStyle.PM_DefaultFrameWidth)
+        frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
         bottom = self.rect().y() + self.rect().height()
         # clear button
         sizeHint = self.clearButton.sizeHint()

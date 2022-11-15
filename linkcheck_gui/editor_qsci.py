@@ -16,7 +16,7 @@
 """
 Text editor implemented with QScintilla
 """
-from PyQt4 import QtGui, Qsci
+from PyQt5 import QtGui, QtWidgets, Qsci
 
 # Map MIME type to Scintilla lexer class
 ContentTypeLexers = {

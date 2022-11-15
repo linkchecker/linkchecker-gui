@@ -24,9 +24,9 @@ class TestGui (unittest.TestCase):
     @need_pyqt
     @need_x11
     def test_gui (self):
-        from PyQt4 import QtCore, QtGui, QtTest
+        from PyQt5 import QtCore, QtWidgets, QtTest
         from linkcheck_gui import LinkCheckerMain
-        app = QtGui.QApplication(sys.argv)
+        app = QtWidgets.QApplication(sys.argv)
         window = LinkCheckerMain()
         window.show()
         QtTest.QTest.mouseClick(window.controlButton, QtCore.Qt.LeftButton)

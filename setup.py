@@ -75,7 +75,7 @@ args = dict(
     ],
     install_requires=[
         'linkchecker>=9.4',
-        #'PyQt4', # install from http://www.riverbankcomputing.com/software/pyqt/download
+        'PyQt5',
     ],
 )
 setup(**args)

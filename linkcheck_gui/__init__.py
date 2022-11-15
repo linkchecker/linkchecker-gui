@@ -18,7 +18,7 @@ import os
 import sys
 import re
 import webbrowser
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from .linkchecker_ui_main import Ui_MainWindow
 from .properties import set_properties, clear_properties
 from .statistics import set_statistics, clear_statistics
@@ -63,7 +63,7 @@ def get_app_style ():
         style = "Macintosh"
     else:
         style = "Plastique"
-    return QtGui.QStyleFactory.create(style)
+    return QtWidgets.QStyleFactory.create(style)
 
 
 def get_icon (name):
@@ -79,7 +79,7 @@ def warninglines2regex(lines):
     return u"|".join([re.escape(line) for line in lines])
 
 
-class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
+class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
     """The main window displaying checked URLs."""
 
     log_url_signal = QtCore.pyqtSignal(object)
@@ -143,7 +143,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
-        langActionGroup = QtGui.QActionGroup(self)
+        langActionGroup = QtWidgets.QActionGroup(self)
         langActionGroup.triggered.connect(self.switch_language)
         for i, lang in enumerate(sorted(i18n.supported_languages)):
             action = self.menuLang.addAction("&%d %s" % (i, lang))
@@ -209,7 +209,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
             """Highlight URL input textbox."""
             self.urlinput.setFocus()
             self.urlinput.selectAll()
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
+        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
         shortcut.activated.connect(selectUrl)
 
     def init_treeview (self):
@@ -388,7 +388,7 @@ class LinkCheckerMain (QtGui.QMainWindow, Ui_MainWindow):
             "portable": _("yes") if configuration.Portable else _("no"),
             "releasedate": configuration.ReleaseDate,
         }
-        QtGui.QMessageBox.about(self, _(u"About %(appname)s") % d,
+        QtWidgets.QMessageBox.about(self, _(u"About %(appname)s") % d,
             _(u"""<qt><center>
 <h1>%(app)s</h1>
 <p>Released on %(releasedate)s
@@ -558,10 +558,10 @@ Version 2 or later.
         """Copy item URL to clipboard."""
         urlitem = self.model.getUrlItem(self.treeView.currentIndex())
         if urlitem:
-            clipboard = QtGui.QApplication.clipboard()
+            clipboard = QtWidgets.QApplication.clipboard()
             clipboard.setText(urlitem.url_data.url)
             event = QtCore.QEvent(QtCore.QEvent.Clipboard)
-            QtGui.QApplication.sendEvent(clipboard, event)
+            QtWidgets.QApplication.sendEvent(clipboard, event)
 
     def set_statusmsg (self, msg):
         """Show given status message."""
@@ -589,7 +589,7 @@ Version 2 or later.
 
     def internal_error (self, msg):
         """Display internal error message. Triggered by sys.excepthook()."""
-        QtGui.QMessageBox.warning(self, _(u"LinkChecker internal error"), msg)
+        QtWidgets.QMessageBox.warning(self, _(u"LinkChecker internal error"), msg)
 
     def handleDragEvent(self, event):
         """Handle drag enter of move event."""
