@@ -16,11 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 from PyQt4 import QtGui
 import os
-try:
-    import urlparse
-except ImportError:
-    # Python 3
-    from urllib import parse as urlparse
+import urllib.parse
+
 from linkcheck.checker.fileurl import get_os_filename
 
 class ContextMenu (QtGui.QMenu):
@@ -56,10 +53,10 @@ class ContextMenu (QtGui.QMenu):
         # Directory contents are dynamically generated, so it makes
         # no sense in viewing/editing them.
         if parent.startswith(u"file:"):
-            path = urlparse.urlsplit(parent)[2]
+            path = urllib.parse.urlsplit(parent)[2]
             return not os.path.isdir(get_os_filename(path))
         if parent.startswith((u"ftp:", u"ftps:")):
-            path = urlparse.urlsplit(parent)[2]
+            path = urllib.parse.urlsplit(parent)[2]
             return bool(path) and not path.endswith(u'/')
         # Only HTTP left
         return parent.startswith((u"http:", u"https:"))

@@ -16,11 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-try:
-    import urlparse
-except ImportError:
-    # Python 3
-    from urllib import parse as urlparse
+import urllib.parse
+
 from PyQt4 import QtGui, QtCore
 from .linkchecker_ui_editor import Ui_EditorDialog
 from linkcheck.checker.fileurl import get_os_filename
@@ -72,7 +69,7 @@ class EditorWindow (QtGui.QDialog, Ui_EditorDialog):
         directory for the "save as" dialog."""
         self.basedir = ""
         if url and url.startswith("file://"):
-            urlparts = urlparse.urlsplit(url)
+            urlparts = urllib.parse.urlsplit(url)
             path = get_os_filename(urlparts[2])
             if os.path.exists(path):
                 self.basedir = path
