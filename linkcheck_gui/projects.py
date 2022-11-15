@@ -48,7 +48,7 @@ class ProjectParser (confparse.LCConfigParser):
             url = self.get(section, option)
             self.urlinput.setText(url)
         else:
-            self.urlinput.setText(u"")
+            self.urlinput.setText("")
 
     def read_gui_config(self):
         section = "gui"
@@ -88,7 +88,7 @@ class ProjectParser (confparse.LCConfigParser):
         """Write gui section configuration."""
         section = "gui"
         self.add_section(section)
-        for key, value in self.gui_options.get_options().items():
+        for key, value in list(self.gui_options.get_options().items()):
             self.set(section, key, value)
 
 

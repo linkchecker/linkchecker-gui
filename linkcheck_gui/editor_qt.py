@@ -104,7 +104,7 @@ class Editor (QtWidgets.QPlainTextEdit):
                 painter.drawText(0, top, self.lineNumberArea.width(),
                                  self.fontMetrics().height(),
                                  QtCore.Qt.AlignRight, number)
-            block = block.next()
+            block = next(block)
             top = bottom
             bottom = top + self.blockBoundingRect(block).height()
             blockNumber += 1

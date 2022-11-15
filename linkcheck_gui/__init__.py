@@ -76,7 +76,7 @@ def get_icon (name):
 def warninglines2regex(lines):
     """Convert a list of strings to a regular expression matching any of
     the given strings."""
-    return u"|".join([re.escape(line) for line in lines])
+    return "|".join([re.escape(line) for line in lines])
 
 
 class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
@@ -108,7 +108,7 @@ class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
         self.icon_stop = get_icon(":/icons/stop.png")
         self.movie = QtGui.QMovie(":/icons/busy.gif")
         self.movie.setCacheMode(QtGui.QMovie.CacheAll)
-        self.label_busy.setText(u"")
+        self.label_busy.setText("")
         self.label_busy.setMovie(self.movie)
         # init the rest
         self.init_logging()
@@ -323,9 +323,9 @@ class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
             self.treeView.scrollToTop()
             self.movie.stop()
             # Reset progress information.
-            self.label_active.setText(u"0")
-            self.label_queued.setText(u"0")
-            self.label_checked.setText(u"0")
+            self.label_active.setText("0")
+            self.label_queued.setText("0")
+            self.label_checked.setText("0")
             self.label_busy.hide()
             self.menubar.setEnabled(True)
             self.urlinput.setEnabled(True)
@@ -333,7 +333,7 @@ class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
         elif status == Status.checking:
             self.treeView.setSortingEnabled(False)
             self.debug.reset()
-            self.set_statusmsg(_(u"Checking site..."))
+            self.set_statusmsg(_("Checking site..."))
             # disable commands
             self.menubar.setEnabled(False)
             self.urlinput.setEnabled(False)
@@ -377,19 +377,19 @@ class LinkCheckerMain (QtWidgets.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered (self):
         """Display about dialog."""
-        modules = u"<br>\n".join(configuration.get_modules_info())
+        modules = "<br>\n".join(configuration.get_modules_info())
         d = {
             "app": configuration.App,
             "appname": configuration.AppName,
             "copyright": configuration.HtmlCopyright,
             "donateurl": configuration.DonateUrl,
-            "pyver": u"%d.%d.%d" % sys.version_info[:3],
+            "pyver": "%d.%d.%d" % sys.version_info[:3],
             "modules": modules,
             "portable": _("yes") if configuration.Portable else _("no"),
             "releasedate": configuration.ReleaseDate,
         }
-        QtWidgets.QMessageBox.about(self, _(u"About %(appname)s") % d,
-            _(u"""<qt><center>
+        QtWidgets.QMessageBox.about(self, _("About %(appname)s") % d,
+            _("""<qt><center>
 <h1>%(app)s</h1>
 <p>Released on %(releasedate)s
 <p>Python: %(pyver)s<br>
@@ -443,7 +443,7 @@ Version 2 or later.
         """Note that checking is canceled."""
         self.controlButton.setEnabled(False)
         duration = strformat.strduration_long(self.config["aborttimeout"])
-        self.set_statusmsg(_(u"Closing active URLs with timeout %s...") % duration)
+        self.set_statusmsg(_("Closing active URLs with timeout %s...") % duration)
 
     @QtCore.pyqtSlot()
     def on_controlButton_clicked (self):
@@ -459,10 +459,10 @@ Version 2 or later.
         """Return URL to check from the urlinput widget."""
         url = strformat.stripurl(self.urlinput.text())
         url = checker.guess_url(url)
-        if url and u":" not in url:
+        if url and ":" not in url:
             # Look for local file, else assume it's an HTTP URL.
             if not os.path.exists(url):
-                url = u"http://%s" % url
+                url = "http://%s" % url
         return url
 
     def check (self):
@@ -537,11 +537,11 @@ Version 2 or later.
 
     def view_source (self, url, line, col):
         """View URL source in editor window."""
-        self.editor.setWindowTitle(u"View %s" % url)
+        self.editor.setWindowTitle("View %s" % url)
         self.editor.setUrl(url)
         data, info = urlutil.get_content(url, proxy=self.config["proxy"])
         if data is None:
-            msg = u"An error occurred retreiving URL `%s': %s." % (url, info)
+            msg = "An error occurred retreiving URL `%s': %s." % (url, info)
             self.editor.setText(msg)
         else:
             content_type = httputil.get_content_type(info)
@@ -568,9 +568,9 @@ Version 2 or later.
         self.statusBar.showMessage(msg)
         if len(msg) > MaxMessageLength:
             self.label_status.setToolTip(msg)
-            msg = msg[:MaxMessageLength-3]+u"..."
+            msg = msg[:MaxMessageLength-3]+"..."
         else:
-            self.label_status.setToolTip(u"")
+            self.label_status.setToolTip("")
         self.label_status.setText(msg)
 
     def hover_link (self, link):
@@ -579,9 +579,9 @@ Version 2 or later.
 
     def log_status (self, checked, in_progress, queued, duration, num_urls):
         """Update number of checked, active and queued links."""
-        self.label_checked.setText(u"%d" % checked)
-        self.label_active.setText(u"%d" % in_progress)
-        self.label_queued.setText(u"%d" % queued)
+        self.label_checked.setText("%d" % checked)
+        self.label_active.setText("%d" % in_progress)
+        self.label_queued.setText("%d" % queued)
 
     def log_stats (self, statistics):
         """Set statistic information for selected URL."""
@@ -589,7 +589,7 @@ Version 2 or later.
 
     def internal_error (self, msg):
         """Display internal error message. Triggered by sys.excepthook()."""
-        QtWidgets.QMessageBox.warning(self, _(u"LinkChecker internal error"), msg)
+        QtWidgets.QMessageBox.warning(self, _("LinkChecker internal error"), msg)
 
     def handleDragEvent(self, event):
         """Handle drag enter of move event."""

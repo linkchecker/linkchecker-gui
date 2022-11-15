@@ -18,7 +18,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from linkcheck import strformat
 
 
-Headers = [_(u"Parent"), _(u"URL"), _(u"Name"), _(u"Result")]
+Headers = [_("Parent"), _("URL"), _("Name"), _("Result")]
 EmptyQVariant = QtCore.QVariant()
 
 
@@ -59,25 +59,25 @@ class UrlItem:
         if self.url_data.valid:
             if self.url_data.warnings:
                 self.result_color = QtCore.Qt.darkYellow
-                text = u"\n".join(x[1] for x in self.url_data.warnings)
-                result = u"Warning: %s" % strformat.limit(text, length=25)
+                text = "\n".join(x[1] for x in self.url_data.warnings)
+                result = "Warning: %s" % strformat.limit(text, length=25)
             else:
                 self.result_color = QtCore.Qt.darkGreen
-                result = u"Valid"
+                result = "Valid"
                 if self.url_data.result:
-                    result += u": %s" % self.url_data.result
+                    result += ": %s" % self.url_data.result
         else:
             self.result_color = QtCore.Qt.darkRed
-            result = u"Error"
+            result = "Error"
             if self.url_data.result:
-                result += u": %s" % self.url_data.result
+                result += ": %s" % self.url_data.result
         # Parent URL
         if self.url_data.parent_url:
-            parent = u"%s%s%s" % (self.url_data.parent_url,
+            parent = "%s%s%s" % (self.url_data.parent_url,
                 (_(", line %d") % self.url_data.line),
                 (_(", col %d") % self.url_data.column))
         else:
-            parent = u""
+            parent = ""
         # display values
         self.display = [
             # Parent URL
@@ -94,13 +94,13 @@ class UrlItem:
         """Store formatted tooltip texts from URL data."""
         # Display warnings in result tooltip
         if self.url_data.warnings:
-            text = u"\n".join(x[1] for x in self.url_data.warnings)
+            text = "\n".join(x[1] for x in self.url_data.warnings)
             result = strformat.wrap(text, 60)
         else:
-            result = u""
+            result = ""
         self.tooltips = [
             # Parent URL
-            u"",
+            "",
             # URL
             self.url_data.url,
             # Name

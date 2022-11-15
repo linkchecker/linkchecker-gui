@@ -45,8 +45,8 @@ class LinkCheckerOptions (QtWidgets.QDialog, Ui_Options):
         self.recursionlevel.setValue(-1)
         self.verbose.setChecked(False)
         self.debug.setChecked(False)
-        self.warninglines.setPlainText(u"")
-        self.ignorelines.setPlainText(u"")
+        self.warninglines.setPlainText("")
+        self.ignorelines.setPlainText("")
 
     def reset_config_options (self):
         """Reset configuration file edit buttons."""
@@ -101,9 +101,9 @@ def set_edit_button (filename, button, label, writable):
     if os.path.isfile(filename):
         button.setEnabled(True)
         if writable:
-            button.setText(_(u"Edit"))
+            button.setText(_("Edit"))
         else:
-            button.setText(_(u"Read"))
+            button.setText(_("Read"))
     else:
         button.setEnabled(False)
-        button.setText(_(u"File not found"))
+        button.setText(_("File not found"))

@@ -34,7 +34,7 @@ from linkcheck_gui.projects import ProjectExt
 
 def excepthook (window, etype, evalue, tb):
     """Catch unhandled exceptions."""
-    from cStringIO import StringIO
+    from io import StringIO
     from linkcheck.director.console import internal_error
     out = i18n.get_encoded_writer(out=StringIO(), encoding="utf-8")
     internal_error(out=out, etype=etype, evalue=evalue, tb=tb)

@@ -33,7 +33,7 @@ Logtype2Filter = {
     'xml': FilterXml,
     'csv': FilterCsv,
 }
-Filter2Logtype = {v: k for k, v in Logtype2Filter.items()}
+Filter2Logtype = {v: k for k, v in list(Logtype2Filter.items())}
 
 Logtype2FileExt = {
     "html": ".html",

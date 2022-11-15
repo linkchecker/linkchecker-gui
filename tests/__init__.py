@@ -49,7 +49,7 @@ def _need_func (testfunc, name):
             if not testfunc():
                 pytest.skip("%s is not available" % name)
             return func(*args, **kwargs)
-        newfunc.func_name = func.func_name
+        newfunc.__name__ = func.__name__
         return newfunc
     return check_func
 
@@ -76,5 +76,5 @@ need_x11 = _need_func(has_x11, 'X11')
 
 
 if __name__ == '__main__':
-    print "has PyQt", has_pyqt()
-    print "has X11", has_x11()
+    print("has PyQt", has_pyqt())
+    print("has X11", has_x11())

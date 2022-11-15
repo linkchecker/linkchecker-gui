@@ -51,11 +51,11 @@ class ContextMenu (QtWidgets.QMenu):
             return False
         # Directory contents are dynamically generated, so it makes
         # no sense in viewing/editing them.
-        if parent.startswith(u"file:"):
+        if parent.startswith("file:"):
             path = urllib.parse.urlsplit(parent)[2]
             return not os.path.isdir(get_os_filename(path))
-        if parent.startswith((u"ftp:", u"ftps:")):
+        if parent.startswith(("ftp:", "ftps:")):
             path = urllib.parse.urlsplit(parent)[2]
-            return bool(path) and not path.endswith(u'/')
+            return bool(path) and not path.endswith('/')
         # Only HTTP left
-        return parent.startswith((u"http:", u"https:"))
+        return parent.startswith(("http:", "https:"))

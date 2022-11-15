@@ -26,7 +26,7 @@ class HelpWindow (QtWidgets.QDialog):
         super(HelpWindow, self).__init__(parent)
         self.engine = QtHelp.QHelpEngine(qhcpath, self)
         self.engine.setupData()
-        self.setWindowTitle(u"%s Help" % configuration.AppName)
+        self.setWindowTitle("%s Help" % configuration.AppName)
         self.build_ui()
 
     def build_ui (self):

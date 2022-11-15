@@ -18,29 +18,29 @@ from linkcheck.logger import ContentTypes
 
 def set_statistics (widget, statistics):
     """Set statistic information in given widget."""
-    widget.stats_url_minlen.setText(u"%d" % statistics.min_url_length)
-    widget.stats_url_maxlen.setText(u"%d" % statistics.max_url_length)
-    widget.stats_url_avglen.setText(u"%d" % statistics.avg_url_length)
-    widget.stats_valid_urls.setText(u"%d" % (statistics.number - statistics.errors))
+    widget.stats_url_minlen.setText("%d" % statistics.min_url_length)
+    widget.stats_url_maxlen.setText("%d" % statistics.max_url_length)
+    widget.stats_url_avglen.setText("%d" % statistics.avg_url_length)
+    widget.stats_valid_urls.setText("%d" % (statistics.number - statistics.errors))
     if statistics.errors > 0:
         color = '#aa0000'
     else:
         color = '#00aa00'
     style = "QLabel {font-weight:bold; color:%s;}" % color
     widget.stats_invalid_urls.setStyleSheet(style)
-    widget.stats_invalid_urls.setText(u"%d" % statistics.errors)
-    widget.stats_warnings.setText(u"%d" % statistics.warnings)
-    for key, value in statistics.link_types.items():
-        getattr(widget, "stats_content_%s"%key).setText(u"%d" % value)
+    widget.stats_invalid_urls.setText("%d" % statistics.errors)
+    widget.stats_warnings.setText("%d" % statistics.warnings)
+    for key, value in list(statistics.link_types.items()):
+        getattr(widget, "stats_content_%s"%key).setText("%d" % value)
 
 
 def clear_statistics (widget):
     """Reset statistic information in given widget."""
-    widget.stats_url_minlen.setText(u"")
-    widget.stats_url_maxlen.setText(u"")
-    widget.stats_url_avglen.setText(u"")
-    widget.stats_valid_urls.setText(u"")
-    widget.stats_invalid_urls.setText(u"")
-    widget.stats_warnings.setText(u"")
+    widget.stats_url_minlen.setText("")
+    widget.stats_url_maxlen.setText("")
+    widget.stats_url_avglen.setText("")
+    widget.stats_valid_urls.setText("")
+    widget.stats_invalid_urls.setText("")
+    widget.stats_warnings.setText("")
     for key in ContentTypes:
-        getattr(widget, "stats_content_%s"%key).setText(u"")
+        getattr(widget, "stats_content_%s"%key).setText("")

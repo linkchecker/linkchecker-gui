@@ -67,7 +67,7 @@ class RecentDocumentModel(QtCore.QAbstractListModel):
         """Add document to model."""
         if not document:
             return False
-        assert isinstance(document, unicode)
+        assert isinstance(document, str)
         while document in self.documents:
             row = self.documents.index(document)
             self.beginRemoveRows(QtCore.QModelIndex(), row, row)
