@@ -116,6 +116,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         # Note: do not use QT assistant here because of the .exe packaging
         # XXX self.assistant = HelpWindow(self, self.get_qhcpath())
         self.actionHelp.setVisible(False)  # XXX
+        self.actionCheckUpdates.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
