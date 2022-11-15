@@ -38,12 +38,18 @@ Homepage = "https://github.com/linkchecker/linkchecker-gui"
 linkchecker-gui = "linkcheck_gui.__main__:main"
 
 [tool.hatch.build]
+artifacts = [
+    "linkcheck_gui/_release.py",
+]
 exclude = [
     ".github",
     "Makefile",
     "linkcheck_gui/rc/",
     "linkcheck_gui/ui/",
 ]
+
+[tool.hatch.build.hooks.custom]
+path = "tools/hatch_build.py"
 
 [tool.hatch.build.targets.sdist]
 strict-naming = false

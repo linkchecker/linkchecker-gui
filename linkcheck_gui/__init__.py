@@ -36,9 +36,10 @@ from .settings import Settings
 from .recentdocs import RecentDocumentModel
 from .projects import openproject, saveproject, loadproject, ProjectExt
 from .library.containers import enum
+from . import configuration
 
 from linkcheck import (
-    configuration,
+    configuration as linkchecker_configuration,
     checker,
     director,
     get_link_pat,
@@ -252,7 +253,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def init_config(self):
         """Create a configuration object."""
-        self.config = configuration.Configuration()
+        self.config = linkchecker_configuration.Configuration()
         status = StatusLogger(self.log_status_signal)
         self.config.set_status_logger(status)
         # dictionary holding overwritten values
@@ -407,6 +408,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             "pyver": "%d.%d.%d" % sys.version_info[:3],
             "modules": modules,
             "releasedate": configuration.ReleaseDate,
+            "linkchecker_version": linkchecker_configuration.Version,
         }
         QtWidgets.QMessageBox.about(
             self,
@@ -415,12 +417,13 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
                 """<qt><center>
 <h1>%(app)s</h1>
 <p>Released on %(releasedate)s
+<p>Using LinkChecker %(linkchecker_version)s
 <p>Python: %(pyver)s<br>
 %(modules)s<br>
 <p>%(copyright)s
 <br>%(appname)s is licensed under the
-<a href="http://www.gnu.org/licenses/gpl.html">GPL</a>
-Version 2 or later.
+<a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL</a>
+Version 3 or later.
 </center></qt>"""
             )
             % d,
