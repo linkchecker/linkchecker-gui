@@ -406,7 +406,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             "copyright": configuration.HtmlCopyright,
             "pyver": "%d.%d.%d" % sys.version_info[:3],
             "modules": modules,
-            "portable": _("yes") if configuration.Portable else _("no"),
             "releasedate": configuration.ReleaseDate,
         }
         QtWidgets.QMessageBox.about(
@@ -418,7 +417,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 <p>Released on %(releasedate)s
 <p>Python: %(pyver)s<br>
 %(modules)s<br>
-Portable version: %(portable)s
 <p>%(copyright)s
 <br>%(appname)s is licensed under the
 <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>
