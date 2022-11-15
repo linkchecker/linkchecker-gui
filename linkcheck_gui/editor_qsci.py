@@ -63,7 +63,7 @@ class Editor(Qsci.QsciScintilla):
         """Set Scintilla options for font, colors, etc."""
         super(Editor, self).__init__(parent)
         # Use Courier font with fixed width
-        font = QtGui.QFont("Consolas", 11)
+        font = QtGui.QFont("Source Code Pro", 11)
         font.setFixedPitch(True)
 
         # Set the default font of the editor

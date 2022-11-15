@@ -181,7 +181,7 @@ h5 a.anchor:hover, h6 a.anchor:hover {
 }
 
 cite, code, tt {
-    font-family: 'Consolas', 'Deja Vu Sans Mono',
+    font-family: 'Source Code Pro', 'Deja Vu Sans Mono',
                  'Bitstream Vera Sans Mono', monospace;
     font-size: 0.95em;
     letter-spacing: 0.01em;
@@ -212,7 +212,7 @@ a tt:hover {
 }
 
 pre {
-    font-family: 'Consolas', 'Deja Vu Sans Mono',
+    font-family: 'Source Code Pro', 'Deja Vu Sans Mono',
                  'Bitstream Vera Sans Mono', monospace;
     font-size: 0.95em;
     letter-spacing: 0.015em;
