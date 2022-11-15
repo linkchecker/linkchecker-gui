@@ -275,7 +275,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
                     pat = get_link_pat(line, strict=1)
                     self.config["externlinks"].append(pat)
                 except re.error as err:
-                    msg = _("Invalid regular expression %r: %s" % (pat, err))
+                    msg = _("Invalid regular expression %r: %s") % (pat, err)
                     self.set_statusmsg(msg)
         # make sure the configuration is sane
         self.config.sanitize()
@@ -545,7 +545,7 @@ Version 3 or later.
         self.editor.setUrl(url)
         data, info = urlutil.get_content(url, proxy=self.config["proxy"])
         if data is None:
-            msg = "An error occurred retreiving URL `%s': %s." % (url, info)
+            msg = _("An error occurred retreiving URL `%s': %s.") % (url, info)
             self.editor.setText(msg)
         else:
             content_type = httputil.get_content_type(info)
