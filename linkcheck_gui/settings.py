@@ -33,7 +33,7 @@ def save_size (qsize):
     return qsize
 
 
-class Settings (object):
+class Settings:
     """Save and read GUI settings."""
 
     def __init__ (self, base, appname):

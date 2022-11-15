@@ -19,7 +19,7 @@ from logging import Handler
 from linkcheck.logger import _Logger
 
 
-class GuiLogHandler (Handler, object):
+class GuiLogHandler (Handler):
     """Delegate log messages to the UI."""
 
     def __init__ (self, signal):
@@ -61,7 +61,7 @@ class SignalLogger (_Logger):
         self.log_stats_signal.emit(self.stats)
 
 
-class StatusLogger (object):
+class StatusLogger:
     """GUI status logger, signaling to progress labels."""
 
     def __init__ (self, signal):

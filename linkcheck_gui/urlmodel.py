@@ -23,7 +23,7 @@ Headers = [_(u"Parent"), _(u"URL"), _(u"Name"), _(u"Result")]
 EmptyQVariant = QtCore.QVariant()
 
 
-class UrlItem (object):
+class UrlItem:
     """URL item storing info to be displayed."""
 
     def __init__ (self, url_data):
