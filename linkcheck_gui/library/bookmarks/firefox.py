@@ -35,7 +35,7 @@ def find_bookmark_file(profile="*.default-[0-9]*"):
     could be found.
     """
     try:
-        for dirname in glob.glob(f"{get_profile_dir()}/{profile}"):
+        for dirname in glob.glob(os.path.join(get_profile_dir(), profile)):
             if os.path.isdir(dirname):
                 fname = os.path.join(dirname, "places.sqlite")
                 if os.path.isfile(fname):
