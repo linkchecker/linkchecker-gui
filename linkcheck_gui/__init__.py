@@ -593,7 +593,13 @@ Version 3 or later.
 
     def internal_error(self, msg):
         """Display internal error message. Triggered by sys.excepthook()."""
-        QtWidgets.QMessageBox.warning(self, _("LinkChecker internal error"), msg)
+        msgBox = QtWidgets.QMessageBox(self)
+        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 12px;}")
+        msgBox.setIcon(QtWidgets.QMessageBox.Warning)
+        msgBox.setWindowTitle(_("LinkChecker internal error"))
+        msgBox.setText(msg)
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Close)
+        msgBox.exec_()
 
     def handleDragEvent(self, event):
         """Handle drag enter of move event."""

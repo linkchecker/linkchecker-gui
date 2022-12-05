@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 
 FilterHtml = _("HTML output (*.html)")
 FilterText = _("Text output (*.txt)")
@@ -69,10 +69,9 @@ def get_save_filename(parent):
     logtype = parent.saveresultas if parent.saveresultas else 'html'
     filters = ";;".join(sortwithfirst(LoggerFilters, Logtype2Filter[logtype]))
     filename = "linkchecker-out" + Logtype2FileExt[logtype]
-    selectedFilter = QtCore.QString()
-    res = func(parent, title, filename, filters, selectedFilter)
+    filename, selectedFilter = func(parent, title, filename, filters)
     logtype = Filter2Logtype.get(selectedFilter)
-    return res, logtype
+    return filename, logtype
 
 
 def sortwithfirst(sequence, firstelement):
