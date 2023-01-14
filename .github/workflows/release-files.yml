@@ -18,10 +18,14 @@ jobs:
           fetch-depth: 0
 
       - name: Install Ubuntu packages
-        run: sudo apt install git qhelpgenerator-qt5
+        run: |
+          sudo apt update
+          sudo apt install git qhelpgenerator-qt5
 
       - name: Setup Python
         uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
       - name: Install Python packages
         run: >
