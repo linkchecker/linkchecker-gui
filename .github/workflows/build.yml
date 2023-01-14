@@ -50,8 +50,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -U hatchling hatch-vcs markdown2
-          python -m pip install -U tox coveralls
+          python -m pip install -U hatchling hatch-vcs markdown2 tox coveralls
 
       - name: Run tests
         run: |
