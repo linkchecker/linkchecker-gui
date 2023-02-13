@@ -21,9 +21,9 @@ Then:
 
 ## Usage
 
-`$ linkchecker-gui`
+`linkchecker-gui`
 
-A desktop entry is created for compatible environments.
+A freedesktop.org desktop entry is installed for compatible environments.
 
 ## Development
 
