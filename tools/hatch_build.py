@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Chris Mayo
+# Copyright (C) 2022-2023 Chris Mayo
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from pathlib import Path
+import re
 import shutil
 import subprocess
 
@@ -45,6 +46,18 @@ class CustomBuildHook(BuildHookInterface):
             if Path(*RELEASE_PY).is_file():
                 self.app.display_warning("_release.py already exists")
                 return
+
+            try:
+                git_archival = Path(".git_archival.txt").read_text()
+            except FileNotFoundError:
+                self.app.display_warning(".git_archival.txt does not exist")
+            else:
+                rematch = re.search(r"node-date: ((\d{4})-\d{2}-\d{2})", git_archival)
+                if rematch:
+                    committer_date = rematch.group(1)
+                    committer_year = rematch.group(2)
+                else:
+                    self.app.display_warning("node-date not substituted")
         else:
             if cp and cp.stdout:
                 committer_date = cp.stdout.strip()
