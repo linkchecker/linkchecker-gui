@@ -110,7 +110,7 @@ def url_split(url):
 def url_to_filename(url, extension):
     # filter host and document
     parts = url_split(url)
-    value = parts[1] + parts[3]
+    value = f"{'' if parts[1] is None else parts[1]}{parts[3]}"
     # normalize
     import unicodedata
 
