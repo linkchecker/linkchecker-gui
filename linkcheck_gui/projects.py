@@ -99,19 +99,18 @@ def url_split(url):
     hostname is always lowercased.
     Precondition: url is syntactically correct URI (eg has no whitespace)
     """
-    scheme, netloc = urllib.parse.splittype(url)
-    host, document = urllib.parse.splithost(netloc)
-    port = default_ports.get(scheme, 0)
-    if host:
+    o = urllib.parse.urlparse(url)
+    port = default_ports.get(o.scheme, 0)
+    if host := o.netloc:
         host = host.lower()
         host, port = splitport(host, port=port)
-    return scheme, host, port, document
+    return o.scheme, host, port, o.path
 
 
 def url_to_filename(url, extension):
     # filter host and document
     parts = url_split(url)
-    value = parts[1] + parts[3]
+    value = f"{'' if parts[1] is None else parts[1]}{parts[3]}"
     # normalize
     import unicodedata
 
