@@ -20,7 +20,7 @@ jobs:
       - name: Install Ubuntu packages
         run: |
           sudo apt update
-          sudo apt install git pkg-config qt6-documentation-tools
+          sudo apt install git pkg-config qt6-documentation-tools qt6-qpa-plugins
 
       - name: Setup Python
         uses: actions/setup-python@v4
