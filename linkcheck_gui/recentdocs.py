@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from PyQt5 import QtCore
+from PyQt6 import QtCore
 
 EmptyQVariant = QtCore.QVariant()
 
@@ -35,7 +35,7 @@ class RecentDocumentModel(QtCore.QAbstractListModel):
         """Return index of document in given row."""
         return self.createIndex(row, column)
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
         """Return data at given index for given role."""
         V = QtCore.QVariant
         if (
@@ -44,7 +44,7 @@ class RecentDocumentModel(QtCore.QAbstractListModel):
             or index.column() != 0
         ):
             return EmptyQVariant
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return V(self.documents[index.row()])
         return EmptyQVariant
 
@@ -57,7 +57,7 @@ class RecentDocumentModel(QtCore.QAbstractListModel):
         selected."""
         if not index.isValid():
             return 0
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemFlag.ItemIsEnabled | QtCore.Qt.ItemFlag.ItemIsSelectable
 
     def clear(self):
         """Empty the document list."""

@@ -18,7 +18,7 @@ import os
 import shutil
 import urllib.parse
 
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 from linkcheck.configuration import get_user_config, confparse
 from linkcheck.url import default_ports, splitport
 from linkcheck.fileutil import is_readable

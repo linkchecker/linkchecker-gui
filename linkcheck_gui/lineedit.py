@@ -14,7 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class LineEdit(QtWidgets.QLineEdit):
@@ -37,7 +37,7 @@ class LineEdit(QtWidgets.QLineEdit):
         pixmap = QtGui.QPixmap(":/icons/clear.png")
         self.clearButton.setIcon(QtGui.QIcon(pixmap))
         self.clearButton.setIconSize(pixmap.size())
-        self.clearButton.setCursor(QtCore.Qt.ArrowCursor)
+        self.clearButton.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
         style = "QToolButton { border: none; padding: 0px; }"
         self.clearButton.setStyleSheet(style)
         self.clearButton.hide()
@@ -50,7 +50,7 @@ class LineEdit(QtWidgets.QLineEdit):
         pixmap = QtGui.QPixmap(":/icons/arrow_down.png")
         self.listButton.setIcon(QtGui.QIcon(pixmap))
         self.listButton.setIconSize(pixmap.size())
-        self.listButton.setCursor(QtCore.Qt.ArrowCursor)
+        self.listButton.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
         style = "QToolButton { border: none; padding: 0px; }"
         self.listButton.setStyleSheet(style)
         self.listButton.hide()
@@ -61,15 +61,19 @@ class LineEdit(QtWidgets.QLineEdit):
         self.listmodel = model
         self.listview = QtWidgets.QListView()
         self.listview.setModel(model)
-        self.listview.setWindowFlags(QtCore.Qt.Popup)
-        self.listview.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.listview.setWindowFlags(QtCore.Qt.WindowType.Popup)
+        self.listview.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.listview.setFocusProxy(self)
         self.listview.setMouseTracking(True)
         self.listview.setUniformItemSizes(True)
-        self.listview.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.listview.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.listview.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
-        self.listview.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.listview.setEditTriggers(
+            QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.listview.setSelectionBehavior(
+            QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+        self.listview.setFrameStyle(
+            QtWidgets.QFrame.Shape.Box | QtWidgets.QFrame.Shadow.Plain)
+        self.listview.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.listview.installEventFilter(self)
         self.listview.clicked.connect(self.selectRecentDocument)
         self.listview.hide()
@@ -83,28 +87,28 @@ class LineEdit(QtWidgets.QLineEdit):
         if obj != self.listview:
             return False
 
-        if event.type() == QtCore.QEvent.MouseButtonPress:
+        if event.type() == QtCore.QEvent.Type.MouseButtonPress:
             self.listview.hide()
             self.setFocus()
             return True
 
-        if event.type() == QtCore.QEvent.KeyPress:
+        if event.type() == QtCore.QEvent.Type.KeyPress:
             consumed = False
             key = event.key()
-            if key in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            if key in (QtCore.Qt.Key.Key_Enter, QtCore.Qt.Key.Key_Return):
                 self.doneCompletion()
                 consumed = True
-            elif key == QtCore.Qt.Key_Escape:
+            elif key == QtCore.Qt.Key.Key_Escape:
                 self.setFocus()
                 self.listview.hide()
                 consumed = True
             elif key in (
-                QtCore.Qt.Key_Up,
-                QtCore.Qt.Key_Down,
-                QtCore.Qt.Key_Home,
-                QtCore.Qt.Key_End,
-                QtCore.Qt.Key_PageUp,
-                QtCore.Qt.Key_PageDown,
+                QtCore.Qt.Key.Key_Up,
+                QtCore.Qt.Key.Key_Down,
+                QtCore.Qt.Key.Key_Home,
+                QtCore.Qt.Key.Key_End,
+                QtCore.Qt.Key.Key_PageUp,
+                QtCore.Qt.Key.Key_PageDown,
             ):
                 pass
             else:
@@ -122,7 +126,8 @@ class LineEdit(QtWidgets.QLineEdit):
 
     def setup_size_metrics(self):
         """Set widget size including the buttons."""
-        frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
+        frameWidth = self.style().pixelMetric(
+            QtWidgets.QStyle.PixelMetric.PM_DefaultFrameWidth)
         padding_right = self.clearButton.sizeHint().width() + frameWidth + 1
         padding_left = self.listButton.sizeHint().width() + frameWidth + 1
         style = "QLineEdit { padding-left: %dpx; padding-right: %dpx } " % (
@@ -144,7 +149,8 @@ class LineEdit(QtWidgets.QLineEdit):
 
     def resizeEvent(self, event):
         """Move the buttons due to resize event."""
-        frameWidth = self.style().pixelMetric(QtWidgets.QStyle.PM_DefaultFrameWidth)
+        frameWidth = self.style().pixelMetric(
+            QtWidgets.QStyle.PixelMetric.PM_DefaultFrameWidth)
         bottom = self.rect().y() + self.rect().height()
         # clear button
         sizeHint = self.clearButton.sizeHint()
@@ -200,7 +206,7 @@ class LineEdit(QtWidgets.QLineEdit):
         """Handle context menu event."""
         menu = self.createStandardContextMenu()
         self.addMenuEntries(menu)
-        menu.exec_(event.globalPos())
+        menu.exec(event.globalPos())
 
 
 def find_firefox():

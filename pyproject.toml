@@ -19,8 +19,8 @@ requires-python = ">=3.9"
 
 dependencies = [
     "linkchecker >= 10.1",
-    "PyQt5",
-    "QScintilla",
+    "PyQt6",
+    "PyQt6-QScintilla",
 ]
 
 [build-system]

@@ -17,7 +17,7 @@
 import os
 import urllib.parse
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt6 import QtWidgets, QtCore
 
 from .linkchecker_ui_editor import Ui_EditorDialog
 from linkcheck.checker.fileurl import get_os_filename
@@ -103,15 +103,16 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
         """Ask user if he wants to save changes. Return True if user
         wants to save, else False."""
         dialog = QtWidgets.QMessageBox(parent=self)
-        dialog.setIcon(QtWidgets.QMessageBox.Question)
+        dialog.setIcon(QtWidgets.QMessageBox.Icon.Question)
         dialog.setWindowTitle(_("Save file?"))
         dialog.setText(_("The document has been modified."))
         dialog.setInformativeText(_("Do you want to save your changes?"))
         dialog.setStandardButtons(
-            QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Discard
+            QtWidgets.QMessageBox.StandardButton.Save |
+            QtWidgets.QMessageBox.StandardButton.Discard
         )
-        dialog.setDefaultButton(QtWidgets.QMessageBox.Save)
-        return dialog.exec_() == QtWidgets.QMessageBox.Save
+        dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Save)
+        return dialog.exec() == QtWidgets.QMessageBox.StandardButton.Save
 
     def save(self):
         """Save editor contents to file."""
@@ -133,7 +134,7 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
         try:
             try:
                 fh = QtCore.QFile(self.filename)
-                if not fh.open(QtCore.QIODevice.WriteOnly):
+                if not fh.open(QtCore.QIODevice.OpenModeFlag.WriteOnly):
                     raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
                 stream.setCodec("UTF-8")
@@ -143,7 +144,7 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
             except OSError as e:
                 err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
-                err.exec_()
+                err.exec()
         finally:
             if fh is not None:
                 fh.close()
@@ -168,16 +169,15 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
         try:
             try:
                 fh = QtCore.QFile(self.filename)
-                if not fh.open(QtCore.QIODevice.ReadOnly):
+                if not fh.open(QtCore.QIODevice.OpenModeFlag.ReadOnly):
                     raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
-                stream.setCodec("UTF-8")
                 self.setText(stream.readAll())
                 loaded = True
             except OSError as e:
                 err = QtWidgets.QMessageBox(self)
                 err.setText(str(e))
-                err.exec_()
+                err.exec()
         finally:
             if fh is not None:
                 fh.close()

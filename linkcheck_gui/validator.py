@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """Provide custom validators."""
 
-from PyQt5 import QtGui
+from PyQt6 import QtGui
 import re
 
 
@@ -34,8 +34,8 @@ class PyRegexValidator(QtGui.QValidator):
 
     def validate(self, input, pos):
         if check_regex(input):
-            return (QtGui.QValidator.Acceptable, pos)
-        return (QtGui.QValidator.Intermediate, pos)
+            return (QtGui.QValidator.State.Acceptable, pos)
+        return (QtGui.QValidator.State.Intermediate, pos)
 
     def fixup(self, input):
         while not check_regex(input):

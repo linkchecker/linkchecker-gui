@@ -33,9 +33,6 @@ class CustomBuildHook(BuildHookInterface):
         shutil.rmtree(str(Path(*HELP_DIR)), ignore_errors=True)
 
     def initialize(self, version, build_data):
-        if not shutil.which("qtchooser"):
-            raise SystemExit("qtchooser not found")
-
         cp = None
         committer_date = committer_year = "unknown"
         try:
@@ -77,10 +74,23 @@ __url__ = "{self.metadata.core.urls["Homepage"]}"
                       + Path(*HELP_SRC_DIR, "html.footer").read_text())
         Path(*HELP_SRC_DIR, "index.html").write_text(index_html)
 
-        cp = subprocess.run(["qtchooser", "-run-tool=qhelpgenerator", "-qt=qt5",
-                             "-c", "lccollection.qhcp", "-o", "lccollection.qhc",
-                             ],
-                            cwd=Path(*HELP_SRC_DIR), check=True)
+        cp = subprocess.run(
+            ["pkg-config", "--variable=libexecdir", "Qt6Help"],
+            capture_output=True, text=True)
+        help_exec_dir = cp.stdout.strip()
+        if help_exec_dir:
+            help_generator = Path(help_exec_dir, "qhelpgenerator")
+        else:
+            # Ubuntu 22.04 doesn't provide Qt6Help.pc, 22.10 does but without libexecdir
+            # qhelpgenerator found in bin on 22.04, libexec from 22.10
+            help_generator = shutil.which(
+                "qhelpgenerator",
+                path="/usr/lib/qt6/libexec/:/usr/lib64/qt6/libexec/:"
+                     "/usr/lib/qt6/bin/:/usr/lib64/qt6/bin/")
+
+        cp = subprocess.run(
+            [help_generator, "-c", "lccollection.qhcp", "-o", "lccollection.qhc"],
+            cwd=Path(*HELP_SRC_DIR), check=True)
 
         Path(*HELP_DIR).mkdir(parents=True, exist_ok=True)
         shutil.copy(Path(*HELP_SRC_DIR, "lcdoc.qch"), Path(*HELP_DIR))

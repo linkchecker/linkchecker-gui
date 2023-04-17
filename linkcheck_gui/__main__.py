@@ -22,7 +22,7 @@ import sys
 from linkcheck import configuration
 from linkcheck.command.linkchecker import drop_privileges
 from linkcheck.fileutil import is_readable
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 
 from . import LinkCheckerMain
 from .projects import ProjectExt
@@ -57,13 +57,13 @@ def main(argv=None):
             mainkwargs["url"] = fileorurl
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     # use local variable here to avoid garbage collection of the main
-    # window before app.exec_() finishes
+    # window before app.exec() finishes
     window = LinkCheckerMain(**mainkwargs)
     window.show()
     window.raise_()  # this will raise the window on Mac OS X
     drop_privileges()
     sys.excepthook = lambda etype, evalue, tb: excepthook(window, etype, evalue, tb)
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

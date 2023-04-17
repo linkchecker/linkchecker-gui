@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from . import configuration
-from PyQt5 import QtCore, QtWidgets, QtHelp
+from PyQt6 import QtCore, QtWidgets, QtHelp
 
 
 class HelpWindow(QtWidgets.QDialog):
@@ -32,7 +32,7 @@ class HelpWindow(QtWidgets.QDialog):
     def build_ui(self):
         """Build UI for the help window."""
         splitter = QtWidgets.QSplitter()
-        splitter.setOrientation(QtCore.Qt.Vertical)
+        splitter.setOrientation(QtCore.Qt.Orientation.Vertical)
         self.browser = HelpBrowser(splitter, self.engine)
         self.tree = self.engine.contentWidget()
         self.tree.setExpandsOnDoubleClick(False)

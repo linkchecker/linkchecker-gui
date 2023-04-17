@@ -48,8 +48,8 @@ certain conditions. Look at the file `LICENSE' within this distribution."""
 # List Python modules in the form (module, name, version attribute)
 Modules = (
     # required modules
-    ("PyQt5.QtCore", "PyQt5", "PYQT_VERSION_STR"),
-    ("PyQt5.Qsci", "QScintilla", "QSCINTILLA_VERSION_STR"),
+    ("PyQt6.QtCore", "PyQt6", "PYQT_VERSION_STR"),
+    ("PyQt6.Qsci", "QScintilla", "QSCINTILLA_VERSION_STR"),
 )
 
 

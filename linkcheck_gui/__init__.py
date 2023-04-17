@@ -26,7 +26,7 @@ from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
                        mimeutil, strformat)
 from linkcheck import url as urlutil
 from linkcheck.parser import parse_text
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from . import configuration
 from .checker import CheckerThread
@@ -57,7 +57,7 @@ MaxMessageLength = 60
 def get_icon(name):
     """Return QIcon with given pixmap resource name."""
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(name), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap(name), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
     return icon
 
 
@@ -79,7 +79,8 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         """Initialize UI."""
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowContextHelpButtonHint)
+        self.setWindowFlags(
+            self.windowFlags() | QtCore.Qt.WindowType.WindowContextHelpButtonHint)
         self.setWindowTitle(configuration.App)
         # app settings
         self.settings = Settings(RegistryBase, configuration.AppName)
@@ -96,7 +97,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
         self.movie = QtGui.QMovie(":/icons/busy.gif")
-        self.movie.setCacheMode(QtGui.QMovie.CacheAll)
+        self.movie.setCacheMode(QtGui.QMovie.CacheMode.CacheAll)
         self.label_busy.setText("")
         self.label_busy.setMovie(self.movie)
         # init the rest
@@ -133,7 +134,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
-        langActionGroup = QtWidgets.QActionGroup(self)
+        langActionGroup = QtGui.QActionGroup(self)
         langActionGroup.triggered.connect(self.switch_language)
         for i, lang in enumerate(sorted(i18n.supported_languages)):
             action = self.menuLang.addAction("&%d %s" % (i, lang))
@@ -202,7 +203,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             self.urlinput.setFocus()
             self.urlinput.selectAll()
 
-        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence("Ctrl+L"), self)
         shortcut.activated.connect(selectUrl)
 
     def init_treeview(self):
@@ -314,7 +315,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             self.controlButton.setEnabled(True)
             self.actionSave.setEnabled(True)
             self.actionDebug.setEnabled(self.options.get_options()["debug"])
-            self.treeView.sortByColumn(0, QtCore.Qt.AscendingOrder)
+            self.treeView.sortByColumn(0, QtCore.Qt.SortOrder.AscendingOrder)
             self.treeView.setSortingEnabled(True)
             self.treeView.scrollToTop()
             self.movie.stop()
@@ -351,7 +352,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot()
     def on_actionOptions_triggered(self):
         """Show option dialog."""
-        self.options.exec_()
+        self.options.exec()
 
     @QtCore.pyqtSlot()
     def on_actionQuit_triggered(self):
@@ -564,7 +565,7 @@ Version 3 or later.
         if urlitem:
             clipboard = QtWidgets.QApplication.clipboard()
             clipboard.setText(urlitem.url_data.url)
-            event = QtCore.QEvent(QtCore.QEvent.Clipboard)
+            event = QtCore.QEvent(QtCore.QEvent.Type.Clipboard)
             QtWidgets.QApplication.sendEvent(clipboard, event)
 
     def set_statusmsg(self, msg):
@@ -595,11 +596,11 @@ Version 3 or later.
         """Display internal error message. Triggered by sys.excepthook()."""
         msgBox = QtWidgets.QMessageBox(self)
         msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 12px;}")
-        msgBox.setIcon(QtWidgets.QMessageBox.Warning)
+        msgBox.setIcon(QtWidgets.QMessageBox.Icon.Warning)
         msgBox.setWindowTitle(_("LinkChecker internal error"))
         msgBox.setText(msg)
-        msgBox.setStandardButtons(QtWidgets.QMessageBox.Close)
-        msgBox.exec_()
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Close)
+        msgBox.exec()
 
     def handleDragEvent(self, event):
         """Handle drag enter of move event."""

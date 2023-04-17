@@ -15,7 +15,7 @@ test:
 	xmllint --valid --noout $(HTMLFILES)
 
 %.qhc:	%.qhcp lcdoc.qhp $(HTMLFILES)
-	-qcollectiongenerator $< -o $@
+	-qhelpgenerator $< -o $@
 
 favicon.ico:	$(ICOICONS)
 	png2ico favicon.ico $(ICOICONS)
