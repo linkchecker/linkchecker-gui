@@ -14,7 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import operator
-from PyQt5 import QtCore, QtGui
+from PyQt6 import QtCore, QtGui
 from linkcheck import strformat
 
 
@@ -57,16 +57,16 @@ class UrlItem:
         # result
         if self.url_data.valid:
             if self.url_data.warnings:
-                self.result_color = QtCore.Qt.darkYellow
+                self.result_color = QtCore.Qt.GlobalColor.darkYellow
                 text = "\n".join(x[1] for x in self.url_data.warnings)
                 result = "Warning: %s" % strformat.limit(text, length=25)
             else:
-                self.result_color = QtCore.Qt.darkGreen
+                self.result_color = QtCore.Qt.GlobalColor.darkGreen
                 result = "Valid"
                 if self.url_data.result:
                     result += ": %s" % self.url_data.result
         else:
-            self.result_color = QtCore.Qt.darkRed
+            self.result_color = QtCore.Qt.GlobalColor.darkRed
             result = "Error"
             if self.url_data.result:
                 result += ": %s" % self.url_data.result
@@ -136,25 +136,26 @@ class UrlItemModel(QtCore.QAbstractItemModel):
         """Return index of URL item in given row and column."""
         return self.createIndex(row, column)
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
         """Return URL item data at given index for given role."""
         V = QtCore.QVariant
         if not index.isValid() or not (0 <= index.row() < len(self.urls)):
             return EmptyQVariant
         urlitem = self.urls[index.row()]
         column = index.column()
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return V(urlitem.display[column])
-        elif role == QtCore.Qt.ToolTipRole:
+        elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
             return V(urlitem.tooltips[column])
-        elif role == QtCore.Qt.TextColorRole and column == 3:
+        elif role == QtCore.Qt.ItemDataRole.TextColorRole and column == 3:
             return QtGui.QColor(urlitem.result_color)
         else:
             return EmptyQVariant
 
     def headerData(self, section, orientation, role):
         """Return header column data for given parameters."""
-        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+        if (orientation == QtCore.Qt.Orientation.Horizontal
+                and role == QtCore.Qt.ItemDataRole.DisplayRole):
             return Headers[section]
         return EmptyQVariant
 
@@ -163,7 +164,7 @@ class UrlItemModel(QtCore.QAbstractItemModel):
         selected."""
         if not index.isValid():
             return 0
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemFlag.ItemIsEnabled | QtCore.Qt.ItemFlag.ItemIsSelectable
 
     def clear(self):
         """Empty the URL item list."""
@@ -185,9 +186,9 @@ class UrlItemModel(QtCore.QAbstractItemModel):
             return None
         return self.urls[index.row()]
 
-    def sort(self, column, order=QtCore.Qt.AscendingOrder):
+    def sort(self, column, order=QtCore.Qt.SortOrder.AscendingOrder):
         """Sort URL items by given column and order."""
         self.layoutAboutToBeChanged.emit()
-        reverse = order == QtCore.Qt.DescendingOrder
+        reverse = order == QtCore.Qt.SortOrder.DescendingOrder
         self.urls.sort(key=operator.itemgetter(column), reverse=reverse)
         self.layoutChanged.emit()

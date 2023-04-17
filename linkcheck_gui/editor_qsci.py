@@ -16,7 +16,7 @@
 """
 Text editor implemented with QScintilla
 """
-from PyQt5 import QtGui, Qsci
+from PyQt6 import QtGui, Qsci
 
 # Map MIME type to Scintilla lexer class
 ContentTypeLexers = {
@@ -72,19 +72,19 @@ class Editor(Qsci.QsciScintilla):
         self.setMarginsFont(font)
 
         # line number margin for 4 digits (plus 2px extra space)
-        margin = QtGui.QFontMetrics(font).width("0" * 4) + 2
+        margin = QtGui.QFontMetrics(font).boundingRect("0" * 4).width() + 2
         # Display line numbers, margin 0 is for line numbers
         self.setMarginWidth(0, margin)
         self.setMarginLineNumbers(0, True)
 
         # Show whitespace to help detect whitespace errors
-        self.setWhitespaceVisibility(True)
+        self.setWhitespaceVisibility(self.WhitespaceVisibility.WsVisible)
 
         # Use boxes as folding visual
-        self.setFolding(self.BoxedTreeFoldStyle)
+        self.setFolding(self.FoldStyle.BoxedTreeFoldStyle)
 
         # Braces matching
-        self.setBraceMatching(self.SloppyBraceMatch)
+        self.setBraceMatching(self.BraceMatch.SloppyBraceMatch)
 
         # Editing line color
         self.setCaretLineVisible(True)

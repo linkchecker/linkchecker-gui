@@ -38,7 +38,7 @@ def _need_func(testfunc, name):
 def has_pyqt():
     """Test if PyQT is installed."""
     try:
-        import PyQt5  # noqa: F401
+        import PyQt6  # noqa: F401
 
         return True
     except ImportError:

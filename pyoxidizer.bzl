@@ -12,7 +12,7 @@ def make_exe():
         config=python_config,
     )
 
-    for resource in exe.pip_download(["PyQt5"]):
+    for resource in exe.pip_download(["PyQt6"]):
         resource.add_location = "filesystem-relative:lib"
         exe.add_python_resource(resource)
 

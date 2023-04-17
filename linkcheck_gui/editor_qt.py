@@ -16,7 +16,7 @@
 """
 Text editor implemented with Qt
 """
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt6 import QtWidgets, QtGui, QtCore
 from . import syntax
 
 # Map MIME type to QSyntaxHighlighter class
@@ -86,8 +86,8 @@ class Editor(QtWidgets.QPlainTextEdit):
             cursor = QtGui.QTextCursor(block)
             if column > 0:
                 cursor.movePosition(
-                    QtGui.QTextCursor.Right,
-                    QtGui.QTextCursor.MoveAnchor,
+                    QtGui.QTextCursor.MoveOperation.Right,
+                    QtGui.QTextCursor.MoveMode.MoveAnchor,
                     column,
                 )
             self.setTextCursor(cursor)
@@ -96,7 +96,7 @@ class Editor(QtWidgets.QPlainTextEdit):
     def lineNumberAreaPaintEvent(self, event):
         """Paint line numbers."""
         painter = QtGui.QPainter(self.lineNumberArea)
-        painter.fillRect(event.rect(), QtCore.Qt.lightGray)
+        painter.fillRect(event.rect(), QtCore.Qt.GlobalColor.lightGray)
         block = self.firstVisibleBlock()
         blockNumber = block.blockNumber()
         top = self.blockBoundingGeometry(block).translated(self.contentOffset()).top()
@@ -104,16 +104,15 @@ class Editor(QtWidgets.QPlainTextEdit):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 number = str(blockNumber + 1)
-                painter.setPen(QtCore.Qt.black)
+                painter.setPen(QtCore.Qt.GlobalColor.black)
                 painter.drawText(
-                    0,
-                    top,
-                    self.lineNumberArea.width(),
-                    self.fontMetrics().height(),
-                    QtCore.Qt.AlignRight,
+                    QtCore.QRectF(
+                        0, top,
+                        self.lineNumberArea.width(), self.fontMetrics().height()),
+                    QtCore.Qt.AlignmentFlag.AlignRight,
                     number,
                 )
-            block = next(block)
+            block = block.next()
             top = bottom
             bottom = top + self.blockBoundingRect(block).height()
             blockNumber += 1
@@ -121,7 +120,7 @@ class Editor(QtWidgets.QPlainTextEdit):
     def lineNumberAreaWidth(self):
         """Calculate line number area width."""
         digits = max(1, len(str(self.blockCount())))
-        onecharwidth = self.fontMetrics().width('9')
+        onecharwidth = self.fontMetrics().boundingRect('9').width()
         space = 3 + onecharwidth * digits
         return space
 
@@ -142,9 +141,10 @@ class Editor(QtWidgets.QPlainTextEdit):
         extraSelections = []
         if not self.isReadOnly():
             selection = QtWidgets.QTextEdit.ExtraSelection()
-            lineColor = QtGui.QColor(QtCore.Qt.yellow).lighter(160)
+            lineColor = QtGui.QColor(QtCore.Qt.GlobalColor.yellow).lighter(160)
             selection.format.setBackground(lineColor)
-            selection.format.setProperty(QtGui.QTextFormat.FullWidthSelection, True)
+            selection.format.setProperty(
+                QtGui.QTextFormat.Property.FullWidthSelection, True)
             selection.cursor = self.textCursor()
             selection.cursor.clearSelection()
             extraSelections.append(selection)

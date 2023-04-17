@@ -31,7 +31,7 @@ jobs:
       - name: Install Ubuntu dependencies
         run: |
           sudo apt update
-          sudo apt install git qhelpgenerator-qt5 xvfb
+          sudo apt install git pkg-config qt6-documentation-tools xvfb
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4

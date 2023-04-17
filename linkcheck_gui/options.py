@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 from .linkchecker_ui_options import Ui_Options
 from .editor import EditorWindow
 from .library.fileutil import is_writable

@@ -14,15 +14,15 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from PyQt5 import QtCore, QtGui
+from PyQt6 import QtCore, QtGui
 
 
 def format(color, style=''):
     """Return a QTextCharFormat with the given attributes."""
     format = QtGui.QTextCharFormat()
-    format.setForeground(getattr(QtCore.Qt, color))
+    format.setForeground(getattr(QtCore.Qt.GlobalColor, color))
     if 'bold' in style:
-        format.setFontWeight(QtGui.QFont.Bold)
+        format.setFontWeight(QtGui.QFont.Weight.Bold)
     if 'italic' in style:
         format.setFontItalic(True)
     return format
@@ -40,18 +40,15 @@ class Highlighter(QtGui.QSyntaxHighlighter):
     def highlightBlock(self, text):
         """Highlight a text block."""
         for expression, format in self.rules:
-            # get first match
-            index = expression.indexIn(text)
-            while index >= 0:
-                length = expression.matchedLength()
-                self.setFormat(index, length, format)
-                # jump to next match
-                index = expression.indexIn(text, index + length)
+            i = expression.globalMatch(text)
+            while i.hasNext():
+                match = i.next()
+                self.setFormat(match.capturedStart(), match.capturedLength(), format)
         self.setCurrentBlockState(0)
 
     def addRule(self, pattern, style):
         """Add a rule pattern with given style."""
-        self.rules.append((QtCore.QRegExp(pattern), self.styles[style]))
+        self.rules.append((QtCore.QRegularExpression(pattern), self.styles[style]))
 
 
 class XmlHighlighter(Highlighter):
