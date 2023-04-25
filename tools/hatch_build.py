@@ -74,10 +74,14 @@ __url__ = "{self.metadata.core.urls["Homepage"]}"
                       + Path(*HELP_SRC_DIR, "html.footer").read_text())
         Path(*HELP_SRC_DIR, "index.html").write_text(index_html)
 
-        cp = subprocess.run(
-            ["pkg-config", "--variable=libexecdir", "Qt6Help"],
-            capture_output=True, text=True)
-        help_exec_dir = cp.stdout.strip()
+        try:
+            cp = subprocess.run(
+                ["pkg-config", "--variable=libexecdir", "Qt6Help"],
+                capture_output=True, text=True)
+            help_exec_dir = cp.stdout.strip()
+        except FileNotFoundError:
+            self.app.display_warning("pkg-config not installed")
+            help_exec_dir = None
         if help_exec_dir:
             help_generator = Path(help_exec_dir, "qhelpgenerator")
         else:
