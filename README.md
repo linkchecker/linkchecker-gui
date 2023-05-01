@@ -10,6 +10,10 @@ Python 3.9 or later is needed. Using pip to install LinkChecker-GUI:
 
 `pip3 install linkchecker-gui`
 
+You may wish to first install the dependencies from you distribution e.g.:
+
+`apt install linkchecker python3-pyqt6.qsci python3-pyqt6.qthelp`
+
 The version in the pip repository may be old, to install the latest code first
 install qhelpgenerator e.g.
 
