@@ -25,6 +25,14 @@ Then:
 
 A freedesktop.org desktop entry is installed for compatible environments.
 
+On Debian/Ubuntu if LinkChecker-GUI fails to start with an error:
+
+    qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+
+this can be resolved by installing libxcb-cursor0:
+
+`apt install libxcb-cursor0`
+
 ## Development
 
 Development is managed on [GitHub](https://github.com/linkchecker/linkchecker-gui).
