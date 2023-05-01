@@ -17,7 +17,7 @@ install qhelpgenerator e.g.
 
 Then:
 
-`pip3 install git+https://github.com/linkchecker/linkchecker-gui.git`
+`pip3 install https://github.com/linkchecker/linkchecker-gui/archive/master.tar.gz`
 
 ## Usage
 
