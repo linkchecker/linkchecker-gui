@@ -37,6 +37,10 @@ this can be resolved by installing libxcb-cursor0:
 
 `apt install libxcb-cursor0`
 
+Recursion depth and verbose output (whether every URL checked is shown or just those with errors)
+are configured in Edit/Options. These settings are specific to LinkChecker-GUI and independent
+of LinkChecker. More advanced settings are shared with the default LinkChecker linkcheckerrc.
+
 ## Development
 
 Development is managed on [GitHub](https://github.com/linkchecker/linkchecker-gui).
