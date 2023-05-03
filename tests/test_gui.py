@@ -14,7 +14,6 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 import unittest
-import sys
 
 from . import need_pyqt, need_x11
 
@@ -28,10 +27,13 @@ class TestGui(unittest.TestCase):
         from PyQt6 import QtCore, QtTest, QtWidgets
         from linkcheck_gui import LinkCheckerMain
 
-        app = QtWidgets.QApplication(sys.argv)
+        app = QtWidgets.QApplication([])
         window = LinkCheckerMain()
+        window.checker.finished.connect(window.close)
+        window.urlinput.setText("http://localhost/linkcheck-gui")
         window.show()
+        QtTest.QTest.qWaitForWindowExposed(window)
         QtTest.QTest.mouseClick(window.controlButton, QtCore.Qt.MouseButton.LeftButton)
-        window.close()
+        app.exec()
         del window
         del app
