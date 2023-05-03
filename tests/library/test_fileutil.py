@@ -1,4 +1,4 @@
-# Copyright (C) 2004-2014 Bastian Kleineidam
+# Copyright (C) 2023 Chris Mayo
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,23 +13,18 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-"""
-Special container classes.
-"""
+import os
+import tempfile
+import unittest
 
-from collections import namedtuple
+from linkcheck_gui.library import fileutil
 
 
-def enum(*names):
-    """Return an enum datatype instance from given list of keyword names.
-    The enum values are zero-based integers.
+class TestFileUtil(unittest.TestCase):
+    """Test fileutil module."""
 
-    >>> Status = enum('open', 'pending', 'closed')
-    >>> Status.open
-    0
-    >>> Status.pending
-    1
-    >>> Status.closed
-    2
-    """
-    return namedtuple('Enum', ' '.join(names))(*range(len(names)))
+    def test_fileutil(self):
+        fp = tempfile.NamedTemporaryFile(delete=False)
+        fp.close()
+        assert fileutil.is_writable(fp.name), True
+        os.remove(fp.name)

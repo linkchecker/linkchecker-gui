@@ -14,6 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from enum import Enum
 import os
 import re
 import sys
@@ -22,9 +23,8 @@ import webbrowser
 from linkcheck import LinkCheckerError
 from linkcheck import checker as linkchecker_checker
 from linkcheck import configuration as linkchecker_configuration
-from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
+from linkcheck import (director, get_link_pat, httputil, logconf,
                        mimeutil, strformat)
-from linkcheck import url as urlutil
 from linkcheck.parser import parse_text
 from PyQt6 import QtCore, QtGui, QtWidgets
 
@@ -34,7 +34,7 @@ from .contextmenu import ContextMenu
 from .debug import LinkCheckerDebug
 from .editor import EditorWindow
 from .help import HelpWindow
-from .library.containers import enum
+from .library import url as urlutil
 from .linkchecker_ui_main import Ui_MainWindow
 from .logger import GuiLogHandler, SignalLogger, StatusLogger
 from .options import LinkCheckerOptions
@@ -49,7 +49,7 @@ from .urlsave import urlsave
 
 DocBaseUrl = "qthelp://linkchecker.app.linkchecker-gui/doc/"
 RegistryBase = "LinkChecker-GUI"
-Status = enum('idle', 'checking')
+Status = Enum("Status", ["idle", "checking"])
 
 MaxMessageLength = 60
 
@@ -130,7 +130,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def init_menu(self):
         """Add menu entries for bookmark file checking."""
         self.urlinput.addMenuEntries(self.menuEdit)
-        return  # XXX
+        """  # XXX
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
@@ -143,6 +143,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             if lang == i18n.default_language:
                 action.setChecked(True)
             langActionGroup.addAction(action)
+        """
 
     def init_drop(self):
         """Set and activate drag-and-drop functions."""
@@ -544,7 +545,7 @@ Version 3 or later.
         """View URL source in editor window."""
         self.editor.setWindowTitle("View %s" % url)
         self.editor.setUrl(url)
-        data, info = urlutil.get_content(url, proxy=self.config["proxy"])
+        data, info = urlutil.get_content(url)
         if data is None:
             msg = _("An error occurred retreiving URL `%s': %s.") % (url, info)
             self.editor.setText(msg)
@@ -630,6 +631,7 @@ Version 3 or later.
         if hasattr(self, "menu_lang"):
             self.menuLang.setTitle(_("&Language"))
 
+    '''  # XXX
     def switch_language(self, action):
         """Change UI language."""
         lang = str(action.data().toString())
@@ -638,3 +640,4 @@ Version 3 or later.
         self.options.retranslateUi(self.options)
         self.debug.retranslateUi(self.debug)
         self.editor.retranslateUi(self.editor)
+    '''

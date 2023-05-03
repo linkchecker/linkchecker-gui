@@ -137,7 +137,7 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
                 if not fh.open(QtCore.QIODevice.OpenModeFlag.WriteOnly):
                     raise OSError(fh.errorString())
                 stream = QtCore.QTextStream(fh)
-                stream.setCodec("UTF-8")
+                stream.setAutoDetectUnicode(False)
                 stream << self.editor.text()
                 self.editor.setModified(False)
                 saved = True
