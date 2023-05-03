@@ -25,7 +25,6 @@ from linkcheck import checker as linkchecker_checker
 from linkcheck import configuration as linkchecker_configuration
 from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
                        mimeutil, strformat)
-from linkcheck import url as urlutil
 from linkcheck.parser import parse_text
 from PyQt6 import QtCore, QtGui, QtWidgets
 
@@ -35,6 +34,7 @@ from .contextmenu import ContextMenu
 from .debug import LinkCheckerDebug
 from .editor import EditorWindow
 from .help import HelpWindow
+from .library import url as urlutil
 from .linkchecker_ui_main import Ui_MainWindow
 from .logger import GuiLogHandler, SignalLogger, StatusLogger
 from .options import LinkCheckerOptions
@@ -544,7 +544,7 @@ Version 3 or later.
         """View URL source in editor window."""
         self.editor.setWindowTitle("View %s" % url)
         self.editor.setUrl(url)
-        data, info = urlutil.get_content(url, proxy=self.config["proxy"])
+        data, info = urlutil.get_content(url)
         if data is None:
             msg = _("An error occurred retreiving URL `%s': %s.") % (url, info)
             self.editor.setText(msg)
