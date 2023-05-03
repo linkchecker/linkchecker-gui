@@ -14,6 +14,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from enum import Enum
 import os
 import re
 import sys
@@ -34,7 +35,6 @@ from .contextmenu import ContextMenu
 from .debug import LinkCheckerDebug
 from .editor import EditorWindow
 from .help import HelpWindow
-from .library.containers import enum
 from .linkchecker_ui_main import Ui_MainWindow
 from .logger import GuiLogHandler, SignalLogger, StatusLogger
 from .options import LinkCheckerOptions
@@ -49,7 +49,7 @@ from .urlsave import urlsave
 
 DocBaseUrl = "qthelp://linkchecker.app.linkchecker-gui/doc/"
 RegistryBase = "LinkChecker-GUI"
-Status = enum('idle', 'checking')
+Status = Enum("Status", ["idle", "checking"])
 
 MaxMessageLength = 60
 
