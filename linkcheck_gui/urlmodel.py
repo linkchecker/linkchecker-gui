@@ -147,7 +147,7 @@ class UrlItemModel(QtCore.QAbstractItemModel):
             return V(urlitem.display[column])
         elif role == QtCore.Qt.ItemDataRole.ToolTipRole:
             return V(urlitem.tooltips[column])
-        elif role == QtCore.Qt.ItemDataRole.TextColorRole and column == 3:
+        elif role == QtCore.Qt.ItemDataRole.ForegroundRole and column == 3:
             return QtGui.QColor(urlitem.result_color)
         else:
             return EmptyQVariant
