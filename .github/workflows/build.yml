@@ -68,6 +68,7 @@ jobs:
       matrix:
         toxenv:
           - flake8
+          - pylint
           - yamllint
 
     steps:

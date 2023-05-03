@@ -23,7 +23,7 @@ import webbrowser
 from linkcheck import LinkCheckerError
 from linkcheck import checker as linkchecker_checker
 from linkcheck import configuration as linkchecker_configuration
-from linkcheck import (director, get_link_pat, httputil, i18n, logconf,
+from linkcheck import (director, get_link_pat, httputil, logconf,
                        mimeutil, strformat)
 from linkcheck.parser import parse_text
 from PyQt6 import QtCore, QtGui, QtWidgets
@@ -130,7 +130,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def init_menu(self):
         """Add menu entries for bookmark file checking."""
         self.urlinput.addMenuEntries(self.menuEdit)
-        return  # XXX
+        """  # XXX
         self.menuLang = self.menuEdit.addMenu(_('Languages'))
         self.menuLang.setTitle(_("&Language"))
         # ensure only one action is checked
@@ -143,6 +143,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             if lang == i18n.default_language:
                 action.setChecked(True)
             langActionGroup.addAction(action)
+        """
 
     def init_drop(self):
         """Set and activate drag-and-drop functions."""
@@ -630,6 +631,7 @@ Version 3 or later.
         if hasattr(self, "menu_lang"):
             self.menuLang.setTitle(_("&Language"))
 
+    '''  # XXX
     def switch_language(self, action):
         """Change UI language."""
         lang = str(action.data().toString())
@@ -638,3 +640,4 @@ Version 3 or later.
         self.options.retranslateUi(self.options)
         self.debug.retranslateUi(self.debug)
         self.editor.retranslateUi(self.editor)
+    '''

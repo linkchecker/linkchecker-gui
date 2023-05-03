@@ -14,6 +14,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# pylint: disable=no-name-in-module
+
 from PyQt6 import QtCore, QtWidgets
 from linkcheck import updater, configuration
 
