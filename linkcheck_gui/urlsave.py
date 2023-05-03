@@ -70,7 +70,7 @@ def get_save_filename(parent):
     filters = ";;".join(sortwithfirst(LoggerFilters, Logtype2Filter[logtype]))
     filename = "linkchecker-out" + Logtype2FileExt[logtype]
     filename, selectedFilter = func(parent, title, filename, filters)
-    logtype = Filter2Logtype.get(selectedFilter)
+    logtype = Filter2Logtype.get(selectedFilter if selectedFilter else FilterHtml)
     return filename, logtype
 
 
