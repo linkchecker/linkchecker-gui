@@ -2,4 +2,5 @@
 
 Changes:
 - Convert to Python 3, PyQt6 and LinkChecker 10
-- Update dialog and UI translation support disabled
+- Update dialog removed
+- UI translation support disabled

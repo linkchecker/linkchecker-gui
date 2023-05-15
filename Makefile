@@ -19,7 +19,6 @@ MYPY_FILES_DIRS:=linkcheck_gui/__init__.py \
 	  linkcheck_gui/settings.py \
 	  linkcheck_gui/statistics.py \
 	  linkcheck_gui/syntax.py \
-	  linkcheck_gui/updater.py \
 	  linkcheck_gui/urlmodel.py \
 	  linkcheck_gui/urlsave.py \
 	  linkchecker-gui \

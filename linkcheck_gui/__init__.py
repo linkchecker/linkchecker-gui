@@ -43,7 +43,6 @@ from .properties import clear_properties, set_properties
 from .recentdocs import RecentDocumentModel
 from .settings import Settings
 from .statistics import clear_statistics, set_statistics
-# XXX from .updater import UpdateDialog
 from .urlmodel import UrlItemModel
 from .urlsave import urlsave
 
@@ -92,7 +91,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.editor = EditorWindow(parent=self)
         self.assistant = HelpWindow(self, self.get_qhcpath())
         self.actionHelp.setVisible(True)
-        self.actionCheckUpdates.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
@@ -436,13 +434,6 @@ Version 3 or later.
         saveresultas = urlsave(self, self.config, self.model.urls)
         if saveresultas:
             self.saveresultas = saveresultas
-
-#    @QtCore.pyqtSlot()
-#    def on_actionCheckUpdates_triggered(self):
-#        """Display update check result."""
-#        dialog = UpdateDialog(self)
-#        dialog.reset()
-#        dialog.show()
 
     def start(self):
         """Start a new check."""
