@@ -413,6 +413,9 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 <br>%(appname)s is licensed under the
 <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL</a>
 Version 3 or later.
+<p>Icons from <a href="https://develop.kde.org/frameworks/oxygen-icons/">
+Oxygen icons</a> copyright KDE<br>
+and licensed under the GNU LGPL version 3 or later.
 </center></qt>"""
             )
             % d,
