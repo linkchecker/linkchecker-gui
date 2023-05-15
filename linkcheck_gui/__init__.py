@@ -362,15 +362,26 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, e=None):
         """Save settings and remove registered logging handler"""
-        self.settings.save_geometry(dict(size=self.size(), pos=self.pos()))
-        self.settings.save_treeviewcols(self.get_treeviewcols())
-        self.settings.save_options(self.options.get_options())
-        self.settings.save_recent_documents(self.recent.get_documents())
-        self.settings.save_misc(dict(saveresultas=self.saveresultas))
-        self.settings.sync()
-        logconf.remove_loghandler(self.handler)
-        if e is not None:
-            e.accept()
+        try:
+            self.checker.finished.connect(
+                self.close, QtCore.Qt.ConnectionType.UniqueConnection)
+        except TypeError:
+            pass
+        if self.checker.isRunning():
+            self.checker.cancel()
+            self.cancel()
+            if e is not None:
+                e.ignore()
+        else:
+            self.settings.save_geometry(dict(size=self.size(), pos=self.pos()))
+            self.settings.save_treeviewcols(self.get_treeviewcols())
+            self.settings.save_options(self.options.get_options())
+            self.settings.save_recent_documents(self.recent.get_documents())
+            self.settings.save_misc(dict(saveresultas=self.saveresultas))
+            self.settings.sync()
+            logconf.remove_loghandler(self.handler)
+            if e is not None:
+                e.accept()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
