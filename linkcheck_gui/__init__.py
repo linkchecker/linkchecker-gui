@@ -77,6 +77,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None, url=None, project=None):
         """Initialize UI."""
         super().__init__(parent)
+        QtCore.QResource.registerResource(self.get_rccpath())
         self.setupUi(self)
         self.setWindowFlags(
             self.windowFlags() | QtCore.Qt.WindowType.WindowContextHelpButtonHint)
@@ -172,6 +173,11 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         """Helper function to search for the QHC help file in different
         locations."""
         return os.path.join(__path__[0], "data", "help", "lccollection.qhc")
+
+    def get_rccpath(self):
+        """Helper function to search for the RCC resource file in different
+        locations."""
+        return os.path.join(__path__[0], "data", "rc", "linkchecker.rcc")
 
     def connect_widgets(self):
         """Connect widget signals. Some signals use the AutoConnect feature.

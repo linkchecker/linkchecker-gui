@@ -829,4 +829,3 @@ class Ui_MainWindow(object):
         self.actionSave_project.setText(_translate("MainWindow", "&Save project..."))
         self.actionSave_project.setShortcut(_translate("MainWindow", "Ctrl+S"))
 from .lineedit import LineEdit
-from . import linkchecker_rc

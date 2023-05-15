@@ -15,9 +15,9 @@ You may wish to first install the dependencies from you distribution e.g.:
 `apt install linkchecker python3-pyqt6.qsci python3-pyqt6.qthelp`
 
 The version in the pip repository may be old, to install the latest code first
-install qhelpgenerator e.g.
+install qhelpgenerator and rcc e.g.
 
-`apt install qt6-documentation-tools`
+`apt install qt6-documentation-tools qt6-base-dev-tools`
 
 Then:
 
