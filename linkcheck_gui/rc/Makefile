@@ -19,9 +19,6 @@ ICONS = \
 
 all: $(ICONS)
 
-app.png:	$(OXYGEN)/categories/applications-development-web.png
-	cp $< $@
-
 save.png:	$(OXYGEN)/actions/document-save-as.png
 	cp $< $@
 
