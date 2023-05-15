@@ -19,12 +19,11 @@ Check HTML pages for broken links. This is the GUI client.
 import signal
 import sys
 
-from linkcheck import configuration
 from linkcheck.command.linkchecker import drop_privileges
 from linkcheck.fileutil import is_readable
 from PyQt6.QtWidgets import QApplication  # pylint: disable=no-name-in-module
 
-from . import LinkCheckerMain
+from . import configuration, LinkCheckerMain
 from .projects import ProjectExt
 
 
