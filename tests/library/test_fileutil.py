@@ -26,5 +26,5 @@ class TestFileUtil(unittest.TestCase):
     def test_fileutil(self):
         fp = tempfile.NamedTemporaryFile(delete=False)
         fp.close()
-        assert fileutil.is_writable(fp.name), True
+        assert fileutil.is_writable(fp.name)
         os.remove(fp.name)

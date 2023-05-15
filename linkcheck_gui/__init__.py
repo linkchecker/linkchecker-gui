@@ -43,7 +43,6 @@ from .properties import clear_properties, set_properties
 from .recentdocs import RecentDocumentModel
 from .settings import Settings
 from .statistics import clear_statistics, set_statistics
-# XXX from .updater import UpdateDialog
 from .urlmodel import UrlItemModel
 from .urlsave import urlsave
 
@@ -78,6 +77,7 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None, url=None, project=None):
         """Initialize UI."""
         super().__init__(parent)
+        QtCore.QResource.registerResource(self.get_rccpath())
         self.setupUi(self)
         self.setWindowFlags(
             self.windowFlags() | QtCore.Qt.WindowType.WindowContextHelpButtonHint)
@@ -92,7 +92,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         self.editor = EditorWindow(parent=self)
         self.assistant = HelpWindow(self, self.get_qhcpath())
         self.actionHelp.setVisible(True)
-        self.actionCheckUpdates.setVisible(False)  # XXX
         self.config_error = None
         self.icon_start = get_icon(":/icons/start.png")
         self.icon_stop = get_icon(":/icons/stop.png")
@@ -175,6 +174,11 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
         locations."""
         return os.path.join(__path__[0], "data", "help", "lccollection.qhc")
 
+    def get_rccpath(self):
+        """Helper function to search for the RCC resource file in different
+        locations."""
+        return os.path.join(__path__[0], "data", "rc", "linkchecker.rcc")
+
     def connect_widgets(self):
         """Connect widget signals. Some signals use the AutoConnect feature.
         Autoconnected methods have the form on_<objectname>_<signal>.
@@ -187,7 +191,6 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
             self.controlButton.clicked.disconnect(self.checker.cancel)
 
         self.checker.finished.connect(set_idle)
-        # XXX self.checker.terminated.connect(set_idle)
         self.log_url_signal.connect(self.model.log_url)
         self.log_stats_signal.connect(self.log_stats)
         self.error_signal.connect(self.internal_error)
@@ -362,15 +365,26 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, e=None):
         """Save settings and remove registered logging handler"""
-        self.settings.save_geometry(dict(size=self.size(), pos=self.pos()))
-        self.settings.save_treeviewcols(self.get_treeviewcols())
-        self.settings.save_options(self.options.get_options())
-        self.settings.save_recent_documents(self.recent.get_documents())
-        self.settings.save_misc(dict(saveresultas=self.saveresultas))
-        self.settings.sync()
-        logconf.remove_loghandler(self.handler)
-        if e is not None:
-            e.accept()
+        try:
+            self.checker.finished.connect(
+                self.close, QtCore.Qt.ConnectionType.UniqueConnection)
+        except TypeError:
+            pass
+        if self.checker.isRunning():
+            self.checker.cancel()
+            self.cancel()
+            if e is not None:
+                e.ignore()
+        else:
+            self.settings.save_geometry(dict(size=self.size(), pos=self.pos()))
+            self.settings.save_treeviewcols(self.get_treeviewcols())
+            self.settings.save_options(self.options.get_options())
+            self.settings.save_recent_documents(self.recent.get_documents())
+            self.settings.save_misc(dict(saveresultas=self.saveresultas))
+            self.settings.sync()
+            logconf.remove_loghandler(self.handler)
+            if e is not None:
+                e.accept()
 
     @QtCore.pyqtSlot()
     def on_actionAbout_triggered(self):
@@ -399,6 +413,9 @@ class LinkCheckerMain(QtWidgets.QMainWindow, Ui_MainWindow):
 <br>%(appname)s is licensed under the
 <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL</a>
 Version 3 or later.
+<p>Icons from <a href="https://develop.kde.org/frameworks/oxygen-icons/">
+Oxygen icons</a> copyright KDE<br>
+and licensed under the GNU LGPL version 3 or later.
 </center></qt>"""
             )
             % d,
@@ -425,13 +442,6 @@ Version 3 or later.
         saveresultas = urlsave(self, self.config, self.model.urls)
         if saveresultas:
             self.saveresultas = saveresultas
-
-#    @QtCore.pyqtSlot()
-#    def on_actionCheckUpdates_triggered(self):
-#        """Display update check result."""
-#        dialog = UpdateDialog(self)
-#        dialog.reset()
-#        dialog.show()
 
     def start(self):
         """Start a new check."""
@@ -623,6 +633,7 @@ Version 3 or later.
         else:
             self.urlinput.setText(url.toString())
 
+    '''  # XXX
     def retranslateUi(self, Window):
         """Translate menu titles."""
         super().retranslateUi(Window)
@@ -631,7 +642,6 @@ Version 3 or later.
         if hasattr(self, "menu_lang"):
             self.menuLang.setTitle(_("&Language"))
 
-    '''  # XXX
     def switch_language(self, action):
         """Change UI language."""
         lang = str(action.data().toString())

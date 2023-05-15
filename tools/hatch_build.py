@@ -25,6 +25,8 @@ import markdown2
 HELP_DIR = ("linkcheck_gui", "data", "help")
 RELEASE_PY = ("linkcheck_gui", "_release.py")
 HELP_SRC_DIR = ("doc", "html")
+RC_SRC_DIR = ("linkcheck_gui", "rc")
+RC_DIR = ("linkcheck_gui", "data", "rc")
 
 
 class CustomBuildHook(BuildHookInterface):
@@ -32,7 +34,28 @@ class CustomBuildHook(BuildHookInterface):
         Path(*RELEASE_PY).unlink(missing_ok=True)
         shutil.rmtree(str(Path(*HELP_DIR)), ignore_errors=True)
 
+    def qt_tool_location(self, qt_module, exe):
+        try:
+            cp = subprocess.run(
+                ["pkg-config", "--variable=libexecdir", qt_module],
+                capture_output=True, text=True)
+            tool_exec_dir = cp.stdout.strip()
+        except FileNotFoundError:
+            self.app.display_warning("pkg-config not installed")
+            tool_exec_dir = None
+        if tool_exec_dir:
+            tool_location = Path(tool_exec_dir, exe)
+        else:
+            # Ubuntu 22.04 doesn't provide Qt6Help.pc, 22.10 does but without libexecdir
+            # qhelpgenerator found in bin on 22.04, libexec from 22.10
+            tool_location = shutil.which(
+                exe,
+                path="/usr/lib/qt6/libexec/:/usr/lib64/qt6/libexec/:"
+                     "/usr/lib/qt6/bin/:/usr/lib64/qt6/bin/")
+        return tool_location
+
     def initialize(self, version, build_data):
+        # _release.py
         cp = None
         committer_date = committer_year = "unknown"
         try:
@@ -69,29 +92,13 @@ __author__ = "{self.metadata.core.authors[0]['name']}"
 __url__ = "{self.metadata.core.urls["Homepage"]}"
 """)
 
+        # Help
         index_html = (Path(*HELP_SRC_DIR, "html.header").read_text()
                       + markdown2.markdown_path(str(Path(*HELP_SRC_DIR, "index.txt")))
                       + Path(*HELP_SRC_DIR, "html.footer").read_text())
         Path(*HELP_SRC_DIR, "index.html").write_text(index_html)
 
-        try:
-            cp = subprocess.run(
-                ["pkg-config", "--variable=libexecdir", "Qt6Help"],
-                capture_output=True, text=True)
-            help_exec_dir = cp.stdout.strip()
-        except FileNotFoundError:
-            self.app.display_warning("pkg-config not installed")
-            help_exec_dir = None
-        if help_exec_dir:
-            help_generator = Path(help_exec_dir, "qhelpgenerator")
-        else:
-            # Ubuntu 22.04 doesn't provide Qt6Help.pc, 22.10 does but without libexecdir
-            # qhelpgenerator found in bin on 22.04, libexec from 22.10
-            help_generator = shutil.which(
-                "qhelpgenerator",
-                path="/usr/lib/qt6/libexec/:/usr/lib64/qt6/libexec/:"
-                     "/usr/lib/qt6/bin/:/usr/lib64/qt6/bin/")
-
+        help_generator = self.qt_tool_location("Qt6Help", "qhelpgenerator")
         cp = subprocess.run(
             [help_generator, "-c", "lccollection.qhcp", "-o", "lccollection.qhc"],
             cwd=Path(*HELP_SRC_DIR), check=True)
@@ -99,3 +106,10 @@ __url__ = "{self.metadata.core.urls["Homepage"]}"
         Path(*HELP_DIR).mkdir(parents=True, exist_ok=True)
         shutil.copy(Path(*HELP_SRC_DIR, "lcdoc.qch"), Path(*HELP_DIR))
         shutil.copy(Path(*HELP_SRC_DIR, "lccollection.qhc"), Path(*HELP_DIR))
+
+        # Resources
+        rcc_generator = self.qt_tool_location("Qt6Core", "rcc")
+        Path(*RC_DIR).mkdir(parents=True, exist_ok=True)
+        cp = subprocess.run(
+            [rcc_generator, "-binary", Path(*RC_SRC_DIR, "linkchecker.qrc"),
+                "-o", Path(*RC_DIR, "linkchecker.rcc")], check=True)

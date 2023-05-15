@@ -1,5 +1,6 @@
 # LinkChecker-GUI
 
+[![Build Status](https://github.com/linkchecker/linkchecker-gui/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/linkchecker/linkchecker-gui/actions/workflows/build.yml)
 [![GPL-3](https://img.shields.io/badge/license-GPL3-d49a6a.svg)](https://opensource.org/licenses/GPL-3.0)
 
 This is the GUI client for [LinkChecker](https://linkchecker.github.io/linkchecker/).
@@ -15,9 +16,9 @@ You may wish to first install the dependencies from you distribution e.g.:
 `apt install linkchecker python3-pyqt6.qsci python3-pyqt6.qthelp`
 
 The version in the pip repository may be old, to install the latest code first
-install qhelpgenerator e.g.
+install qhelpgenerator and rcc e.g.
 
-`apt install qt6-documentation-tools`
+`apt install qt6-documentation-tools qt6-base-dev-tools`
 
 Then:
 
