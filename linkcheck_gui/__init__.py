@@ -625,6 +625,7 @@ Version 3 or later.
         else:
             self.urlinput.setText(url.toString())
 
+    '''  # XXX
     def retranslateUi(self, Window):
         """Translate menu titles."""
         super().retranslateUi(Window)
@@ -633,7 +634,6 @@ Version 3 or later.
         if hasattr(self, "menu_lang"):
             self.menuLang.setTitle(_("&Language"))
 
-    '''  # XXX
     def switch_language(self, action):
         """Change UI language."""
         lang = str(action.data().toString())
