@@ -47,6 +47,7 @@ def main(argv=None):
     app.setApplicationName(configuration.AppName)
     app.setApplicationVersion(configuration.Version)
     app.setOrganizationName(configuration.Author)
+    app.setDesktopFileName(f"{configuration.AppName.lower()}.desktop")
     args = app.arguments()
     mainkwargs = {}
     if len(args) > 1:
