@@ -118,11 +118,12 @@ class EditorWindow(QtWidgets.QDialog, Ui_EditorDialog):
         """Save editor contents to file."""
         if not self.filename:
             title = _("Save File As")
-            res = QtWidgets.QFileDialog.getSaveFileName(self, title, self.basedir)
-            if not res:
+            filename, _filter = \
+                QtWidgets.QFileDialog.getSaveFileName(self, title, self.basedir)
+            if not filename:
                 # user canceled
                 return
-            self.filename = res
+            self.filename = filename
             self.setWindowTitle(self.filename)
         else:
             if not os.path.isfile(self.filename):
