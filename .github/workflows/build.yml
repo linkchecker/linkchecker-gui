@@ -27,7 +27,9 @@ jobs:
 
     steps:
       - name: Git clone
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Install Ubuntu dependencies
         run: |
@@ -36,12 +38,12 @@ jobs:
             libxcb-cursor0 xvfb
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ matrix.python-version }}"
 
       - name: Pip cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
@@ -61,7 +63,7 @@ jobs:
           xvfb-run --auto-servernum python -m pytest -vras --cov=linkcheck_gui
 
       - name: Report to coveralls
-        uses: coverallsapp/github-action@f350da2c033043742f89e8c0b7b5145a1616da6d
+        uses: coverallsapp/github-action@f350da2c033043742f89e8c0b7b5145a1616da6d  # v2.1.2
 
   lint:
     name: ${{ matrix.toxenv }}
@@ -77,15 +79,17 @@ jobs:
 
     steps:
       - name: Git clone
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
       - name: Pip cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ matrix.toxenv }}-${{ hashFiles('tox.ini') }}
