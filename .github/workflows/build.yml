@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Git clone
         uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Install Ubuntu dependencies
         run: |
@@ -78,6 +80,8 @@ jobs:
     steps:
       - name: Git clone
         uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
