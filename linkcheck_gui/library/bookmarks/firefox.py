@@ -20,6 +20,7 @@ import glob
 
 def get_profile_dir():
     """Return path where all profiles of current user are stored."""
+    # pylint: disable=possibly-used-before-assignment
     if os.name == "nt":
         basedir = os.environ["APPDATA"]
         dirpath = os.path.join(basedir, "Mozilla", "Firefox", "Profiles")
