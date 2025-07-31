@@ -56,12 +56,8 @@ exclude = [
 [tool.hatch.build.hooks.custom]
 path = "tools/hatch_build.py"
 
-[tool.hatch.build.targets.sdist]
-strict-naming = false
-
 [tool.hatch.build.targets.wheel]
 only-include = ["linkcheck_gui"]
-strict-naming = false
 
 [tool.hatch.build.targets.wheel.shared-data]
 "doc/en/linkchecker-gui.1" = "share/man/man1/linkchecker-gui.1"
