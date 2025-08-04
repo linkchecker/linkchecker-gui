@@ -41,6 +41,11 @@ jobs:
         run: >
             python3 -m hatchling build
 
+      - name: Attest
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'dist/*'
+
       - name: Check distribution files
         run: >
             twine check dist/*
