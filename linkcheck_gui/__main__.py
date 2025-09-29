@@ -30,7 +30,7 @@ from .projects import ProjectExt
 def excepthook(window, etype, evalue, tb):
     """Catch unhandled exceptions."""
     from io import StringIO
-    from linkcheck.director.console import internal_error
+    from .library.internal_error import internal_error
     out = StringIO()
     internal_error(out=out, etype=etype, evalue=evalue, tb=tb)
     # signal main window to be thread-safe
