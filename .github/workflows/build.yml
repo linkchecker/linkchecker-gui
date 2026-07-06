@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Git clone
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           show-progress: false
 
@@ -46,7 +46,7 @@ jobs:
           allow-prereleases: true
 
       - name: Pip cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Git clone
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           show-progress: false
 
@@ -104,7 +104,7 @@ jobs:
           python-version: "3.x"
 
       - name: Pip cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ matrix.toxenv }}-${{ hashFiles('tox.ini') }}
