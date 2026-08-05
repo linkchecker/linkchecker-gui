@@ -26,7 +26,7 @@ jobs:
           sudo apt install git pkg-config qt6-base-dev-tools qt6-documentation-tools qt6-qpa-plugins
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
